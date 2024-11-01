@@ -6,9 +6,12 @@ import Footer from './components/Footer';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Main from './pages/Main';
+import { AuthProvider } from './context/AuthContext';
+
 
 function App() {
     return (
+        <AuthProvider>
         <Router>
             <Header />
             <main className="flex-grow">
@@ -20,6 +23,7 @@ function App() {
             </main>
             <Footer />
         </Router>
+    </AuthProvider>
     );
 }
 
