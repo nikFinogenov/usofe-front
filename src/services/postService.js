@@ -12,4 +12,11 @@ export async function fetchPosts() {
         console.error('Error fetching posts:', error);
         throw error;
     }
-}
+};
+
+export const fetchPostById = async (id) => {
+    const response = await fetch(`/api/posts/${id}`);
+    if (!response.ok) throw new Error('Failed to fetch post');
+    const data = await response.json();
+    return data;
+};

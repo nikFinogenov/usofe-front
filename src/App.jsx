@@ -6,6 +6,7 @@ import Footer from './components/Footer';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Main from './pages/Main';
+import FullPost from './pages/FullPost';
 import { AuthProvider } from './context/AuthContext';
 
 
@@ -19,6 +20,7 @@ function App() {
                     <Route path="/" element={<Main />} />
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Register />} />
+                    <Route path="/post/:id" element={<FullPost />} />
                 </Routes>
             </main>
             <Footer />
