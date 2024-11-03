@@ -18,7 +18,7 @@ function Post({ post }) {
             <h2 className="text-xl font-bold mb-2">{post.title}</h2>
             
             <p className="text-gray-700 mb-4">
-                {post.content.length > 100 ? `${post.content.slice(0, 100)}...` : post.content}
+                {post.content.length > 50 ? `${post.content.slice(0, 50)}...` : post.content}
             </p>
             
             <CategoryTags categories={post.categories} />
@@ -26,10 +26,12 @@ function Post({ post }) {
             <div className="flex justify-between items-center text-gray-500 text-sm my-4 border-t border-gray-200 pt-4">
                 <div className="flex flex-col items-start">
                     <span>❤️ Likes: {post.likeCount}</span>
+                    <br />
                     <span>👎 Dislikes: {post.dislikeCount}</span>
                 </div>
                 <div className="flex flex-col items-end">
                     <span>👀 Views: {post.views}</span>
+                    <br />
                     <span>💬 Comments: {post.commentCount}</span>
                 </div>
             </div>
