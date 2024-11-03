@@ -61,9 +61,9 @@ function Main() {
         // Добавляем кнопку "Первая"
         if (startPage > 1) {
             buttons.push(
-                <button 
-                    key={1} 
-                    onClick={() => handlePageChange(1)} 
+                <button
+                    key={1}
+                    onClick={() => handlePageChange(1)}
                     className={`mx-1 px-3 py-1 rounded ${currentPage === 1 ? 'bg-blue-500 text-white' : 'bg-gray-300'}`}
                 >
                     1
@@ -77,9 +77,9 @@ function Main() {
         // Генерируем кнопки для текущего диапазона
         for (let page = startPage; page <= endPage; page++) {
             buttons.push(
-                <button 
-                    key={page} 
-                    onClick={() => handlePageChange(page)} 
+                <button
+                    key={page}
+                    onClick={() => handlePageChange(page)}
                     className={`mx-1 px-3 py-1 rounded ${currentPage === page ? 'bg-blue-500 text-white' : 'bg-gray-300'}`}
                 >
                     {page}
@@ -93,9 +93,9 @@ function Main() {
                 buttons.push(<span key="ellipsis-end">...</span>);
             }
             buttons.push(
-                <button 
-                    key={totalPages} 
-                    onClick={() => handlePageChange(totalPages)} 
+                <button
+                    key={totalPages}
+                    onClick={() => handlePageChange(totalPages)}
                     className={`mx-1 px-3 py-1 rounded ${currentPage === totalPages ? 'bg-blue-500 text-white' : 'bg-gray-300'}`}
                 >
                     {totalPages}
@@ -106,20 +106,29 @@ function Main() {
         return buttons;
     };
 
+    // Add the padding-top for spacing under the header
     return (
-        <div className="flex flex-col items-center py-8 bg-gray-100 min-h-screen">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-4 max-w-5xl w-full mt-6">
+        <div className="flex flex-col items-center pt-16 bg-gray-100 min-h-screen">
+            {/* Заголовок */}
+            <h2 className="text-3xl font-semibold text-gray-800 mt-4 text-left w-full max-w-5xl px-4">Recent Posts</h2>
+
+            {/* Сетка постов */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-4 max-w-5xl w-full">
                 {currentPosts.map((post) => (
                     <Post key={post.id} post={post} onViewMore={handleViewMore} />
                 ))}
             </div>
+            <br />
 
             {/* Навигация по страницам */}
             <div className="mt-4 flex justify-center">
                 {renderPaginationButtons()}
             </div>
+            <br />
         </div>
     );
+
+
 }
 
 export default Main;
