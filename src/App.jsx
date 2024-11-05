@@ -11,6 +11,7 @@ import Error from './pages/Error';
 import Category from './pages/Category';
 import Categories from './pages/Categories';
 import { AuthProvider } from './context/AuthContext';
+import Posts from './pages/Posts';
 
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Register />} />
                     <Route path="/post/:id" element={<FullPost />} />
+                    <Route path="/posts" element={<Posts />} />
                     <Route path="/categories" element={<Categories />} />
                     <Route path="/categories/:category_id/posts" element={<Category />} />
                     <Route path='*' element={<Error />} />
