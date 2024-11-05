@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { fetchPosts } from '../services/postService';
 import Post from '../components/Post';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
 function Main() {
@@ -10,8 +10,7 @@ function Main() {
     const [loading, setLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPosts, setTotalPosts] = useState(0); // Общее количество постов
-    const [error, setError] = useState(null);
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
 
     useEffect(() => {
         const loadPosts = async () => {
@@ -39,9 +38,6 @@ function Main() {
     // Функция для переключения страниц
     const handlePageChange = (pageNumber) => {
         setCurrentPage(pageNumber);
-    };
-    const handleViewMore = (postId) => {
-        navigate(`/post/${postId}`);
     };
 
     if (loading) return <div className="flex justify-center items-center min-h-screen">Loading...</div>;
@@ -115,20 +111,18 @@ function Main() {
             <h2 className="text-3xl font-semibold text-gray-800 mt-4 text-left w-full max-w-5xl px-4">Recent Posts</h2>
 
             {/* Сетка постов */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-4 max-w-5xl w-full">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-4 max-w-5xl w-full mb-5">
                 {currentPosts.map((post) => (
                     <Link key={post.id} to={`/post/${post.id}`} className="hover:shadow-2xl transition-shadow duration-300">
                         <Post post={post} />
                     </Link>
                 ))}
             </div>
-            <br />
 
             {/* Навигация по страницам */}
-            <div className="mt-4 flex justify-center">
+            <div className="mt-4 flex justify-center mb-5">
                 {renderPaginationButtons()}
             </div>
-            <br />
         </div>
     );
 

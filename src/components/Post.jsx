@@ -14,13 +14,11 @@ function Post({ post }) {
 
             <div className="flex justify-between items-center text-gray-500 text-sm my-4 border-t border-gray-200 pt-4">
                 <div className="flex flex-col items-start">
-                    <span>❤️ Likes: {post.likeCount}</span>
-                    <br />
+                    <span className='mb-5'>❤️ Likes: {post.likeCount}</span>
                     <span>👎 Dislikes: {post.dislikeCount}</span>
                 </div>
                 <div className="flex flex-col items-end">
-                    <span>👀 Views: {post.views}</span>
-                    <br />
+                    <span className='mb-5'>👀 Views: {post.views}</span>
                     <span>💬 Comments: {post.commentCount}</span>
                 </div>
             </div>

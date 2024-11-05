@@ -44,8 +44,7 @@ function FullPost() {
     const dislikesCount = likes.filter(like => like.type === 'dislike').length;
 
     return (
-        <div className="max-w-2xl mx-auto pt-16 flex flex-col min-h-screen">
-            <br />
+        <div className="max-w-2xl mx-auto pt-16 flex flex-col min-h-screen mt-5">
             <div className="flex items-center mb-4">
                 {/* <div className="flex items-center mr-3">
                     <span className="text-gray-600 text-sm font-bold mr-1">{user.rating}</span>

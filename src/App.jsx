@@ -8,6 +8,8 @@ import Register from './pages/Register';
 import Main from './pages/Main';
 import FullPost from './pages/FullPost';
 import Error from './pages/Error';
+import Category from './pages/Category';
+import Categories from './pages/Categories';
 import { AuthProvider } from './context/AuthContext';
 
 
@@ -22,6 +24,8 @@ function App() {
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Register />} />
                     <Route path="/post/:id" element={<FullPost />} />
+                    <Route path="/categories" element={<Categories />} />
+                    <Route path="/categories/:category_id/posts" element={<Category />} />
                     <Route path='*' element={<Error />} />
                 </Routes>
             </main>
