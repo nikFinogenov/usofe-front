@@ -4,7 +4,7 @@ import axios from 'axios';
 
 const API_URL = 'http://localhost:3306/api';
 
-export async function fetchPosts() {
+export const fetchPosts = async () => {
     try {
         const response = await axios.get(`${API_URL}/posts`);
         return response.data.posts;
@@ -15,8 +15,11 @@ export async function fetchPosts() {
 };
 
 export const fetchPostById = async (id) => {
-    const response = await fetch(`/api/posts/${id}`);
-    if (!response.ok) throw new Error('Failed to fetch post');
-    const data = await response.json();
-    return data;
+    try {
+        const response = await axios.get(`${API_URL}/posts/${id}`);
+        return response.data;
+    } catch (error) {
+        console.error('Failed to fetch post:', error);
+        throw error;
+    }
 };
