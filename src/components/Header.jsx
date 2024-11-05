@@ -34,7 +34,7 @@ function Header() {
                 <div className="absolute top-16 left-4 w-48 bg-white text-gray-800 rounded-md shadow-lg z-20 transition-opacity duration-200 ease-in-out">
                     <ul className="flex flex-col font-medium mt-2">
                         <li>
-                            <Link to="/posts" className="block py-2 px-4 hover:bg-blue-500 hover:text-white rounded-md transition duration-200">Posts</Link>
+                            <Link to="/" className="block py-2 px-4 hover:bg-blue-500 hover:text-white rounded-md transition duration-200">Posts</Link>
                         </li>
                         <li>
                             <Link to="/users" className="block py-2 px-4 hover:bg-blue-500 hover:text-white rounded-md transition duration-200">Users</Link>

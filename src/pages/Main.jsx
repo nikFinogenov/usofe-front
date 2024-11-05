@@ -10,6 +10,7 @@ function Main() {
     const [loading, setLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPosts, setTotalPosts] = useState(0); // Общее количество постов
+    const [error, setError] = useState(null);
     const navigate = useNavigate();
 
     useEffect(() => {

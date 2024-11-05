@@ -7,6 +7,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Main from './pages/Main';
 import FullPost from './pages/FullPost';
+import Error from './pages/Error';
 import { AuthProvider } from './context/AuthContext';
 
 
@@ -21,6 +22,7 @@ function App() {
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Register />} />
                     <Route path="/post/:id" element={<FullPost />} />
+                    <Route path='*' element={<Error />} />
                 </Routes>
             </main>
             <Footer />
