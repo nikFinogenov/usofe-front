@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { fetchPostById } from '../services/postService';
+import Comment from '../components/Comment';
 
 function FullPost() {
     const { id } = useParams();
@@ -54,28 +55,16 @@ function FullPost() {
             </div>
             
             <div className="flex justify-between items-center mt-4 text-gray-500 text-sm">
-                <span>❤️ {likesCount} likes</span>
+                <span>👍 {likesCount} likes</span>
                 <span>👎 {dislikesCount} dislikes</span>
                 <span>💬 {comments.length} comments</span>
             </div>
 
             <div className="mt-8">
                 <h3 className="text-xl font-semibold mb-4">Comments</h3>
-                {comments.map(comment => {
-                    // Разделяем лайки и дизлайки для каждого комментария
-                    const commentLikesCount = comment.likes.filter(like => like.type === 'like').length;
-                    const commentDislikesCount = comment.likes.filter(like => like.type === 'dislike').length;
-
-                    return (
-                        <div key={comment.id} className="mb-4 border-b pb-4">
-                            <p className="text-gray-700">{comment.content}</p>
-                            <div className="flex justify-between items-center mt-2 text-gray-500 text-sm">
-                                <span>👍 {commentLikesCount} likes</span>
-                                <span>👎 {commentDislikesCount} dislikes</span>
-                            </div>
-                        </div>
-                    );
-                })}
+                {comments.map(comment => (
+                    <Comment key={comment.id} comment={comment} />
+                ))}
             </div>
         </div>
     );
