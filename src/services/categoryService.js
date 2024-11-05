@@ -1,9 +1,9 @@
 // services/categoryService.js
-const API_URL = 'http://localhost:3306/api';
+// const API_URL = '';
 
 export const fetchCategories = async () => {
     try {
-        const response = await fetch(`${API_URL}/categories`);
+        const response = await fetch(`${process.env.REACT_APP_API}/categories`);
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
@@ -16,7 +16,7 @@ export const fetchCategories = async () => {
 
 export const fetchPostsByCategoryId = async (categoryId) => {
     try {
-        const response = await fetch(`${API_URL}/categories/${categoryId}/posts`);
+        const response = await fetch(`${process.env.REACT_APP_API}/categories/${categoryId}/posts`);
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
