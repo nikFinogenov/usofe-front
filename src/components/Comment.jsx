@@ -3,7 +3,7 @@ import React from 'react';
 
 function Comment({ comment }) {
     const { content, user, likes } = comment;
-    
+
     // Разделяем лайки и дизлайки для комментария
     const likesCount = likes.filter(like => like.type === 'like').length;
     const dislikesCount = likes.filter(like => like.type === 'dislike').length;
