@@ -3,6 +3,7 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
+import Sidebar from './components/Sidebar';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Main from './pages/Main';
@@ -19,6 +20,7 @@ function App() {
         <AuthProvider>
         <Router>
             <Header />
+            <Sidebar />
             <main className="flex-grow">
                 <Routes>
                     <Route path="/" element={<Main />} />
