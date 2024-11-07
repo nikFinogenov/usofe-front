@@ -81,7 +81,7 @@ function FullPost() {
                 <h3 className="text-xl font-semibold mb-4">Comments</h3>
                 {
                 comments.map(comment => (
-                        <Comment key={comment.id} comment={comment} />
+                        <Comment key={comment.id} comment={comment} isReply={Boolean(comment.replyId)}/>
                     ))
                 }
             </div>

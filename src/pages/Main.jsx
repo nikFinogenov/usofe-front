@@ -38,7 +38,7 @@ function Main() {
             {/* Featured PostPreview */}
             {posts.length > 0 && (
                 <div className="w-full max-w-5xl mb-6 p-4 bg-white rounded-lg shadow-lg">
-                    <h2 className="text-2xl font-semibold text-gray-900 mb-2">Featured PostPreview</h2>
+                    <h2 className="text-2xl font-semibold text-gray-900 mb-2">Featured Post</h2>
                     <Link to={`/post/${posts[0].id}`}>
                         <PostPreview post={posts[0]} className="text-xl" />
                     </Link>
