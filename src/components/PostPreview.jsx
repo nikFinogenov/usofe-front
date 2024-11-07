@@ -10,7 +10,7 @@ function PostPreview({ post }) {
                 {post.content.length > 50 ? `${post.content.slice(0, 50)}...` : post.content}
             </p>
             
-            <CategoryTags categories={post.categories} />
+            <CategoryTags categories={post.categories} maxVisible={5} />
 
             <div className="flex justify-between items-center text-gray-500 text-sm my-4 border-t border-gray-200 pt-4">
                 <div className="flex flex-col items-start">

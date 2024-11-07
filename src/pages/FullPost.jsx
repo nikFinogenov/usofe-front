@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { fetchPostById, fetchPostComments } from '../services/postService';
 import Comment from '../components/Comment';
+import CategoryTags from '../components/CategoryTags';
 
 function FullPost() {
     const { id } = useParams();
@@ -50,13 +51,14 @@ function FullPost() {
             </p>
             <p className="text-gray-700 mb-4">{content}</p>
 
-            <div className="flex flex-wrap gap-2 mb-4">
+            {/* <div className="flex flex-wrap gap-2 mb-4">
                 {categories.map(category => (
                     <span key={category.id} className="bg-gray-200 text-gray-700 px-2 py-1 rounded">
                         {category.title}
                     </span>
                 ))}
-            </div>
+            </div> */}
+            <CategoryTags categories={categories} maxVisible={categories.length} />
 
             <div className="flex justify-between items-center mt-4 text-gray-500 text-sm">
                 <span>❤️ {likesCount} likes</span>

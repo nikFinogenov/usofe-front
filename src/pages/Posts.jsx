@@ -21,7 +21,7 @@ function Posts() {
     useEffect(() => {
         const loadPosts = async () => {
             try {
-                const { posts, totalPosts } = await fetchPosts(currentPage);
+                const { posts, totalPosts } = await fetchPosts(currentPage, postsPerPage);
                 setPosts(posts);
                 setTotalPosts(totalPosts);
                 setLoading(false);

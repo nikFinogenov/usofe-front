@@ -1,7 +1,7 @@
 import React from 'react';
 
-function CategoryTags({ categories }) {
-    const maxVisible = 5; // Maximum tags to show before truncating
+function CategoryTags({ categories, maxVisible }) {
+    // const maxVisible = 5; // Maximum tags to show before truncating
 
     // Determine if truncation is needed
     const visibleCategories = categories.slice(0, maxVisible);

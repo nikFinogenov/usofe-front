@@ -7,7 +7,6 @@ export const fetchCategories = async (page = 1, pageSize = 10) => {
         const response = await axios.get(`${process.env.REACT_APP_API}/categories`,{
             params: { page, pageSize }
         });
-        console.log(response);
         return response.data;
     } catch (error) {
         console.error('Failed to fetch categories:', error);
@@ -15,13 +14,12 @@ export const fetchCategories = async (page = 1, pageSize = 10) => {
     }
 };
 
-export const fetchPostsByCategoryId = async (categoryId) => {
+export const fetchPostsByCategoryId = async (categoryId, page = 1, pageSize = 10) => {
     try {
-        const response = await fetch(`${process.env.REACT_APP_API}/categories/${categoryId}/posts`);
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        return await response.json();
+        const response = await axios.get(`${process.env.REACT_APP_API}/categories/${categoryId}/posts`, {
+            params: { page, pageSize }
+        });
+        return response.data;
     } catch (error) {
         console.error(`Failed to fetch posts for category ${categoryId}:`, error);
         throw error;
