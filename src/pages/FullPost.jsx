@@ -1,13 +1,14 @@
 // pages/FullPost.jsx
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { fetchPostById } from '../services/postService';
+import { fetchPostById, fetchPostComments } from '../services/postService';
 import Comment from '../components/Comment';
 // import { FaArrowUp, FaArrowDown, FaMinus } from 'react-icons/fa';
 
 function FullPost() {
     const { id } = useParams();
     const [post, setPost] = useState(null);
+    const [postComments, setPostComments] = useState(null);
     const [loading, setLoading] = useState(true);
     // const renderRating = (rating) => {
     //     if (rating > 0) {
@@ -23,7 +24,9 @@ function FullPost() {
         const loadPost = async () => {
             try {
                 const postData = await fetchPostById(id);
+                const comData = await fetchPostComments(id);
                 setPost(postData);
+                setPostComments(comData);
             } catch (error) {
                 console.error('Failed to load post:', error);
             } finally {
@@ -37,7 +40,8 @@ function FullPost() {
     if (loading) return <div>Loading...</div>;
     if (!post) return <div>PostPreview not found.</div>;
 
-    const { title, content, publishDate, views, user, categories, comments, likes } = post;
+    const { title, content, publishDate, views, user, categories, likes } = post;
+    const comments  = postComments;
 
     // Разделяем лайки и дизлайки поста
     const likesCount = likes.filter(like => like.type === 'like').length;
@@ -70,14 +74,16 @@ function FullPost() {
             <div className="flex justify-between items-center mt-4 text-gray-500 text-sm">
                 <span>❤️ {likesCount} likes</span>
                 <span>👎 {dislikesCount} dislikes</span>
-                <span>💬 {comments.length} comments</span>
+                {/* <span>💬 {comments.length} comments</span> */}
             </div>
 
             <div className="mt-8">
                 <h3 className="text-xl font-semibold mb-4">Comments</h3>
-                {comments.map(comment => (
-                    <Comment key={comment.id} comment={comment} />
-                ))}
+                {
+                comments.map(comment => (
+                        <Comment key={comment.id} comment={comment} />
+                    ))
+                }
             </div>
         </div>
     );
