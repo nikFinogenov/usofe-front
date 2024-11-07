@@ -39,8 +39,8 @@ function FullPost() {
         postComments.filter(reply => reply.replyId === commentId);
 
     return (
-        <div className="max-w-2xl mx-auto pt-16 flex flex-col min-h-screen mt-5">
-            <div className="flex items-center mb-4">
+        <div className="max-w-2xl mx-auto pt-16 flex flex-col flex-grow">
+            <div className="flex items-center mb-4 mt-5">
                 <img src={user.profilePicture} alt="Author" className="w-10 h-10 rounded-full mr-2" />
                 <h2 className="font-semibold text-lg">{user.fullName}</h2>
             </div>

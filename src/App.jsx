@@ -14,28 +14,33 @@ import Categories from './pages/Categories';
 import { AuthProvider } from './context/AuthContext';
 import Posts from './pages/Posts';
 
-
 function App() {
     return (
         <AuthProvider>
-        <Router>
-            <Header />
-            <Sidebar />
-            <main className="flex-grow">
-                <Routes>
-                    <Route path="/" element={<Main />} />
-                    <Route path="/login" element={<Login />} />
-                    <Route path="/register" element={<Register />} />
-                    <Route path="/post/:id" element={<FullPost />} />
-                    <Route path="/posts" element={<Posts />} />
-                    <Route path="/categories" element={<Categories />} />
-                    <Route path="/categories/:category_id/posts" element={<Category />} />
-                    <Route path='*' element={<Error />} />
-                </Routes>
-            </main>
-            <Footer />
-        </Router>
-    </AuthProvider>
+            <Router>
+                <div className="flex flex-col min-h-screen">
+                    <Header />
+                    <div className="flex flex-grow">
+                        <Sidebar />
+                        <div className="flex-grow flex flex-col">
+                            <main className="flex-grow">
+                                <Routes>
+                                    <Route path="/" element={<Main />} />
+                                    <Route path="/login" element={<Login />} />
+                                    <Route path="/register" element={<Register />} />
+                                    <Route path="/post/:id" element={<FullPost />} />
+                                    <Route path="/posts" element={<Posts />} />
+                                    <Route path="/categories" element={<Categories />} />
+                                    <Route path="/categories/:category_id/posts" element={<Category />} />
+                                    <Route path='*' element={<Error />} />
+                                </Routes>
+                            </main>
+                        </div>
+                    </div>
+                    <Footer />
+                </div>
+            </Router>
+        </AuthProvider>
     );
 }
 
