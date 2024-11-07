@@ -1,42 +1,56 @@
 // src/components/Pagination.jsx
+
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
-const Pagination = ({ currentPage, totalPages, onNext, onPrevious, onFirst, onLast }) => {
-    return (
-        <div className="flex justify-between items-center mt-6">
-            <button 
-                onClick={onFirst}
-                disabled={currentPage === 1}
-                className="bg-blue-500 text-white px-4 py-2 rounded disabled:opacity-50"
-            >
-                Супер Назад
-            </button>
-            <button 
-                onClick={onPrevious}
-                disabled={currentPage === 1}
-                className="bg-blue-500 text-white px-4 py-2 rounded disabled:opacity-50"
-            >
-                Предыдущая
-            </button>
+function Pagination({ currentPage, totalPages, onPageChange }) {
+    const navigate = useNavigate();
 
-            <span>{`Страница ${currentPage} из ${totalPages}`}</span>
+    const handlePageChange = (pageNumber) => {
+        onPageChange(pageNumber);
+        navigate(`?page=${pageNumber}`);
+    };
 
-            <button 
-                onClick={onNext}
-                disabled={currentPage === totalPages}
-                className="bg-blue-500 text-white px-4 py-2 rounded disabled:opacity-50"
-            >
-                Следующая
-            </button>
-            <button 
-                onClick={onLast}
-                disabled={currentPage === totalPages}
-                className="bg-blue-500 text-white px-4 py-2 rounded disabled:opacity-50"
-            >
-                Супер Вперёд
-            </button>
-        </div>
-    );
-};
+    const renderButtons = () => {
+        const buttons = [];
+        const maxVisibleButtons = 10;
+        let startPage = Math.max(1, currentPage - 4);
+        let endPage = Math.min(totalPages, startPage + maxVisibleButtons - 1);
+
+        if (endPage - startPage < maxVisibleButtons - 1) {
+            startPage = Math.max(1, endPage - maxVisibleButtons + 1);
+        }
+
+        if (startPage > 1) {
+            buttons.push(
+                <button key={1} onClick={() => handlePageChange(1)} className={`mx-1 px-3 py-1 rounded ${currentPage === 1 ? 'bg-blue-500 text-white' : 'bg-gray-300'}`}>
+                    1
+                </button>
+            );
+            if (startPage > 2) buttons.push(<span key="ellipsis-start">...</span>);
+        }
+
+        for (let page = startPage; page <= endPage; page++) {
+            buttons.push(
+                <button key={page} onClick={() => handlePageChange(page)} className={`mx-1 px-3 py-1 rounded ${currentPage === page ? 'bg-blue-500 text-white' : 'bg-gray-300'}`}>
+                    {page}
+                </button>
+            );
+        }
+
+        if (endPage < totalPages) {
+            if (endPage < totalPages - 1) buttons.push(<span key="ellipsis-end">...</span>);
+            buttons.push(
+                <button key={totalPages} onClick={() => handlePageChange(totalPages)} className={`mx-1 px-3 py-1 rounded ${currentPage === totalPages ? 'bg-blue-500 text-white' : 'bg-gray-300'}`}>
+                    {totalPages}
+                </button>
+            );
+        }
+
+        return buttons;
+    };
+
+    return <div className="mt-4 flex justify-center mb-5">{renderButtons()}</div>;
+}
 
 export default Pagination;

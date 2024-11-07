@@ -35,7 +35,7 @@ function FullPost() {
     }, [id]);
 
     if (loading) return <div>Loading...</div>;
-    if (!post) return <div>Post not found.</div>;
+    if (!post) return <div>PostPreview not found.</div>;
 
     const { title, content, publishDate, views, user, categories, comments, likes } = post;
 

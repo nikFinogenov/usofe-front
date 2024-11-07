@@ -1,7 +1,7 @@
 import React from 'react';
 import CategoryTags from './CategoryTags';
 
-function Post({ post }) {
+function PostPreview({ post }) {
     return (
         <div className="bg-white rounded-lg shadow-md p-6 mt-4 flex flex-col h-full">
             <h2 className="text-xl font-bold mb-2">{post.title}</h2>
@@ -38,4 +38,4 @@ function Post({ post }) {
     );
 }
 
-export default Post;
+export default PostPreview;

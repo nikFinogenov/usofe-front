@@ -1,46 +1,61 @@
-// pages/PostsByCategory.jsx
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import { fetchPostsByCategoryId } from '../services/categoryService';
+import PostPreview from '../components/PostPreview';
+import Pagination from '../components/Pagination';
+import { Link } from 'react-router-dom';
 
-function PostsByCategory() {
+function Category() {
     const { category_id } = useParams();
+    const postsPerPage = 12;
     const [posts, setPosts] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPosts, setTotalPosts] = useState(0);
+    const location = useLocation();
+
+    useEffect(() => {
+        const query = new URLSearchParams(location.search);
+        const page = query.get('page');
+        if (page) setCurrentPage(parseInt(page));
+    }, [location.search]);
 
     useEffect(() => {
         const loadPosts = async () => {
             try {
-                const postsData = await fetchPostsByCategoryId(category_id);
-                setPosts(postsData);
+                const { posts, totalPosts } = await fetchPostsByCategoryId(category_id, currentPage);
+                setPosts(posts);
+                setTotalPosts(totalPosts);
+                setLoading(false);
             } catch (error) {
                 console.error('Failed to load posts:', error);
-            } finally {
                 setLoading(false);
             }
         };
 
         loadPosts();
-    }, [category_id]);
+    }, [category_id, currentPage]);
+
+    const totalPages = Math.ceil(totalPosts / postsPerPage);
 
     if (loading) return <div>Loading posts...</div>;
-    if (!posts.length) return <div>No posts found for this category.</div>;
 
     return (
-        <div className="max-w-2xl mx-auto pt-16 mt-5 mb-5">
+        <div className="flex flex-col items-center pt-16 bg-gray-100 min-h-screen">
             <h1 className="text-2xl font-bold mb-4">Posts in Category</h1>
-            <ul className="space-y-4">
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-4 max-w-5xl w-full mb-5">
                 {posts.map(post => (
-                    <li key={post.id} className="border p-4 rounded">
-                        <h2 className="font-semibold">{post.title}</h2>
-                        <p>{post.content}</p>
-                        <span className="text-gray-500">Published on {new Date(post.publishDate).toLocaleDateString()}</span>
-                    </li>
-                    
+                    <Link key={post.id} to={`/post/${post.id}`} className="hover:shadow-2xl transition-shadow duration-300">
+                        <PostPreview post={post} />
+                    </Link>
+                    // <PostPreview key={post.id} post={post} />
                 ))}
-            </ul>
+            </div>
+
+            <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
         </div>
     );
 }
 
-export default PostsByCategory;
+export default Category;

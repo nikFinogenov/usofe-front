@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { fetchPosts } from '../services/postService';
-import Post from '../components/Post';
+import PostPreview from '../components/PostPreview';
 import { Link, useLocation } from 'react-router-dom';
 
 function Main() {
@@ -35,12 +35,12 @@ function Main() {
                 <p className="text-lg mt-2">Explore the latest discussions and trending topics</p>
             </div>
 
-            {/* Featured Post */}
+            {/* Featured PostPreview */}
             {posts.length > 0 && (
                 <div className="w-full max-w-5xl mb-6 p-4 bg-white rounded-lg shadow-lg">
-                    <h2 className="text-2xl font-semibold text-gray-900 mb-2">Featured Post</h2>
+                    <h2 className="text-2xl font-semibold text-gray-900 mb-2">Featured PostPreview</h2>
                     <Link to={`/post/${posts[0].id}`}>
-                        <Post post={posts[0]} className="text-xl" />
+                        <PostPreview post={posts[0]} className="text-xl" />
                     </Link>
                 </div>
             )}
@@ -49,7 +49,7 @@ function Main() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 px-4 max-w-5xl w-full mb-10">
                 {posts.slice(1, 7).map((post) => (
                     <Link key={post.id} to={`/post/${post.id}`} className="hover:shadow-xl transition-shadow duration-300">
-                        <Post post={post} />
+                        <PostPreview post={post} />
                     </Link>
                 ))}
             </div>
