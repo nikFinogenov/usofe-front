@@ -9,6 +9,7 @@ function Category() {
     const { category_id } = useParams();
     const postsPerPage = 12;
     const [posts, setPosts] = useState([]);
+    const [title, setTitle] = useState('');
     const [loading, setLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPosts, setTotalPosts] = useState(0);
@@ -23,8 +24,9 @@ function Category() {
     useEffect(() => {
         const loadPosts = async () => {
             try {
-                const { posts, totalPosts } = await fetchPostsByCategoryId(category_id, currentPage, postsPerPage);
+                const { title, posts, totalPosts } = await fetchPostsByCategoryId(category_id, currentPage, postsPerPage);
                 setPosts(posts);
+                setTitle(title);
                 setTotalPosts(totalPosts);
                 setLoading(false);
             } catch (error) {
@@ -42,7 +44,7 @@ function Category() {
 
     return (
         <div className="flex flex-col items-center pt-16 bg-gray-100 min-h-screen mt-5">
-            <h1 className="text-2xl font-bold mb-4">Posts in Category</h1>
+            <h1 className="text-2xl font-bold mb-4">Posts about <i>{title}</i> </h1>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-4 max-w-5xl w-full mb-5">
                 {posts.map(post => (
