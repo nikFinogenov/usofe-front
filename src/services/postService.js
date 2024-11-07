@@ -2,12 +2,10 @@
 
 import axios from 'axios';
 
-// const API_URL = 'http://localhost:3306/api';
-
-export const fetchPosts = async (page = 1) => {
+export const fetchPosts = async (page = 1, pageSize = 10) => {
     try {
         const response = await axios.get(`${process.env.REACT_APP_API}/posts`, {
-            params: { page }
+            params: { page, pageSize }
         });
         return response.data;
     } catch (error) {
