@@ -3,30 +3,20 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { fetchPostById, fetchPostComments } from '../services/postService';
 import Comment from '../components/Comment';
-// import { FaArrowUp, FaArrowDown, FaMinus } from 'react-icons/fa';
 
 function FullPost() {
     const { id } = useParams();
     const [post, setPost] = useState(null);
-    const [postComments, setPostComments] = useState(null);
+    const [postComments, setPostComments] = useState([]);
     const [loading, setLoading] = useState(true);
-    // const renderRating = (rating) => {
-    //     if (rating > 0) {
-    //         return <FaArrowUp className="text-green-500" />;
-    //     } else if (rating < 0) {
-    //         return <FaArrowDown className="text-red-500" />;
-    //     } else {
-    //         return <FaMinus className="text-gray-500" />;
-    //     }
-    // };
 
     useEffect(() => {
         const loadPost = async () => {
             try {
                 const postData = await fetchPostById(id);
-                const comData = await fetchPostComments(id);
+                const commentsData = await fetchPostComments(id);
                 setPost(postData);
-                setPostComments(comData);
+                setPostComments(commentsData);
             } catch (error) {
                 console.error('Failed to load post:', error);
             } finally {
@@ -38,22 +28,19 @@ function FullPost() {
     }, [id]);
 
     if (loading) return <div>Loading...</div>;
-    if (!post) return <div>PostPreview not found.</div>;
+    if (!post) return <div>Post not found.</div>;
 
     const { title, content, publishDate, views, user, categories, likes } = post;
-    const comments  = postComments;
 
-    // Разделяем лайки и дизлайки поста
     const likesCount = likes.filter(like => like.type === 'like').length;
     const dislikesCount = likes.filter(like => like.type === 'dislike').length;
+
+    const getReplies = (commentId) =>
+        postComments.filter(reply => reply.replyId === commentId);
 
     return (
         <div className="max-w-2xl mx-auto pt-16 flex flex-col min-h-screen mt-5">
             <div className="flex items-center mb-4">
-                {/* <div className="flex items-center mr-3">
-                    <span className="text-gray-600 text-sm font-bold mr-1">{user.rating}</span>
-                    {renderRating(user.rating)}
-                </div> */}
                 <img src={user.profilePicture} alt="Author" className="w-10 h-10 rounded-full mr-2" />
                 <h2 className="font-semibold text-lg">{user.fullName}</h2>
             </div>
@@ -74,16 +61,19 @@ function FullPost() {
             <div className="flex justify-between items-center mt-4 text-gray-500 text-sm">
                 <span>❤️ {likesCount} likes</span>
                 <span>👎 {dislikesCount} dislikes</span>
-                {/* <span>💬 {comments.length} comments</span> */}
             </div>
 
             <div className="mt-8">
                 <h3 className="text-xl font-semibold mb-4">Comments</h3>
-                {
-                comments.map(comment => (
-                        <Comment key={comment.id} comment={comment} isReply={Boolean(comment.replyId)}/>
-                    ))
-                }
+                {postComments
+                    .filter(comment => !comment.replyId)
+                    .map(comment => (
+                        <Comment
+                            key={comment.id}
+                            comment={comment}
+                            replies={getReplies(comment.id)}
+                        />
+                    ))}
             </div>
         </div>
     );
