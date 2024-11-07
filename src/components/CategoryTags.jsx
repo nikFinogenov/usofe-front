@@ -11,7 +11,7 @@ function CategoryTags({ categories, maxVisible }) {
     return (
         <div className="flex flex-wrap mt-4">
             {visibleCategories.map((category, index) => (
-                <Link to={`/categories/${category.id}/posts`}>
+                <Link className="mb-2" to={`/categories/${category.id}/posts`}>
                     <span
                         key={category.id || index}
                         className="bg-blue-100 text-blue-600 text-xs font-semibold mr-2 mb-2 px-3 py-1 rounded-full"

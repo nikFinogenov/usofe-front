@@ -26,7 +26,6 @@ function Category() {
             try {
                 const { title, posts, totalPosts } = await fetchPostsByCategoryId(category_id, currentPage, postsPerPage);
                 setPosts(posts);
-                // console.log(posts);
                 setTitle(title);
                 setTotalPosts(totalPosts);
                 setLoading(false);
