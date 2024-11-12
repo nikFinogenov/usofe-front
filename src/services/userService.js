@@ -23,7 +23,7 @@ export const fetchCurrentUser = async () => {
 };
 
 export const clearUser = async () => {
-    await axios.post(`${process.env.REACT_APP_API}/auth/logout`);
+    // await axios.post(`${process.env.REACT_APP_API}/auth/logout`);
     // return
     // NIHUYA
 };

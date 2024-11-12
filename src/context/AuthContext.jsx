@@ -1,7 +1,7 @@
 // src/context/AuthContext.jsx
 
 import React, { createContext, useState, useEffect } from 'react';
-import { fetchUser, fetchCurrentUser, clearUser} from '../services/userService';
+import { fetchUser, fetchCurrentUser} from '../services/userService';
 
 export const AuthContext = createContext();
 
@@ -38,8 +38,8 @@ export const AuthProvider = ({ children }) => {
     };
 
     const logout = async () => {
-        console.log("LOGGIN OUT");
-        await clearUser();
+        // console.log("LOGGIN OUT");
+        // await clearUser();
         localStorage.removeItem('token');
         setUser(null);
     };

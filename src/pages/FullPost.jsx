@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import { fetchPostById, fetchPostComments } from '../services/postService';
 import Comment from '../components/Comment';
 import CategoryTags from '../components/CategoryTags';
+import LoadingSpinner from '../components/LoadingSpinner';
 
 function FullPost() {
     const { id } = useParams();
@@ -28,7 +29,7 @@ function FullPost() {
         loadPost();
     }, [id]);
 
-    if (loading) return <div>Loading...</div>;
+    if (loading) return <LoadingSpinner />;
     if (!post) return <div>Post not found.</div>;
 
     const { title, content, publishDate, views, user, categories, likes } = post;

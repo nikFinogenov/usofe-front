@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { fetchCategories } from '../services/categoryService';
 import Pagination from '../components/Pagination';
+import LoadingSpinner from '../components/LoadingSpinner';
 
 
 function Categories() {
@@ -25,7 +26,6 @@ function Categories() {
                 const { categories, totalCategories} = await fetchCategories(currentPage, categoriesPerPage);
                 setCategories(categories);
                 setTotalCategories(totalCategories); // Assuming the API provides total pages
-                setLoading(false);
             } catch (error) {
                 console.error('Failed to load categories:', error);
             } finally {
@@ -38,7 +38,7 @@ function Categories() {
 
     const totalPages = Math.ceil(totalCategories / categoriesPerPage);
 
-    if (loading) return <div>Loading categories...</div>;
+    if (loading) return <LoadingSpinner />;
 
     return (
         <div className="max-w-2xl mx-auto pt-16 mt-5">

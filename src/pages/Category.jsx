@@ -4,6 +4,7 @@ import { fetchPostsByCategoryId } from '../services/categoryService';
 import PostPreview from '../components/PostPreview';
 import Pagination from '../components/Pagination';
 import { Link } from 'react-router-dom';
+import LoadingSpinner from '../components/LoadingSpinner';
 
 function Category() {
     const { category_id } = useParams();
@@ -28,9 +29,10 @@ function Category() {
                 setPosts(posts);
                 setTitle(title);
                 setTotalPosts(totalPosts);
-                setLoading(false);
             } catch (error) {
                 console.error('Failed to load posts:', error);
+            }
+            finally {
                 setLoading(false);
             }
         };
@@ -40,7 +42,7 @@ function Category() {
 
     const totalPages = Math.ceil(totalPosts / postsPerPage);
 
-    if (loading) return <div>Loading posts...</div>;
+    if (loading) return <LoadingSpinner />;
 
     return (
         <div className="flex flex-col items-center pt-16 bg-gray-100 min-h-screen mt-5">

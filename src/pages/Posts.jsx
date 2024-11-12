@@ -3,6 +3,7 @@ import { fetchPosts } from '../services/postService';
 import PostPreview from '../components/PostPreview';
 import Pagination from '../components/Pagination';
 import { Link, useLocation } from 'react-router-dom';
+import LoadingSpinner from '../components/LoadingSpinner';
 
 function Posts() {
     const postsPerPage = 12;
@@ -24,9 +25,10 @@ function Posts() {
                 const { posts, totalPosts } = await fetchPosts(currentPage, postsPerPage);
                 setPosts(posts);
                 setTotalPosts(totalPosts);
-                setLoading(false);
             } catch (error) {
                 console.error('Failed to load posts:', error);
+            }
+            finally {
                 setLoading(false);
             }
         };
@@ -36,7 +38,7 @@ function Posts() {
 
     const totalPages = Math.ceil(totalPosts / postsPerPage);
 
-    if (loading) return <div className="flex justify-center items-center min-h-screen">Loading...</div>;
+    if (loading) return <LoadingSpinner />;
 
     return (
         <div className="flex flex-col items-center pt-16 bg-gray-100 min-h-screen">

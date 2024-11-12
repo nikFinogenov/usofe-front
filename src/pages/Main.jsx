@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { fetchPosts } from '../services/postService';
 import PostPreview from '../components/PostPreview';
 import { Link, useLocation } from 'react-router-dom';
+import LoadingSpinner from '../components/LoadingSpinner';
 
 function Main() {
     const [posts, setPosts] = useState([]);
@@ -15,9 +16,10 @@ function Main() {
             try {
                 const { posts } = await fetchPosts(1); // Fetch only the first page for main
                 setPosts(posts);
-                setLoading(false);
             } catch (error) {
                 console.error('Failed to load posts:', error);
+            }
+            finally {
                 setLoading(false);
             }
         };
@@ -25,7 +27,7 @@ function Main() {
         loadPosts();
     }, [location]);
 
-    if (loading) return <div className="flex justify-center items-center min-h-screen">Loading...</div>;
+    if (loading) return <LoadingSpinner />;
 
     return (
         <div className="flex flex-col items-center pt-16 bg-gray-100 min-h-screen">
