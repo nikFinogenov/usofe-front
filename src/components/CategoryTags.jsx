@@ -2,20 +2,19 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 function CategoryTags({ categories, maxVisible }) {
-    // const maxVisible = 5; // Maximum tags to show before truncating
-
-    // Determine if truncation is needed
+    // Обрезаем категории, если их больше `maxVisible`
     const visibleCategories = categories.slice(0, maxVisible);
     const remainingCount = categories.length - maxVisible;
 
     return (
         <div className="flex flex-wrap mt-4">
-            {visibleCategories.map((category, index) => (
-                <Link className="mb-2" to={`/categories/${category.id}/posts`}>
-                    <span
-                        key={category.id || index}
-                        className="bg-blue-100 text-blue-600 text-xs font-semibold mr-2 mb-2 px-3 py-1 rounded-full"
-                    >
+            {visibleCategories.map((category) => (
+                <Link
+                    key={category.id} // Уникальный ключ на корневом элементе списка
+                    className="mb-2"
+                    to={`/categories/${category.id}/posts`}
+                >
+                    <span className="bg-blue-100 text-blue-600 text-xs font-semibold mr-2 mb-2 px-3 py-1 rounded-full">
                         {category.title}
                     </span>
                 </Link>

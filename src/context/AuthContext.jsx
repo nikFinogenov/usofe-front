@@ -1,33 +1,46 @@
 // src/context/AuthContext.jsx
 
-import React, { createContext, useState } from 'react';
+import React, { createContext, useState, useEffect } from 'react';
+import { fetchUser, fetchCurrentUser } from '../services/userService';
 
-// Создаем контекст
 export const AuthContext = createContext();
 
-// Провайдер для оборачивания приложения
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
 
-    const login = (email, password) => {
-        // Здесь должна быть логика аутентификации
-        // Например, сделать запрос к вашему API
-        // Если успешно, установить пользователя
-        setUser({ email });
-    };
+    useEffect(() => {
+        const loadUser = async () => {
+            const currentUser = await fetchCurrentUser();
+            if (currentUser) {
+                setUser(currentUser); // Set the user if token is valid
+            }
+        };
+        loadUser();
+    }, []);
 
-    const register = (email, username, password) => {
-        // Логика регистрации
-        // После успешной регистрации можно выполнить вход
-        setUser({ email, username });
+    const login = async (email, password) => {
+        try {
+            const data = await fetchUser(email, password);
+            localStorage.setItem('token', data.token);
+            setUser(data.user);
+            return data.user;
+        } catch (error) {
+            console.error('Login failed:', error);
+            return null;
+        }
     };
 
     const logout = () => {
-        setUser(null); // Убираем пользователя при выходе
+        localStorage.removeItem('token'); // Remove token on logout
+        setUser(null);
+    };
+
+    const register = (email, username, password) => {
+        // Registration logic
     };
 
     return (
-        <AuthContext.Provider value={{ user, login, register, logout }}>
+        <AuthContext.Provider value={{ user, login, logout, register, setUser }}>
             {children}
         </AuthContext.Provider>
     );

@@ -1,6 +1,7 @@
 // src/App.jsx
 
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import Sidebar from './components/Sidebar';
@@ -13,11 +14,20 @@ import Category from './pages/Category';
 import Categories from './pages/Categories';
 import { AuthProvider } from './context/AuthContext';
 import Posts from './pages/Posts';
+function ScrollToTop() {
+    const { pathname } = useLocation();
 
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, [pathname]);
+
+    return null;
+}
 function App() {
     return (
         <AuthProvider>
             <Router>
+            <ScrollToTop /> {/* Этот компонент прокручивает наверх при каждом изменении маршрута */}
                 <div className="flex flex-col min-h-screen">
                     <Header />
                     <div className="flex flex-grow">
