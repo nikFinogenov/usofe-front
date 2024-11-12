@@ -74,10 +74,10 @@ const UserDropdown = () => {
           <ul className="py-2 text-sm text-gray-700">
             <li>
               <a
-                href={user ? '/dashboard' : '/login'}
+                href={user ? '/profile' : '/login'}
                 className="block px-4 py-2 hover:bg-gray-100"
               >
-                {user ? "Dashboard" : "Login"}
+                {user ? "Profile" : "Login"}
               </a>
             </li>
             <li>

@@ -17,6 +17,7 @@ import { NotifyProvider } from './context/NotifyContext';
 import Posts from './pages/Posts';
 import LoadingSpinner from './components/LoadingSpinner';
 import Notification from './components/Notification';
+import Profile from './pages/Profile';
 function ScrollToTop() {
     const { pathname } = useLocation();
 
@@ -29,42 +30,37 @@ function ScrollToTop() {
 
 function AppContent() {
     const { isLoading } = useContext(AuthContext);
-    const [notification, setNotification] = useState(null);
-
-    if (isLoading) {
-        return <LoadingSpinner />; // Показываем спиннер, пока идет загрузка
-    }
-    const handleNotification = (message, type) => {
-        setNotification({ text: message, type });
-        setTimeout(() => setNotification(null), 5000);  // Убираем уведомление через 5 секунд
-    };
+    const [notification] = useState(null);
 
     return (
-        <div className="app-content">
-            <ScrollToTop /> {/* Этот компонент прокручивает наверх при каждом изменении маршрута */}
-            <div className="flex flex-col min-h-screen">
-                <Header />
-                <div className="flex flex-grow">
-                    <Sidebar />
-                    <div className="flex-grow flex flex-col">
-                        {notification && <Notification text={notification.text} type={notification.type} />}
-                        <main className="flex-grow">
-                            <Routes>
-                                <Route path="/" element={<Main />} />
-                                <Route path="/login" element={<Login />} />
-                                <Route path="/register" element={<Register onNotification={handleNotification} />} />
-                                <Route path="/post/:id" element={<FullPost />} />
-                                <Route path="/posts" element={<Posts />} />
-                                <Route path="/categories" element={<Categories />} />
-                                <Route path="/categories/:category_id/posts" element={<Category />} />
-                                <Route path='*' element={<Error />} />
-                            </Routes>
-                        </main>
+        isLoading ? <LoadingSpinner /> : (
+            <div className="app-content">
+                <ScrollToTop /> {/* Этот компонент прокручивает наверх при каждом изменении маршрута */}
+                <div className="flex flex-col min-h-screen">
+                    <Header />
+                    <div className="flex flex-grow">
+                        <Sidebar />
+                        <div className="flex-grow flex flex-col">
+                            {notification && <Notification text={notification.text} type={notification.type} />}
+                            <main className="flex-grow">
+                                <Routes>
+                                    <Route path="/" element={<Main />} />
+                                    <Route path="/login" element={<Login />} />
+                                    <Route path="/register" element={<Register />} />
+                                    <Route path="/post/:id" element={<FullPost />} />
+                                    <Route path="/posts" element={<Posts />} />
+                                    <Route path="/categories" element={<Categories />} />
+                                    <Route path="/categories/:category_id/posts" element={<Category />} />
+                                    <Route path="/profile" element={<Profile />} />
+                                    <Route path='*' element={<Error />} />
+                                </Routes>
+                            </main>
+                        </div>
                     </div>
+                    <Footer />
                 </div>
-                <Footer />
             </div>
-        </div>
+        )
     );
 }
 
