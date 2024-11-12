@@ -9,7 +9,7 @@ export const fetchUser = async (email, password) => {
         });
         return response.data;
     } catch (error) {
-        console.error('Error fetching posts:', error);
+        // console.error('Error fetching user:', error);
         throw error;
     }
 };
@@ -23,19 +23,21 @@ export const fetchCurrentUser = async () => {
 };
 
 export const clearUser = async () => {
-    // await axios.post(`${process.env.REACT_APP_API}/auth/logout`);
+    await axios.post(`${process.env.REACT_APP_API}/auth/logout`);
     // return
     // NIHUYA
 };
 
-export const createUser = async (id) => {
-    // try {
-    //     const response = await axios.post(`${process.env.REACT_APP_API}/posts/${id}`);
-    //     return response.data;
-    // } catch (error) {
-    //     console.error('Failed to fetch post:', error);
-    //     throw error;
-    // }
+export const createUser = async (login, email, fullName, password) => {
+    try {
+        const response = await axios.post(`${process.env.REACT_APP_API}/auth/register`, {
+            login, email, fullName, password
+        });
+        return response.data;
+    } catch (error) {
+        // console.error('Error fetching user:', error);
+        throw error;
+    }
 };
 
 // src/services/userService.js

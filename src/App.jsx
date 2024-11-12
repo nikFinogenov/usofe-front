@@ -26,7 +26,7 @@ function ScrollToTop() {
 }
 
 function AppContent() {
-    const { user, isLoading } = useContext(AuthContext);
+    const { isLoading } = useContext(AuthContext);
 
     if (isLoading) {
         return <LoadingSpinner />; // Показываем спиннер, пока идет загрузка

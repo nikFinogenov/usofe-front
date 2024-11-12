@@ -1,7 +1,6 @@
 // src/context/AuthContext.jsx
-
 import React, { createContext, useState, useEffect } from 'react';
-import { fetchUser, fetchCurrentUser} from '../services/userService';
+import { fetchUser, fetchCurrentUser, createUser } from '../services/userService';
 
 export const AuthContext = createContext();
 
@@ -17,7 +16,7 @@ export const AuthProvider = ({ children }) => {
                     setUser(currentUser);
                 }
             } catch (error) {
-                console.error('Failed to load user:', error);
+                // console.error('Failed to load user:', error);
             } finally {
                 setIsLoading(false);
             }
@@ -38,15 +37,21 @@ export const AuthProvider = ({ children }) => {
     };
 
     const logout = async () => {
-        // console.log("LOGGIN OUT");
-        // await clearUser();
         localStorage.removeItem('token');
         setUser(null);
     };
 
-    const register = () => {
-
-    }
+    const register = async (email, username, fullName, password) => {
+        try {
+            const data = await createUser(username, email, fullName, password); // Передаем все параметры
+            localStorage.setItem('token', data.token);
+            setUser(data.user);
+            return data.user;
+        } catch (error) {
+            // console.error('Registration failed:', error);
+            throw error;
+        }
+    };
 
     return (
         <AuthContext.Provider value={{ user, login, logout, register, setUser, isLoading }}>
