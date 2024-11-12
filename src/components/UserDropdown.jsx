@@ -100,7 +100,7 @@ const UserDropdown = () => {
           {user && (
             <div className="py-2">
               <a
-                href="/logout"
+                href="/"
                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                 onClick={logout}
               >

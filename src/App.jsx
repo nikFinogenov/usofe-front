@@ -1,6 +1,6 @@
 // src/App.jsx
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
 import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -12,8 +12,9 @@ import FullPost from './pages/FullPost';
 import Error from './pages/Error';
 import Category from './pages/Category';
 import Categories from './pages/Categories';
-import { AuthProvider } from './context/AuthContext';
+import { AuthProvider, AuthContext } from './context/AuthContext';
 import Posts from './pages/Posts';
+import LoadingSpinner from './components/LoadingSpinner';
 function ScrollToTop() {
     const { pathname } = useLocation();
 
@@ -23,10 +24,16 @@ function ScrollToTop() {
 
     return null;
 }
-function App() {
+
+function AppContent() {
+    const { user, isLoading } = useContext(AuthContext);
+
+    if (isLoading) {
+        return <LoadingSpinner />; // Показываем спиннер, пока идет загрузка
+    }
+
     return (
-        <AuthProvider>
-            <Router>
+        <div className="app-content">
             <ScrollToTop /> {/* Этот компонент прокручивает наверх при каждом изменении маршрута */}
                 <div className="flex flex-col min-h-screen">
                     <Header />
@@ -49,6 +56,16 @@ function App() {
                     </div>
                     <Footer />
                 </div>
+        </div>
+    );
+}
+
+
+function App() {
+    return (
+        <AuthProvider>
+            <Router>
+                <AppContent />
             </Router>
         </AuthProvider>
     );
