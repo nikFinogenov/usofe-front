@@ -41,7 +41,8 @@ function Register() {
                 const message = await register(email, username, fullName, password);
                 if (message) {
                     // onNotification(message, 'info');  // Отправляем уведомление на главную страницу
-                    showNotification(message, 'success');
+                    showNotification(message, 'info');
+                    // showNotification(message, 'success');
                     navigate('/');
                 }
             } catch (error) {

@@ -29,10 +29,10 @@ export const AuthProvider = ({ children }) => {
             const data = await fetchUser(email, password);
             localStorage.setItem('token', data.token);
             setUser(data.user);
-            return data.user;
+            return data;
         } catch (error) {
-            console.error('Login failed:', error);
-            return null;
+            // console.error('Login failed:', error);
+            throw error;
         }
     };
 

@@ -40,7 +40,7 @@ function Notification({ text, type, onClose }) {
     }
 
     return (
-        <div className={`fixed top-15 right-5 z-50 p-4 rounded-lg shadow-lg ${bgColor} ${alertClass} flex items-center`}>
+        <div className={`fixed top-16 right-5 z-50 p-4 rounded-lg shadow-lg ${bgColor} ${alertClass} flex items-center`}>
             <svg className="flex-shrink-0 w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                 <path d={iconPath} />
             </svg>
