@@ -13,12 +13,15 @@ export const fetchUser = async (email, password) => {
         throw error;
     }
 };
-export const fetchUserPosts = async (login) => {
+export const fetchUserPosts = async (page = 1, pageSize = 5, id) => {
+    // console.log('porno');
     try {
-        // const response = await axios.post(`${process.env.REACT_APP_API}/auth/login`);
-        // return response.data;
+        const response = await axios.get(`${process.env.REACT_APP_API}/users/${id}/posts`, {
+            params: { page, pageSize }
+        });
+        return response.data;
     } catch (error) {
-        // console.error('Error fetching user:', error);
+        console.error('Error fetching posts:', error);
         throw error;
     }
 };

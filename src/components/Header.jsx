@@ -9,7 +9,7 @@ function Header() {
     // const { user } = useContext(AuthContext);
 
     return (
-        <header className="fixed top-0 left-0 right-0 bg-blue-500 text-white p-4 z-10 shadow-md">
+        <header className="fixed top-0 left-0 right-0 bg-blue-500 text-white py-3 px-4 z-10 shadow-md">
             <nav className="flex items-center">
                 <h1 className="text-2xl font-bold">
                     <Link to="/">My Forum</Link>

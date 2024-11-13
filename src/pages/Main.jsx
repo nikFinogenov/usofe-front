@@ -30,7 +30,7 @@ function Main() {
     if (loading) return <LoadingSpinner />;
 
     return (
-        <div className="flex flex-col items-center pt-16 bg-gray-100 min-h-screen">
+        <div className="flex flex-col items-center pt-16 min-h-screen">
             {/* Banner Section */}
             <div className="w-full bg-blue-600 text-white p-8 text-center mb-6">
                 <h1 className="text-4xl font-bold">Welcome to Our Forum</h1>

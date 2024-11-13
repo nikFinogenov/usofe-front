@@ -33,4 +33,13 @@ export const fetchPostComments = async (id) => {
         throw error;
     }
 };
+export const fetchRandomPost = async () => {
+    try {
+        const response = await axios.get(`${process.env.REACT_APP_API}/posts/random`);
+        return response.data;
+    } catch (error) {
+        console.error('Failed to fetch random post:', error);
+        throw error;
+    }
+};
 

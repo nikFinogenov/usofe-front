@@ -32,7 +32,7 @@ const UserDropdown = () => {
       <button
         id="dropdownAvatarNameButton"
         onClick={toggleDropdown}
-        className="flex items-center text-sm pe-1 font-medium text-gray-900 rounded-full hover:text-white focus:text-white md:me-0 focus:ring-2 focus:ring-gray-100"
+        className="flex items-center text-sm pe-1 p-1 font-medium text-gray-900 rounded-full hover:text-white focus:text-white md:me-0 focus:ring-2 focus:ring-gray-100"
         type="button"
       >
         <span className="sr-only">Open user menu</span>
