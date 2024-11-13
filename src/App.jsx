@@ -29,7 +29,7 @@ function ScrollToTop() {
 }
 
 function AppContent() {
-    const { isLoading } = useContext(AuthContext);
+    const { user, isLoading } = useContext(AuthContext);
     const [notification] = useState(null);
 
     return (

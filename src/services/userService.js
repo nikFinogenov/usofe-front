@@ -13,6 +13,15 @@ export const fetchUser = async (email, password) => {
         throw error;
     }
 };
+export const fetchUserPosts = async (login) => {
+    try {
+        // const response = await axios.post(`${process.env.REACT_APP_API}/auth/login`);
+        // return response.data;
+    } catch (error) {
+        // console.error('Error fetching user:', error);
+        throw error;
+    }
+};
 
 export const fetchCurrentUser = async () => {
     const token = localStorage.getItem('token');
