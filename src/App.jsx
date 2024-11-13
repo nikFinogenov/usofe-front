@@ -18,6 +18,7 @@ import Posts from './pages/Posts';
 import LoadingSpinner from './components/LoadingSpinner';
 import Notification from './components/Notification';
 import Profile from './pages/Profile';
+import Settings from './pages/Settings'
 function ScrollToTop() {
     const { pathname } = useLocation();
 
@@ -52,6 +53,7 @@ function AppContent() {
                                     <Route path="/categories" element={<Categories />} />
                                     <Route path="/categories/:category_id/posts" element={<Category />} />
                                     <Route path="/profile" element={<Profile />} />
+                                    <Route path="/settings" element={<Settings />} />
                                     <Route path='*' element={<Error />} />
                                 </Routes>
                             </main>
