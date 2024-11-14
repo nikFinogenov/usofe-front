@@ -105,3 +105,12 @@ export const deleteAllPosts = async (userId) => {
         throw error;
     }
 };
+export const deleteAllComments = async (userId) => {
+    try {
+        const response = await axios.delete(`${API_URL}/users/${userId}/comments`);
+        return response.data;
+    } catch (error) {
+        console.error('Error deleting all comments:', error);
+        throw error;
+    }
+};

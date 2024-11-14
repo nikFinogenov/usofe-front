@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect, useRef } from 'react';
 import { AuthContext } from '../context/AuthContext';
-import { updateUser, deleteAccount, deleteAllPosts, uploadAvatar } from '../services/userService';
+import { updateUser, deleteAccount, deleteAllPosts, deleteAllComments, uploadAvatar } from '../services/userService';
 import { NotifyContext } from '../context/NotifyContext';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -23,10 +23,10 @@ function Settings() {
     const fileInputRef = useRef(null);  // Ref for file input
     const [isAccountChecked, setIsAccountChecked] = useState(false);
     const [isPostsChecked, setIsPostsChecked] = useState(false);
+    const [isCommentsChecked, setIsCommentsChecked] = useState(false);
     const [usernameConfirm, setUsernameConfirm] = useState("");
     const [usernameConfirmPosts, setUsernameConfirmPosts] = useState("");
-
-
+    const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
     useEffect(() => {
         if (!user) navigate('/');
@@ -119,11 +119,12 @@ function Settings() {
             setLoading(false);
         }
     };
-
     const handleDeleteAccount = async () => {
         setLoading(true);
         try {
-            await deleteAccount(user.id);
+            if (isPostsChecked) await deleteAllPosts(user.id);  // Delete posts if selected
+            if (isCommentsChecked) await deleteAllComments(user.id);  // Delete comments if selected
+            await deleteAccount(user.id);  // Delete the account itself
             showNotification('Account deleted successfully', 'success');
             logout();
             navigate('/');
@@ -133,6 +134,7 @@ function Settings() {
             setLoading(false);
         }
     };
+
 
     const handleDeleteAllPosts = async () => {
         setLoading(true);
@@ -145,6 +147,18 @@ function Settings() {
             setLoading(false);
         }
     };
+    const handleDeleteAllComments = async () => {
+        setLoading(true);
+        try {
+            await deleteAllComments(user.id); // Call the service to delete all comments
+            showNotification('All comments deleted successfully', 'success');
+        } catch (error) {
+            showNotification('Failed to delete comments', 'error');
+        } finally {
+            setLoading(false);
+        }
+    };
+
 
     if (loading) return <LoadingSpinner />;
 
@@ -161,7 +175,10 @@ function Settings() {
                             Delete Account
                         </li>
                         <li onClick={() => setActiveSection("deletePosts")} className={`cursor-pointer py-2 ${activeSection === "deletePosts" ? 'bg-gray-300 font-semibold shadow rounded px-4 transition-all duration-300' : ''}`}>
-                            Delete All Posts
+                            Delete All Posts 
+                        </li>
+                        <li onClick={() => setActiveSection("deleteComments")} className={`cursor-pointer py-2 ${activeSection === "deleteComments" ? 'bg-gray-300 font-semibold shadow rounded px-4 transition-all duration-300' : ''}`}>
+                            Delete All Comments
                         </li>
                     </ul>
                 </div>
@@ -206,7 +223,7 @@ function Settings() {
                             <h2 className="text-2xl font-bold mb-4">Delete Account</h2>
                             <p className="text-gray-600 mb-4">Are you sure you want to delete your account? This action cannot be undone.</p>
 
-                            {/* Checkbox to enable the button */}
+                            {/* Checkbox to enable post and comment deletion */}
                             <div className="mb-4">
                                 <label className="flex items-center">
                                     <input
@@ -215,7 +232,7 @@ function Settings() {
                                         checked={isAccountChecked}
                                         className="mr-2"
                                     />
-                                    Confirm Deletion
+                                    Confirm Deletion of Account
                                 </label>
                             </div>
 
@@ -234,7 +251,8 @@ function Settings() {
 
                             {/* Disable button until confirmed */}
                             <button
-                                onClick={handleDeleteAccount}
+                                // onClick={handleDeleteAccount}
+                                onClick={() => setShowDeleteDialog(true)}
                                 className={`bg-red-500 text-white p-3 rounded-md hover:bg-red-600 ${!isAccountChecked || usernameConfirm !== user.login ? 'opacity-50 cursor-not-allowed' : ''}`}
                                 disabled={!isAccountChecked || usernameConfirm !== user.login}
                             >
@@ -242,6 +260,7 @@ function Settings() {
                             </button>
                         </div>
                     )}
+
 
                     {activeSection === "deletePosts" && (
                         <div>
@@ -284,9 +303,98 @@ function Settings() {
                             </button>
                         </div>
                     )}
+                    {activeSection === "deleteComments" && (
+                        <div>
+                            <h2 className="text-2xl font-bold mb-4">Delete All Comments</h2>
+                            <p className="text-gray-600 mb-4">Are you sure you want to delete all your comments? This action cannot be undone.</p>
+
+                            {/* Checkbox to enable the button */}
+                            <div className="mb-4">
+                                <label className="flex items-center">
+                                    <input
+                                        type="checkbox"
+                                        onChange={() => setIsPostsChecked(!isPostsChecked)}
+                                        checked={isPostsChecked}
+                                        className="mr-2"
+                                    />
+                                    Confirm Deletion
+                                </label>
+                            </div>
+
+                            {/* Text input for username confirmation */}
+                            {isPostsChecked && (
+                                <div className="mb-4">
+                                    <label className="block text-gray-600 mb-2">Enter your username to confirm:</label>
+                                    <input
+                                        type="text"
+                                        value={usernameConfirmPosts}
+                                        onChange={(e) => setUsernameConfirmPosts(e.target.value)}
+                                        className="border p-2 rounded-md w-full"
+                                    />
+                                </div>
+                            )}
+
+                            {/* Disable button until confirmed */}
+                            <button
+                                onClick={handleDeleteAllComments}
+                                className={`bg-red-500 text-white p-3 rounded-md hover:bg-red-600 ${!isPostsChecked || usernameConfirmPosts !== user.login ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                disabled={!isPostsChecked || usernameConfirmPosts !== user.login}
+                            >
+                                Delete All Comments
+                            </button>
+                        </div>
+                    )}
+
 
                 </div>
             </div>
+            {showDeleteDialog && (
+                <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50">
+                    <div className="bg-white p-6 rounded-md w-96">
+                        <h3 className="text-lg font-semibold mb-4">Are you sure you want to delete your account?</h3>
+                        <p className="text-sm text-gray-600 mb-4">
+                            This action is permanent and cannot be undone. Your account will be deleted, but your posts and comments will be retained unless specified otherwise.
+                        </p>
+                        <p className="text-sm text-gray-600 mb-6">
+                            If you wish to delete your posts or comments as well, please check the corresponding options below.
+                        </p>
+                        <div className="space-y-3">
+                            <label className="flex items-center space-x-2">
+                                <input
+                                    type="checkbox"
+                                    checked={isPostsChecked}
+                                    onChange={(e) => setIsPostsChecked(e.target.checked)}
+                                    className="form-checkbox h-4 w-4 text-red-500"
+                                />
+                                <span className="text-sm text-gray-700">I want to delete my posts as well</span>
+                            </label>
+                            <label className="flex items-center space-x-2">
+                                <input
+                                    type="checkbox"
+                                    checked={isCommentsChecked}
+                                    onChange={(e) => setIsCommentsChecked(e.target.checked)}
+                                    className="form-checkbox h-4 w-4 text-red-500"
+                                />
+                                <span className="text-sm text-gray-700">I want to delete my comments as well</span>
+                            </label>
+                        </div>
+                        <div className="flex justify-end mt-4">
+                            <button
+                                onClick={() => setShowDeleteDialog(false)}
+                                className="bg-gray-300 text-black py-2 px-4 rounded-md mr-4"
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                onClick={handleDeleteAccount}
+                                className="bg-red-500 text-white py-2 px-4 rounded-md"
+                            >
+                                Delete Account
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
