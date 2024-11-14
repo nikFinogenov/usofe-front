@@ -21,6 +21,12 @@ function Settings() {
     const navigate = useNavigate();
     const location = useLocation();
     const fileInputRef = useRef(null);  // Ref for file input
+    const [isAccountChecked, setIsAccountChecked] = useState(false);
+    const [isPostsChecked, setIsPostsChecked] = useState(false);
+    const [usernameConfirm, setUsernameConfirm] = useState("");
+    const [usernameConfirmPosts, setUsernameConfirmPosts] = useState("");
+
+
 
     useEffect(() => {
         if (!user) navigate('/');
@@ -148,13 +154,13 @@ function Settings() {
             <div className="flex w-full max-w-4xl mx-auto shadow-md rounded-lg overflow-hidden">
                 <div className="w-1/4 bg-gray-200 p-4">
                     <ul>
-                        <li onClick={() => setActiveSection("edit")} className={`cursor-pointer py-2 ${activeSection === "edit" ? 'bg-gray-300 font-semibold' : ''}`}>
+                        <li onClick={() => setActiveSection("edit")} className={`cursor-pointer py-2 ${activeSection === "edit" ? 'bg-gray-300 font-semibold shadow rounded px-4 transition-all duration-300' : ''}`}>
                             Edit Account
                         </li>
-                        <li onClick={() => setActiveSection("deleteAccount")} className={`cursor-pointer py-2 ${activeSection === "deleteAccount" ? 'bg-gray-300 font-semibold' : ''}`}>
+                        <li onClick={() => setActiveSection("deleteAccount")} className={`cursor-pointer py-2 ${activeSection === "deleteAccount" ? 'bg-gray-300 font-semibold shadow rounded px-4 transition-all duration-300' : ''}`}>
                             Delete Account
                         </li>
-                        <li onClick={() => setActiveSection("deletePosts")} className={`cursor-pointer py-2 ${activeSection === "deletePosts" ? 'bg-gray-300 font-semibold' : ''}`}>
+                        <li onClick={() => setActiveSection("deletePosts")} className={`cursor-pointer py-2 ${activeSection === "deletePosts" ? 'bg-gray-300 font-semibold shadow rounded px-4 transition-all duration-300' : ''}`}>
                             Delete All Posts
                         </li>
                     </ul>
@@ -199,7 +205,41 @@ function Settings() {
                         <div>
                             <h2 className="text-2xl font-bold mb-4">Delete Account</h2>
                             <p className="text-gray-600 mb-4">Are you sure you want to delete your account? This action cannot be undone.</p>
-                            <button onClick={handleDeleteAccount} className="bg-red-500 text-white p-3 rounded-md hover:bg-red-600">Delete Account</button>
+
+                            {/* Checkbox to enable the button */}
+                            <div className="mb-4">
+                                <label className="flex items-center">
+                                    <input
+                                        type="checkbox"
+                                        onChange={() => setIsAccountChecked(!isAccountChecked)}
+                                        checked={isAccountChecked}
+                                        className="mr-2"
+                                    />
+                                    Confirm Deletion
+                                </label>
+                            </div>
+
+                            {/* Text input for username confirmation */}
+                            {isAccountChecked && (
+                                <div className="mb-4">
+                                    <label className="block text-gray-600 mb-2">Enter your username to confirm:</label>
+                                    <input
+                                        type="text"
+                                        value={usernameConfirm}
+                                        onChange={(e) => setUsernameConfirm(e.target.value)}
+                                        className="border p-2 rounded-md w-full"
+                                    />
+                                </div>
+                            )}
+
+                            {/* Disable button until confirmed */}
+                            <button
+                                onClick={handleDeleteAccount}
+                                className={`bg-red-500 text-white p-3 rounded-md hover:bg-red-600 ${!isAccountChecked || usernameConfirm !== user.login ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                disabled={!isAccountChecked || usernameConfirm !== user.login}
+                            >
+                                Delete Account
+                            </button>
                         </div>
                     )}
 
@@ -207,9 +247,44 @@ function Settings() {
                         <div>
                             <h2 className="text-2xl font-bold mb-4">Delete All Posts</h2>
                             <p className="text-gray-600 mb-4">Are you sure you want to delete all your posts? This action cannot be undone.</p>
-                            <button onClick={handleDeleteAllPosts} className="bg-red-500 text-white p-3 rounded-md hover:bg-red-600">Delete All Posts</button>
+
+                            {/* Checkbox to enable the button */}
+                            <div className="mb-4">
+                                <label className="flex items-center">
+                                    <input
+                                        type="checkbox"
+                                        onChange={() => setIsPostsChecked(!isPostsChecked)}
+                                        checked={isPostsChecked}
+                                        className="mr-2"
+                                    />
+                                    Confirm Deletion
+                                </label>
+                            </div>
+
+                            {/* Text input for username confirmation */}
+                            {isPostsChecked && (
+                                <div className="mb-4">
+                                    <label className="block text-gray-600 mb-2">Enter your username to confirm:</label>
+                                    <input
+                                        type="text"
+                                        value={usernameConfirmPosts}
+                                        onChange={(e) => setUsernameConfirmPosts(e.target.value)}
+                                        className="border p-2 rounded-md w-full"
+                                    />
+                                </div>
+                            )}
+
+                            {/* Disable button until confirmed */}
+                            <button
+                                onClick={handleDeleteAllPosts}
+                                className={`bg-red-500 text-white p-3 rounded-md hover:bg-red-600 ${!isPostsChecked || usernameConfirmPosts !== user.login ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                disabled={!isPostsChecked || usernameConfirmPosts !== user.login}
+                            >
+                                Delete All Posts
+                            </button>
                         </div>
                     )}
+
                 </div>
             </div>
         </div>
