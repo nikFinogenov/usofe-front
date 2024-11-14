@@ -17,7 +17,7 @@ function Profile() {
     useEffect(() => {
         const loadUserPosts = async () => {
             try {
-                const { posts, totalPosts } = await fetchUserPosts(currentPage, postsPerPage, user.id);
+                const { posts, totalPosts } = await fetchUserPosts(currentPage, postsPerPage, user?.id);
                 setPosts(posts);
                 setTotalPosts(totalPosts);
             } catch (error) {
@@ -28,7 +28,7 @@ function Profile() {
         };
 
         loadUserPosts();
-    }, [currentPage, user.id]);
+    }, [currentPage, user?.id]);
 
     const handlePageChange = (pageNumber) => {
         setCurrentPage(pageNumber);
@@ -45,20 +45,20 @@ function Profile() {
             <div className="w-full max-w-3xl mb-6 p-6 bg-white rounded-lg shadow-lg">
                 <div className="flex items-center space-x-4">
                     <img
-                        src={user.profilePicture}
-                        alt={`${user.fullName}'s profile`}
+                        src={user?.profilePicture}
+                        alt={`${user?.fullName}'s profile`}
                         className="w-24 h-24 rounded-full object-cover"
                     />
                     <div>
-                        <h1 className="text-3xl font-bold text-gray-900">{user.fullName}</h1>
-                        <p className="text-lg text-gray-600">@{user.login}</p>
-                        <p className="text-gray-600">{user.email}</p>
-                        <p className="text-gray-500">{user.role}</p>
-                        <p className="text-gray-500">Rating: {user.rating}</p>
+                        <h1 className="text-3xl font-bold text-gray-900">{user?.fullName}</h1>
+                        <p className="text-lg text-gray-600">@{user?.login}</p>
+                        <p className="text-gray-600">{user?.email}</p>
+                        <p className="text-gray-500">{user?.role}</p>
+                        <p className="text-gray-500">Rating: {user?.rating}</p>
                         <p className="text-gray-500">
                             Email Confirmed: 
-                            <span className={`text-cyan-50 rounded-sm px-2 py-1 m-2 ${user.emailConfirmed ? 'bg-green-400' : 'bg-red-400'}`}>
-                                {user.emailConfirmed ? 'True' : 'False'}
+                            <span className={`text-cyan-50 rounded-sm px-2 py-1 m-2 ${user?.emailConfirmed ? 'bg-green-400' : 'bg-red-400'}`}>
+                                {user?.emailConfirmed ? 'True' : 'False'}
                             </span>
                         </p>
                     </div>
