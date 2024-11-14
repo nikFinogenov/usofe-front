@@ -49,8 +49,13 @@ export const createUser = async (login, email, fullName, password) => {
 // Update user details
 export const updateUser = async (userId, { login, email, fullName, password, role }) => {
     try {
+        const token = localStorage.getItem('token'); // Получаем токен из localStorage
         const response = await axios.patch(`${API_URL}/users/${userId}`, {
             login, email, fullName, password, role
+        }, {
+            headers: {
+                'Authorization': `Bearer ${token}` // Отправляем токен в заголовках
+            }
         });
         return response.data;
     } catch (error) {
@@ -62,9 +67,14 @@ export const updateUser = async (userId, { login, email, fullName, password, rol
 // Upload avatar
 export const uploadAvatar = async (formData) => {
     try {
+        const token = localStorage.getItem('token');
+        if(!token) {
+            throw new Error('No token found');
+        }
         const response = await axios.patch(`${API_URL}/users/avatar`, formData, {
             headers: {
-                'Content-Type': 'multipart/form-data'
+                'Content-Type': 'multipart/form-data',
+                'Authorization': `Bearer ${token}`
             }
         });
         return response.data;

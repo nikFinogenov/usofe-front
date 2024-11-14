@@ -27,6 +27,10 @@ const UserDropdown = () => {
     };
   }, [isOpen]);
 
+  useEffect(() => {
+    setIsOpen(false);  // Optionally close the dropdown when user changes
+  }, [user]);
+
   return (
     <div className="relative" ref={dropdownRef}>
       <button

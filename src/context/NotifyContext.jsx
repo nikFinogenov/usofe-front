@@ -8,7 +8,6 @@ export function NotifyProvider({ children }) {
     const [notification, setNotification] = useState(null);
 
     const showNotification = useCallback((message, type) => {
-        console.log("asd")
         setNotification({ text: message, type });
         setTimeout(() => setNotification(null), 5000); // Убираем уведомление через 5 секунд
     }, []);

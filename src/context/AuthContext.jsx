@@ -41,6 +41,8 @@ export const AuthProvider = ({ children }) => {
         setUser(null);
     };
 
+    const setNewUser = (newUserData) => setUser(newUserData);
+
     const register = async (email, username, fullName, password) => {
         try {
             const data = await createUser(username, email, fullName, password); // Передаем все параметры
@@ -55,7 +57,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     return (
-        <AuthContext.Provider value={{ user, login, logout, register, setUser, isLoading }}>
+        <AuthContext.Provider value={{ user, login, logout, register, setNewUser, isLoading }}>
             {children}
         </AuthContext.Provider>
     );
