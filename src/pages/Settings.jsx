@@ -10,12 +10,12 @@ function Settings() {
     const showNotification = useContext(NotifyContext);
     const [activeSection, setActiveSection] = useState("edit");
     const [formData, setFormData] = useState({
-        fullName: user.fullName,
-        email: user.email,
-        login: user.login,
+        fullName: user?.fullName,
+        email: user?.email,
+        login: user?.login,
     });
     const [errors, setErrors] = useState({});
-    const [avatar, setAvatar] = useState(user.profilePicture);
+    const [avatar, setAvatar] = useState(user?.profilePicture);
     const [selectedAvatarFile, setSelectedAvatarFile] = useState(null);
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();

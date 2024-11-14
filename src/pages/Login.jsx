@@ -35,7 +35,7 @@ function Login() {
 
     return (
         loading ? (<LoadingSpinner />) : (
-        <div className="flex items-center justify-center min-h-screen bg-gray-100">
+        <div className="flex items-center justify-center min-h-screen">
             <div className="bg-white p-8 rounded shadow-md w-80">
                 <h1 className="text-2xl font-semibold text-center mb-6">Login</h1>
                 <form onSubmit={handleSubmit} className="flex flex-col">
