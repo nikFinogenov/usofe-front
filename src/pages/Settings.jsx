@@ -135,7 +135,6 @@ function Settings() {
         }
     };
 
-
     const handleDeleteAllPosts = async () => {
         setLoading(true);
         try {

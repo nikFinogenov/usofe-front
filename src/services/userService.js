@@ -68,7 +68,7 @@ export const updateUser = async (userId, { login, email, fullName, password, rol
 export const uploadAvatar = async (formData) => {
     try {
         const token = localStorage.getItem('token');
-        if(!token) {
+        if (!token) {
             throw new Error('No token found');
         }
         const response = await axios.patch(`${API_URL}/users/avatar`, formData, {
@@ -87,7 +87,9 @@ export const uploadAvatar = async (formData) => {
 // Delete user account
 export const deleteAccount = async (userId) => {
     try {
-        const response = await axios.delete(`${API_URL}/users/${userId}`);
+        const token = localStorage.getItem('token');
+        if (!token) return null;
+        const response = await axios.delete(`${API_URL}/users/${userId}`, { token });
         return response.data;
     } catch (error) {
         console.error('Error deleting account:', error);
@@ -98,7 +100,9 @@ export const deleteAccount = async (userId) => {
 // Delete all posts by user
 export const deleteAllPosts = async (userId) => {
     try {
-        const response = await axios.delete(`${API_URL}/users/${userId}/posts`);
+        const token = localStorage.getItem('token');
+        if (!token) return null;
+        const response = await axios.delete(`${API_URL}/users/${userId}/posts`, { token });
         return response.data;
     } catch (error) {
         console.error('Error deleting all posts:', error);
@@ -107,7 +111,9 @@ export const deleteAllPosts = async (userId) => {
 };
 export const deleteAllComments = async (userId) => {
     try {
-        const response = await axios.delete(`${API_URL}/users/${userId}/comments`);
+        const token = localStorage.getItem('token');
+        if (!token) return null;
+        const response = await axios.delete(`${API_URL}/users/${userId}/comments`, { token });
         return response.data;
     } catch (error) {
         console.error('Error deleting all comments:', error);
