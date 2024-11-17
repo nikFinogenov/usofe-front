@@ -129,6 +129,7 @@ function Settings() {
             logout();
             navigate('/');
         } catch (error) {
+            console.log(error);
             showNotification('Failed to delete account', 'error');
         } finally {
             setLoading(false);
@@ -252,8 +253,8 @@ function Settings() {
                             <button
                                 // onClick={handleDeleteAccount}
                                 onClick={() => setShowDeleteDialog(true)}
-                                className={`bg-red-500 text-white p-3 rounded-md hover:bg-red-600 ${!isAccountChecked || usernameConfirm !== user.login ? 'opacity-50 cursor-not-allowed' : ''}`}
-                                disabled={!isAccountChecked || usernameConfirm !== user.login}
+                                className={`bg-red-500 text-white p-3 rounded-md hover:bg-red-600 ${!isAccountChecked || usernameConfirm !== user?.login ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                disabled={!isAccountChecked || usernameConfirm !== user?.login}
                             >
                                 Delete Account
                             </button>
@@ -295,8 +296,8 @@ function Settings() {
                             {/* Disable button until confirmed */}
                             <button
                                 onClick={handleDeleteAllPosts}
-                                className={`bg-red-500 text-white p-3 rounded-md hover:bg-red-600 ${!isPostsChecked || usernameConfirmPosts !== user.login ? 'opacity-50 cursor-not-allowed' : ''}`}
-                                disabled={!isPostsChecked || usernameConfirmPosts !== user.login}
+                                className={`bg-red-500 text-white p-3 rounded-md hover:bg-red-600 ${!isPostsChecked || usernameConfirmPosts !== user?.login ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                disabled={!isPostsChecked || usernameConfirmPosts !== user?.login}
                             >
                                 Delete All Posts
                             </button>
@@ -312,8 +313,8 @@ function Settings() {
                                 <label className="flex items-center">
                                     <input
                                         type="checkbox"
-                                        onChange={() => setIsPostsChecked(!isPostsChecked)}
-                                        checked={isPostsChecked}
+                                        onChange={() => setIsCommentsChecked(!isCommentsChecked)}
+                                        checked={isCommentsChecked}
                                         className="mr-2"
                                     />
                                     Confirm Deletion
@@ -321,7 +322,7 @@ function Settings() {
                             </div>
 
                             {/* Text input for username confirmation */}
-                            {isPostsChecked && (
+                            {isCommentsChecked && (
                                 <div className="mb-4">
                                     <label className="block text-gray-600 mb-2">Enter your username to confirm:</label>
                                     <input
@@ -336,8 +337,8 @@ function Settings() {
                             {/* Disable button until confirmed */}
                             <button
                                 onClick={handleDeleteAllComments}
-                                className={`bg-red-500 text-white p-3 rounded-md hover:bg-red-600 ${!isPostsChecked || usernameConfirmPosts !== user.login ? 'opacity-50 cursor-not-allowed' : ''}`}
-                                disabled={!isPostsChecked || usernameConfirmPosts !== user.login}
+                                className={`bg-red-500 text-white p-3 rounded-md hover:bg-red-600 ${!isCommentsChecked || usernameConfirmPosts !== user?.login ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                disabled={!isCommentsChecked || usernameConfirmPosts !== user?.login}
                             >
                                 Delete All Comments
                             </button>

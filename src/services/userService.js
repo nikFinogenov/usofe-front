@@ -89,7 +89,11 @@ export const deleteAccount = async (userId) => {
     try {
         const token = localStorage.getItem('token');
         if (!token) return null;
-        const response = await axios.delete(`${API_URL}/users/${userId}`, { token });
+        const response = await axios.delete(`${API_URL}/users/${userId}`, {
+            headers: {
+                'Authorization': `Bearer ${token}` // Отправляем токен в заголовках
+            }
+        });
         return response.data;
     } catch (error) {
         console.error('Error deleting account:', error);
@@ -102,7 +106,11 @@ export const deleteAllPosts = async (userId) => {
     try {
         const token = localStorage.getItem('token');
         if (!token) return null;
-        const response = await axios.delete(`${API_URL}/users/${userId}/posts`, { token });
+        const response = await axios.delete(`${API_URL}/users/${userId}/posts`, {
+            headers: {
+                'Authorization': `Bearer ${token}` // Отправляем токен в заголовках
+            }
+        });
         return response.data;
     } catch (error) {
         console.error('Error deleting all posts:', error);
@@ -113,7 +121,11 @@ export const deleteAllComments = async (userId) => {
     try {
         const token = localStorage.getItem('token');
         if (!token) return null;
-        const response = await axios.delete(`${API_URL}/users/${userId}/comments`, { token });
+        const response = await axios.delete(`${API_URL}/users/${userId}/comments`, {
+            headers: {
+                'Authorization': `Bearer ${token}` // Отправляем токен в заголовках
+            }
+        });
         return response.data;
     } catch (error) {
         console.error('Error deleting all comments:', error);
