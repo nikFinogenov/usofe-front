@@ -1,5 +1,3 @@
-// src/App.jsx
-
 import React, { useState, useEffect, useContext } from 'react';
 import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
 import Header from './components/Header';
@@ -65,7 +63,6 @@ function AppContent() {
         )
     );
 }
-
 
 function App() {
     return (

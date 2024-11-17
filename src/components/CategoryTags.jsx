@@ -10,16 +10,14 @@ function CategoryTags({ categories, maxVisible }) {
         <div className="flex flex-wrap mt-4">
             {visibleCategories.map((category) => (
                 <Link
-                    key={category.id} // Уникальный ключ
+                    key={category.id} // Уникальный ключ на корневом элементе списка
                     className="mb-2"
                     to={`/categories/${category.id}/posts`}
-                    onClick={(e) => e.stopPropagation()} // Предотвращение всплытия
                 >
                     <span className="bg-blue-100 text-blue-600 text-xs font-semibold mr-2 mb-2 px-3 py-1 rounded-full">
                         {category.title}
                     </span>
                 </Link>
-
             ))}
             {remainingCount > 0 && (
                 <span className="text-gray-500 text-sm font-semibold">

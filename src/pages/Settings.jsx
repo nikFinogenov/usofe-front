@@ -26,6 +26,7 @@ function Settings() {
     const [isCommentsChecked, setIsCommentsChecked] = useState(false);
     const [usernameConfirm, setUsernameConfirm] = useState("");
     const [usernameConfirmPosts, setUsernameConfirmPosts] = useState("");
+    const [usernameConfirmComments, setUsernameConfirmComments] = useState("");
     const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
     useEffect(() => {
@@ -158,6 +159,16 @@ function Settings() {
             setLoading(false);
         }
     };
+    const handleChangeSection = async (sectionName) => {
+        setActiveSection(sectionName)
+        setIsPostsChecked(false);
+        setIsCommentsChecked(false);
+        setIsAccountChecked(false);
+        setUsernameConfirmPosts("");
+        setUsernameConfirmComments("");
+        setUsernameConfirm("");
+        
+    };
 
 
     if (loading) return <LoadingSpinner />;
@@ -168,16 +179,16 @@ function Settings() {
             <div className="flex w-full max-w-4xl mx-auto shadow-md rounded-lg overflow-hidden">
                 <div className="w-1/4 bg-gray-200 p-4">
                     <ul>
-                        <li onClick={() => setActiveSection("edit")} className={`cursor-pointer py-2 ${activeSection === "edit" ? 'bg-gray-300 font-semibold shadow rounded px-4 transition-all duration-300' : ''}`}>
+                        <li onClick={() => handleChangeSection("edit")} className={`cursor-pointer py-2 ${activeSection === "edit" ? 'bg-gray-300 font-semibold shadow rounded px-4 transition-all duration-300' : ''}`}>
                             Edit Account
                         </li>
-                        <li onClick={() => setActiveSection("deleteAccount")} className={`cursor-pointer py-2 ${activeSection === "deleteAccount" ? 'bg-gray-300 font-semibold shadow rounded px-4 transition-all duration-300' : ''}`}>
+                        <li onClick={() => handleChangeSection("deleteAccount")} className={`cursor-pointer py-2 ${activeSection === "deleteAccount" ? 'bg-gray-300 font-semibold shadow rounded px-4 transition-all duration-300' : ''}`}>
                             Delete Account
                         </li>
-                        <li onClick={() => setActiveSection("deletePosts")} className={`cursor-pointer py-2 ${activeSection === "deletePosts" ? 'bg-gray-300 font-semibold shadow rounded px-4 transition-all duration-300' : ''}`}>
-                            Delete All Posts 
+                        <li onClick={() => handleChangeSection("deletePosts")} className={`cursor-pointer py-2 ${activeSection === "deletePosts" ? 'bg-gray-300 font-semibold shadow rounded px-4 transition-all duration-300' : ''}`}>
+                            Delete All Posts
                         </li>
-                        <li onClick={() => setActiveSection("deleteComments")} className={`cursor-pointer py-2 ${activeSection === "deleteComments" ? 'bg-gray-300 font-semibold shadow rounded px-4 transition-all duration-300' : ''}`}>
+                        <li onClick={() => handleChangeSection("deleteComments")} className={`cursor-pointer py-2 ${activeSection === "deleteComments" ? 'bg-gray-300 font-semibold shadow rounded px-4 transition-all duration-300' : ''}`}>
                             Delete All Comments
                         </li>
                     </ul>
@@ -327,8 +338,8 @@ function Settings() {
                                     <label className="block text-gray-600 mb-2">Enter your username to confirm:</label>
                                     <input
                                         type="text"
-                                        value={usernameConfirmPosts}
-                                        onChange={(e) => setUsernameConfirmPosts(e.target.value)}
+                                        value={usernameConfirmComments}
+                                        onChange={(e) => setUsernameConfirmComments(e.target.value)}
                                         className="border p-2 rounded-md w-full"
                                     />
                                 </div>
@@ -337,8 +348,8 @@ function Settings() {
                             {/* Disable button until confirmed */}
                             <button
                                 onClick={handleDeleteAllComments}
-                                className={`bg-red-500 text-white p-3 rounded-md hover:bg-red-600 ${!isCommentsChecked || usernameConfirmPosts !== user?.login ? 'opacity-50 cursor-not-allowed' : ''}`}
-                                disabled={!isCommentsChecked || usernameConfirmPosts !== user?.login}
+                                className={`bg-red-500 text-white p-3 rounded-md hover:bg-red-600 ${!isCommentsChecked || usernameConfirmComments !== user?.login ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                disabled={!isCommentsChecked || usernameConfirmComments !== user?.login}
                             >
                                 Delete All Comments
                             </button>
@@ -380,7 +391,11 @@ function Settings() {
                         </div>
                         <div className="flex justify-end mt-4">
                             <button
-                                onClick={() => setShowDeleteDialog(false)}
+                                onClick={() => {
+                                    setShowDeleteDialog(false);
+                                    setIsPostsChecked(false);
+                                    setIsCommentsChecked(false);
+                                }}
                                 className="bg-gray-300 text-black py-2 px-4 rounded-md mr-4"
                             >
                                 Cancel
