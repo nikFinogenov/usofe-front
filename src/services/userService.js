@@ -132,3 +132,21 @@ export const deleteAllComments = async (userId) => {
         throw error;
     }
 };
+
+export const passwordReset = async (email) => {
+    try {
+        const response = await axios.post(`${API_URL}/auth/password-reset`, { email });
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};
+
+export const passwordResetConfirm = async (confirmToken, newPassword) => {
+    try {
+        const response = await axios.post(`${API_URL}/auth/password-reset/${confirmToken}`, { newPassword });
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};

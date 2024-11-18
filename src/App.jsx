@@ -17,6 +17,8 @@ import LoadingSpinner from './components/LoadingSpinner';
 import Notification from './components/Notification';
 import Profile from './pages/Profile';
 import Settings from './pages/Settings'
+import ForgotPassword from './pages/ForgotPassord';
+import ConfirmResetPassword from './pages/ConfirmResetPassword';
 function ScrollToTop() {
     const { pathname } = useLocation();
 
@@ -52,6 +54,8 @@ function AppContent() {
                                     <Route path="/categories/:category_id/posts" element={<Category />} />
                                     <Route path="/profile" element={<Profile />} />
                                     <Route path="/settings" element={<Settings />} />
+                                    <Route path="/forgot-password" element={<ForgotPassword />} />
+                                    <Route path="/confirm-reset/:token" element={<ConfirmResetPassword />} />
                                     <Route path='*' element={<Error />} />
                                 </Routes>
                             </main>
