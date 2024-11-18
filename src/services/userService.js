@@ -150,3 +150,13 @@ export const passwordResetConfirm = async (confirmToken, newPassword) => {
         throw error;
     }
 };
+
+export const emailConfirm = async (confirmToken) => {
+    try {
+        console.log("PIDRILA");
+        const response = await axios.get(`${API_URL}/auth/confirm/${confirmToken}`);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};

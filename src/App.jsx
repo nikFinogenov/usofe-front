@@ -19,6 +19,7 @@ import Profile from './pages/Profile';
 import Settings from './pages/Settings'
 import ForgotPassword from './pages/ForgotPassord';
 import ConfirmResetPassword from './pages/ConfirmResetPassword';
+import ConfirmEmail from './pages/ConfirmEmail'
 function ScrollToTop() {
     const { pathname } = useLocation();
 
@@ -56,6 +57,7 @@ function AppContent() {
                                     <Route path="/settings" element={<Settings />} />
                                     <Route path="/forgot-password" element={<ForgotPassword />} />
                                     <Route path="/confirm-reset/:token" element={<ConfirmResetPassword />} />
+                                    <Route path="/confirm-email/:token" element={<ConfirmEmail />} />
                                     <Route path='*' element={<Error />} />
                                 </Routes>
                             </main>
