@@ -20,6 +20,7 @@ import Settings from './pages/Settings'
 import ForgotPassword from './pages/ForgotPassord';
 import ConfirmResetPassword from './pages/ConfirmResetPassword';
 import ConfirmEmail from './pages/ConfirmEmail'
+import { AxiosInterceptor } from './services/index'
 function ScrollToTop() {
     const { pathname } = useLocation();
 
@@ -92,6 +93,7 @@ function App() {
         <AuthProvider>
             <NotifyProvider>
                 <Router>
+                    <AxiosInterceptor />    
                     <AppContent />
                 </Router>
             </NotifyProvider>

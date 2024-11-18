@@ -1,5 +1,6 @@
 import React, { useState, useContext, useRef, useEffect } from 'react';
 import { AuthContext } from '../context/AuthContext';
+import noname from '../assets/noname.png'
 
 const UserDropdown = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -42,7 +43,7 @@ const UserDropdown = () => {
         <span className="sr-only">Open user menu</span>
         <img
           className="w-8 h-8 me-2 rounded-full"
-          src={user ? user.profilePicture : `${process.env.REACT_APP_BASE}/noname.png`}
+          src={user ? user.profilePicture : noname}
           alt="user"
         />
         {user ? user.fullName : "Anonym"}

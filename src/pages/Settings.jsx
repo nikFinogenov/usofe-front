@@ -115,7 +115,8 @@ function Settings() {
             setNewUser(updatedUser);
             showNotification('Account updated successfully', 'success');
         } catch (error) {
-            showNotification(error.response.data.error, 'error');
+            console.log(error);
+            // showNotification(error.response.data.error, 'error');
         } finally {
             setLoading(false);
         }
