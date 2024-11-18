@@ -65,6 +65,23 @@ function AppContent() {
 }
 
 function App() {
+
+    useEffect(() => {
+        const originalWarn = console.warn;
+    
+        console.error = (...args) => {
+            if (typeof args[0] === 'string' && args[0].includes('cannot appear as a descendant of')) {
+                return; // Игнорируем конкретное предупреждение
+            }
+            originalWarn(...args);
+        };
+    
+        return () => {
+            console.warn = originalWarn;
+        };
+    }, []);
+    
+
     return (
         <AuthProvider>
             <NotifyProvider>
