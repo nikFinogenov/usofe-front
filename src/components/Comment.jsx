@@ -1,4 +1,5 @@
 import React, { useState, useContext } from 'react';
+// import DOMPurify from 'dompurify'; // Импортируем DOMPurify
 import died from '../assets/died.png';
 import { SlArrowDownCircle, SlArrowUpCircle } from "react-icons/sl";
 import { updateCommentLike, deleteCommentLike } from '../services/commentService';
@@ -6,7 +7,7 @@ import { AuthContext } from '../context/AuthContext';
 import { NotifyContext } from '../context/NotifyContext';
 
 function Comment({ comment, replies }) {
-    const { id, content, user:commentAuthor, likes, replyId } = comment;
+    const { id, content, user: commentAuthor, likes, replyId } = comment;
     const showNotification = useContext(NotifyContext);
     const { user } = useContext(AuthContext);
     const [showReplies, setShowReplies] = useState(false);
@@ -38,7 +39,6 @@ function Comment({ comment, replies }) {
             }
         } catch (error) {
             showNotification('Failed to like the comment.', 'error');
-            // console.error('Error liking comment:', error);
         } finally {
             setIsFetchingLike(false);
         }
@@ -64,13 +64,15 @@ function Comment({ comment, replies }) {
             }
         } catch (error) {
             showNotification('Failed to dislike the comment.', 'error');
-            // console.error('Error disliking comment:', error);
         } finally {
             setIsFetchingLike(false);
         }
     };
 
     const rating = likesCount - dislikesCount;
+
+    // Очистка HTML с использованием DOMPurify
+    // const sanitizedContent = DOMPurify.sanitize(content);
 
     return (
         <div className={`mb-4 pb-4 relative ${replyId ? 'pl-10' : 'border-b-2'}`}>
@@ -85,7 +87,13 @@ function Comment({ comment, replies }) {
                 </h4>
                 {replyId && <span className="text-sm text-gray-500 ml-2">replied</span>}
             </div>
-            <p className="text-gray-700">{content}</p>
+
+            {/* Отображение HTML-контента */}
+            <div
+                className="text-gray-700"
+                dangerouslySetInnerHTML={{ __html: content }}
+            ></div>
+
             <div className="flex justify-between items-center mt-2 text-gray-500 text-sm">
                 <div className="flex items-center">
                     <button onClick={handleLike}>

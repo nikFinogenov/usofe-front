@@ -1,4 +1,4 @@
-import axios from 'axios';
+// import axios from 'axios';
 import { api } from './index'
 
 export const updateCommentLike = async (commentId, type) => {
@@ -19,6 +19,18 @@ export const deleteCommentLike = async (commentId) => {
         return response.data;
     } catch (error) {
         console.error('Failed to update comment like:', error);
+        throw error;
+    }
+};
+
+export const addComment = async (postId, content) => {
+    try {
+        const response = await api.post(`${process.env.REACT_APP_API}/posts/${postId}/comments`, {
+            content
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Failed to add comment:', error);
         throw error;
     }
 };

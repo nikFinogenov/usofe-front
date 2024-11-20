@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import { fetchPostById, fetchPostComments, updatePostLike, deletePostLike } from '../services/postService';
+import { addComment } from '../services/commentService';
 import Comment from '../components/Comment';
 import CategoryTags from '../components/CategoryTags';
 import LoadingSpinner from '../components/LoadingSpinner';
@@ -9,6 +10,7 @@ import DislikeButton from '../components/DislikeButton';
 import { NotifyContext } from '../context/NotifyContext';
 import died from '../assets/died.png';
 import { AuthContext } from '../context/AuthContext';
+import CommentEditor from '../components/CommentEditor';
 
 function FullPost() {
     const { id } = useParams();
@@ -31,6 +33,7 @@ function FullPost() {
                 const commentsData = await fetchPostComments(id);
                 setPost(postData);
                 setPostComments(commentsData);
+                // console.log(postComments);
 
                 // Подсчет лайков и дизлайков
                 const likes = postData.likes || [];
@@ -40,7 +43,7 @@ function FullPost() {
 
                 // Проверка, был ли пост лайкнут или дизлайкнут
                 const userLike = likes.find((like) => like.userId === user.id);  // Пример: проверка по userId
-                console.log(userLike);
+                // console.log(userLike);
                 if (userLike) {
                     if (userLike.type === 'like') {
                         setLiked(true);
@@ -62,7 +65,7 @@ function FullPost() {
     const handleLike = async () => {
         if (isFetchingLike) return;
         setIsFetchingLike(true);
-    
+
         try {
             // If the post is already liked, delete the like
             if (liked) {
@@ -74,7 +77,7 @@ function FullPost() {
                 await updatePostLike(id, 'like');
                 setLiked(true);
                 setLikesCount((prevCount) => prevCount + 1);
-    
+
                 // If the post was disliked, remove the dislike
                 if (disliked) {
                     setDisliked(false);
@@ -87,11 +90,11 @@ function FullPost() {
             setIsFetchingLike(false);
         }
     };
-    
+
     const handleDislike = async () => {
         if (isFetchingLike) return;
         setIsFetchingLike(true);
-    
+
         try {
             // If the post is already disliked, delete the dislike
             if (disliked) {
@@ -103,7 +106,7 @@ function FullPost() {
                 await updatePostLike(id, 'dislike');
                 setDisliked(true);
                 setDislikesCount((prevCount) => prevCount + 1);
-    
+
                 // If the post was liked, remove the like
                 if (liked) {
                     setLiked(false);
@@ -117,14 +120,25 @@ function FullPost() {
         }
     };
 
+    const handleAddComment = async (content) => {
+        try {
+            const newComment = await addComment(id, content); // Предполагаем, что `addComment` добавляет комментарий
+            setPostComments((prevComments) => [...prevComments, newComment]);
+            showNotification('Comment added successfully!', 'success');
+        } catch (error) {
+            console.error('Failed to add comment:', error);
+            showNotification('Failed to add comment.', 'error');
+        }
+    };
+
     if (loading) return <LoadingSpinner />;
     if (!post) return <div>Post not found.</div>;
 
-    const { title, content, publishDate, views, user:author, categories } = post;
+    const { title, content, publishDate, views, user: author, categories } = post;
 
     const getReplies = (commentId) =>
         postComments.filter((reply) => reply.replyId === commentId);
-
+    console.log(postComments);
     return (
         <div className="max-w-2xl mx-auto pt-16 flex flex-col flex-grow">
             {author ? (
@@ -167,15 +181,18 @@ function FullPost() {
 
             <div className="mt-8">
                 <h3 className="text-xl font-semibold mb-4">Comments</h3>
-                {postComments
-                    .filter((comment) => !comment.replyId)
-                    .map((comment) => (
-                        <Comment
-                            key={comment.id}
-                            comment={comment}
-                            replies={getReplies(comment.id)}
-                        />
-                    ))}
+                {postComments.length ?
+                    postComments.filter((comment) => !comment.replyId)
+                        .map((comment) => (
+                            <Comment
+                                key={comment.id}
+                                comment={comment}
+                                replies={getReplies(comment.id)}
+                            />
+                        )) :
+                    <p className='text-s'>No comments found, be first!</p>}
+                <h3 className="text-xl font-semibold mt-8">Add a Comment</h3>
+                <CommentEditor onSubmit={handleAddComment} />
             </div>
         </div>
     );
