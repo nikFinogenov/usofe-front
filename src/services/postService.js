@@ -43,3 +43,7 @@ export const fetchRandomPost = async () => {
     }
 };
 
+export const updatePostLike = async () => {
+
+};
+
