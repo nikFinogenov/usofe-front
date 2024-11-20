@@ -1,6 +1,7 @@
 // src/services/postService.js
 
 import axios from 'axios';
+import { api } from './index'
 
 export const fetchPosts = async (page = 1, pageSize = 10) => {
     try {
@@ -43,7 +44,25 @@ export const fetchRandomPost = async () => {
     }
 };
 
-export const updatePostLike = async () => {
+export const updatePostLike = async (postId, type) => {
+    try {
+        const response = await api.post(`${process.env.REACT_APP_API}/posts/${postId}/like`, {
+            type
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Failed to update post like:', error);
+        throw error;
+    }
+};
 
+export const deletePostLike = async (postId) => {
+    try {
+        const response = await api.delete(`${process.env.REACT_APP_API}/posts/${postId}/like`);
+        return response.data;
+    } catch (error) {
+        console.error('Failed to update post like:', error);
+        throw error;
+    }
 };
 

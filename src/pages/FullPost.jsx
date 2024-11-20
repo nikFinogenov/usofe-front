@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { useParams } from 'react-router-dom';
-import { fetchPostById, fetchPostComments, updatePostLike } from '../services/postService';
+import { fetchPostById, fetchPostComments, updatePostLike, deletePostLike } from '../services/postService';
 import Comment from '../components/Comment';
 import CategoryTags from '../components/CategoryTags';
 import LoadingSpinner from '../components/LoadingSpinner';
@@ -8,15 +8,21 @@ import LikeButton from '../components/LikeButton';
 import DislikeButton from '../components/DislikeButton';
 import { NotifyContext } from '../context/NotifyContext';
 import died from '../assets/died.png';
+import { AuthContext } from '../context/AuthContext';
 
 function FullPost() {
     const { id } = useParams();
     const showNotification = useContext(NotifyContext);
+    const { user } = useContext(AuthContext);
 
     const [post, setPost] = useState(null);
     const [postComments, setPostComments] = useState([]);
     const [loading, setLoading] = useState(true);
     const [isFetchingLike, setIsFetchingLike] = useState(false);
+    const [likesCount, setLikesCount] = useState(0);
+    const [dislikesCount, setDislikesCount] = useState(0);
+    const [liked, setLiked] = useState(false);  // Отслеживаем, лайкнут ли пост
+    const [disliked, setDisliked] = useState(false);  // Отслеживаем, дизлайкнут ли пост
 
     useEffect(() => {
         const loadPost = async () => {
@@ -25,6 +31,23 @@ function FullPost() {
                 const commentsData = await fetchPostComments(id);
                 setPost(postData);
                 setPostComments(commentsData);
+
+                // Подсчет лайков и дизлайков
+                const likes = postData.likes || [];
+                setLikesCount(likes.filter((like) => like.type === 'like').length);
+                setDislikesCount(likes.filter((like) => like.type === 'dislike').length);
+                // console.log(postData);
+
+                // Проверка, был ли пост лайкнут или дизлайкнут
+                const userLike = likes.find((like) => like.userId === user.id);  // Пример: проверка по userId
+                console.log(userLike);
+                if (userLike) {
+                    if (userLike.type === 'like') {
+                        setLiked(true);
+                    } else if (userLike.type === 'dislike') {
+                        setDisliked(true);
+                    }
+                }
             } catch (error) {
                 console.error('Failed to load post:', error);
                 showNotification('Failed to load post data.', 'error');
@@ -34,21 +57,61 @@ function FullPost() {
         };
 
         loadPost();
-    }, [id, showNotification]);
+    }, [id, showNotification, user]);
 
-    const handleLike = async (type) => {
+    const handleLike = async () => {
         if (isFetchingLike) return;
         setIsFetchingLike(true);
-
+    
         try {
-            const updatedLikes = await updatePostLike(id, type);
-            setPost((prevPost) => ({
-                ...prevPost,
-                likes: updatedLikes,
-            }));
+            // If the post is already liked, delete the like
+            if (liked) {
+                await deletePostLike(id);  // Remove the like
+                setLiked(false);
+                setLikesCount((prevCount) => prevCount - 1);
+            } else {
+                // If not liked yet, add the like (this could be implemented via another API call)
+                await updatePostLike(id, 'like');
+                setLiked(true);
+                setLikesCount((prevCount) => prevCount + 1);
+    
+                // If the post was disliked, remove the dislike
+                if (disliked) {
+                    setDisliked(false);
+                    setDislikesCount((prevCount) => prevCount - 1);
+                }
+            }
         } catch (error) {
-            console.error(`Failed to ${type} the post:`, error);
-            showNotification(`Failed to ${type} the post.`, 'error');
+            showNotification('Failed to like the post.', 'error');
+        } finally {
+            setIsFetchingLike(false);
+        }
+    };
+    
+    const handleDislike = async () => {
+        if (isFetchingLike) return;
+        setIsFetchingLike(true);
+    
+        try {
+            // If the post is already disliked, delete the dislike
+            if (disliked) {
+                await deletePostLike(id);  // Remove the dislike
+                setDisliked(false);
+                setDislikesCount((prevCount) => prevCount - 1);
+            } else {
+                // If not disliked yet, add the dislike (this could be implemented via another API call)
+                await updatePostLike(id, 'dislike');
+                setDisliked(true);
+                setDislikesCount((prevCount) => prevCount + 1);
+    
+                // If the post was liked, remove the like
+                if (liked) {
+                    setLiked(false);
+                    setLikesCount((prevCount) => prevCount - 1);
+                }
+            }
+        } catch (error) {
+            showNotification('Failed to dislike the post.', 'error');
         } finally {
             setIsFetchingLike(false);
         }
@@ -57,20 +120,17 @@ function FullPost() {
     if (loading) return <LoadingSpinner />;
     if (!post) return <div>Post not found.</div>;
 
-    const { title, content, publishDate, views, user, categories, likes } = post;
-
-    const likesCount = likes.filter((like) => like.type === 'like').length;
-    const dislikesCount = likes.filter((like) => like.type === 'dislike').length;
+    const { title, content, publishDate, views, user:author, categories } = post;
 
     const getReplies = (commentId) =>
         postComments.filter((reply) => reply.replyId === commentId);
 
     return (
         <div className="max-w-2xl mx-auto pt-16 flex flex-col flex-grow">
-            {user ? (
+            {author ? (
                 <div className="flex items-center mb-4 mt-5">
-                    <img src={user.profilePicture} alt="Author" className="w-10 h-10 rounded-full mr-2" />
-                    <h2 className="font-semibold text-lg">{user.fullName}</h2>
+                    <img src={author.profilePicture} alt="Author" className="w-10 h-10 rounded-full mr-2" />
+                    <h2 className="font-semibold text-lg">{author.fullName}</h2>
                 </div>
             ) : (
                 <div className="flex items-center mb-4 mt-5">
@@ -91,14 +151,12 @@ function FullPost() {
             <div className="flex justify-between items-center mt-4 text-gray-500 text-sm">
                 <div className="flex items-center gap-4">
                     <LikeButton
-                        liked={false}
-                        isFetching={isFetchingLike}
-                        onClick={() => handleLike('like')}
+                        liked={liked}  // Передаем актуальное состояние
+                        onClick={handleLike}
                     />
                     <DislikeButton
-                        liked={false}
-                        isFetching={isFetchingLike}
-                        onClick={() => handleLike('dislike')}
+                        disliked={disliked}  // Передаем актуальное состояние
+                        onClick={handleDislike}
                     />
                 </div>
                 <div className="flex gap-4">
