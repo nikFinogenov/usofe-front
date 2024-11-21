@@ -3,12 +3,16 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import died from '../assets/died.png';
 import { SlArrowDownCircle, SlArrowUpCircle } from "react-icons/sl";
-import { updateCommentLike, deleteCommentLike, addComment } from '../services/commentService';
+import { updateCommentLike, deleteCommentLike, addComment, updateComment, hideComment } from '../services/commentService';
 import { AuthContext } from '../context/AuthContext';
 import { NotifyContext } from '../context/NotifyContext';
 import { GoReply } from "react-icons/go";
 import CommentEditorMarkdown from './CommentEditorMarkdown';
+import { IoSettingsOutline } from "react-icons/io5";
 import { IoIosClose } from "react-icons/io";
+import { Menu, MenuItem, MenuButton } from '@szhsin/react-menu';
+import '@szhsin/react-menu/dist/index.css';
+import '@szhsin/react-menu/dist/transitions/zoom.css';
 
 function Comment({ comment, replies, onReplyAdded }) {
     const { id, content, user: commentAuthor, likes, replyId } = comment;
@@ -21,6 +25,59 @@ function Comment({ comment, replies, onReplyAdded }) {
     const [disliked, setDisliked] = useState(likes.some(like => like.type === 'dislike' && like.userId === user?.id));
     const [isFetchingLike, setIsFetchingLike] = useState(false);
     const [showReplyDialog, setShowReplyDialog] = useState(false);
+    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+    const [isHidden, setIsHidden] = useState(false);
+    const [isEditing, setIsEditing] = useState(false);
+    const [editContent, setEditContent] = useState(content);
+
+    const handleMenuAction = (action) => {
+        switch (action) {
+            case 'Edit':
+                handleEdit();
+                break;
+            case 'Hide':
+                handleHide();
+                break;
+            case 'Delete':
+                setShowDeleteConfirm(true);
+                break;
+            default:
+                break;
+        }
+    };
+
+    const handleEdit = () => {
+        setIsEditing(true);
+    };
+
+    const handleEditSubmit = async () => {
+        try {
+            await updateComment(id, { content: editContent });
+            showNotification('Comment updated successfully!', 'success');
+            setIsEditing(false);
+        } catch (error) {
+            showNotification('Failed to update comment.', 'error');
+        }
+    };
+
+    const handleHide = async () => {
+        try {
+            await hideComment(id); // Можно добавить API вызов, если требуется
+            setIsHidden(!isHidden);
+            showNotification('Comment hidden successfully!', 'success');
+        } catch (error) {
+            showNotification('Failed to hide comment.', 'error');
+        }
+    };
+
+    const handleDelete = async () => {
+        try {
+            await deleteCommentLike(id);
+            showNotification('Comment deleted successfully!', 'success');
+        } catch (error) {
+            showNotification('Failed to delete comment.', 'error');
+        }
+    };
 
     const toggleReplies = () => setShowReplies(!showReplies);
 
@@ -91,7 +148,7 @@ function Comment({ comment, replies, onReplyAdded }) {
     const rating = likesCount - dislikesCount;
 
     return (
-        <div className={`mb-4 pb-4 relative ${replyId ? 'pl-10' : 'border-b-2'}`}>
+        <div className={`mb-4 pb-4 relative ${replyId ? 'pl-10' : 'border-b-2'} ${isHidden ? 'opacity-50' : ''}`}>
             <div className="flex items-center mb-2">
                 <img
                     src={commentAuthor ? commentAuthor.profilePicture : died}
@@ -106,10 +163,43 @@ function Comment({ comment, replies, onReplyAdded }) {
                     <GoReply className="text-lg" />
                 </button>
             </div>
-
-            <ReactMarkdown className="prose" remarkPlugins={[remarkGfm]}>
-                {content}
-            </ReactMarkdown>
+            {isEditing ? (
+                <div className='flex'>
+                    <CommentEditorMarkdown
+                        inputValue={editContent}
+                        onChange={(value) => setEditContent(value)}
+                        onSubmit={handleEditSubmit}
+                    />
+                    <button onClick={() => setIsEditing(false)} className="absolute top-2 right-12 text-2xl mt-4 px-1 py-1 bg-red-500 text-white rounded">
+                        <IoIosClose />
+                    </button>
+                </div>
+            ) : (
+                <div className='flex'>
+                    <ReactMarkdown className="prose" remarkPlugins={[remarkGfm]}>
+                        {content}
+                    </ReactMarkdown>
+                    {user.id === commentAuthor.id && (
+                        <Menu
+                            menuButton={<MenuButton className='ml-auto self-start'><IoSettingsOutline /></MenuButton>}
+                            key={'right'}
+                            direction={'right'}
+                            align={'center'}
+                            position={'anchor'}
+                            viewScroll={'auto'}
+                            arrow={true}
+                            gap={12}
+                            shift={12}
+                        >
+                            {['Edit', 'Hide', 'Delete'].map((action) => (
+                                <MenuItem key={action} onClick={() => handleMenuAction(action)}>
+                                    {(action === 'Hide' && isHidden) ? `Show` : action}
+                                </MenuItem>
+                            ))}
+                        </Menu>
+                    )}
+                </div>
+            )}
 
             <div className="flex justify-between items-center mt-2 text-gray-500 text-sm">
                 <div className="flex items-center">
@@ -159,6 +249,17 @@ function Comment({ comment, replies, onReplyAdded }) {
                             onSubmit={handleReplySubmit}
                             height="200px"
                         />
+                    </div>
+                </div>
+            )}
+            {showDeleteConfirm && (
+                <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50">
+                    <div className="bg-white p-6 rounded-md w-1/3">
+                        <h3 className="text-lg font-semibold mb-4">Are you sure you want to delete this comment?</h3>
+                        <div className="flex justify-end gap-4">
+                            <button onClick={() => setShowDeleteConfirm(false)} className="text-sm text-gray-500">Cancel</button>
+                            <button onClick={handleDelete} className="text-sm text-red-500">Delete</button>
+                        </div>
                     </div>
                 </div>
             )}

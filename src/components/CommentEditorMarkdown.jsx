@@ -6,8 +6,8 @@ import MarkdownIt from 'markdown-it';
 // Инициализация Markdown-it для рендеринга Markdown
 const mdParser = new MarkdownIt();
 
-const CommentEditorMarkdown = ({ onSubmit, height }) => {
-    const [value, setValue] = useState('');
+const CommentEditorMarkdown = ({ onSubmit, height, inputValue = null }) => {
+    const [value, setValue] = useState(inputValue ? inputValue : '');
 
     const handleEditorChange = ({ text }) => {
         setValue(text);

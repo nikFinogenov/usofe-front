@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@heroicons/react": "^2.1.5",
+    "@szhsin/react-menu": "^4.2.3",
     "@tailwindcss/typography": "^0.5.15",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",

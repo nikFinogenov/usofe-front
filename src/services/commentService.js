@@ -35,7 +35,11 @@ export const addComment = async (postId, content, replyId = null) => {
     }
 };
 
-export const createReply = async() => {
+export const updateComment = async() => {
+
+};
+
+export const hideComment = async() => {
 
 };
  
