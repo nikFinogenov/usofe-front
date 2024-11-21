@@ -35,8 +35,28 @@ export const addComment = async (postId, content, replyId = null) => {
     }
 };
 
-export const updateComment = async() => {
+export const updateComment = async(commentId, content, status) => {
+    try {
+        const response = await api.patch(`${process.env.REACT_APP_API}/comments/${commentId}`, {
+            content, status
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Failed to add comment:', error);
+        throw error;
+    }
+};
 
+export const updateCommentStatus= async(commentId, status) => {
+    try {
+        const response = await api.patch(`${process.env.REACT_APP_API}/comments/${commentId}`, {
+            status
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Failed to add comment:', error);
+        throw error;
+    }
 };
 
 export const hideComment = async() => {

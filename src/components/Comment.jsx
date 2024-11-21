@@ -15,7 +15,7 @@ import '@szhsin/react-menu/dist/index.css';
 import '@szhsin/react-menu/dist/transitions/zoom.css';
 
 function Comment({ comment, replies, onReplyAdded }) {
-    const { id, content, user: commentAuthor, likes, replyId } = comment;
+    const { id, content: initialContent, user: commentAuthor, likes, replyId } = comment;
     const showNotification = useContext(NotifyContext);
     const { user } = useContext(AuthContext);
     const [showReplies, setShowReplies] = useState(false);
@@ -28,7 +28,7 @@ function Comment({ comment, replies, onReplyAdded }) {
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
     const [isHidden, setIsHidden] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
-    const [editContent, setEditContent] = useState(content);
+    const [content, setContent] = useState(initialContent);
 
     const handleMenuAction = (action) => {
         switch (action) {
@@ -50,12 +50,14 @@ function Comment({ comment, replies, onReplyAdded }) {
         setIsEditing(true);
     };
 
-    const handleEditSubmit = async () => {
+    const handleEditSubmit = async (newContent) => {
         try {
-            await updateComment(id, { content: editContent });
+            await updateComment(id, newContent);
+            setContent(newContent);
             showNotification('Comment updated successfully!', 'success');
             setIsEditing(false);
         } catch (error) {
+            console.log(error);
             showNotification('Failed to update comment.', 'error');
         }
     };
@@ -166,11 +168,10 @@ function Comment({ comment, replies, onReplyAdded }) {
             {isEditing ? (
                 <div className='flex'>
                     <CommentEditorMarkdown
-                        inputValue={editContent}
-                        onChange={(value) => setEditContent(value)}
+                        inputValue={content}
                         onSubmit={handleEditSubmit}
                     />
-                    <button onClick={() => setIsEditing(false)} className="absolute top-2 right-12 text-2xl mt-4 px-1 py-1 bg-red-500 text-white rounded">
+                    <button onClick={() => setIsEditing(false)} className="self-start ml-1 text-2xl mt-4 px-1 py-1 bg-red-500 text-white rounded">
                         <IoIosClose />
                     </button>
                 </div>
