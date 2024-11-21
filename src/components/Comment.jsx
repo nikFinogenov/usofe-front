@@ -150,7 +150,14 @@ function Comment({ comment, replies, onReplyAdded }) {
     const rating = likesCount - dislikesCount;
 
     return (
-        <div className={`mb-4 pb-4 relative ${replyId ? 'pl-10' : 'border-b-2'} ${isHidden ? 'opacity-50' : ''}`}>
+        <div className={`mb-4 pb-4 relative ${replyId ? 'pl-10' : 'border-b-2'}`}>
+            {isHidden && (
+                <div className="absolute inset-0 bg-black/30 flex justify-center items-center pointer-events-none rounded-lg shadow-lg">
+                    <span className="text-4xl font-bold text-white opacity-50 transform rotate-[-15deg]">
+                        INACTIVE
+                    </span>
+                </div>
+            )}
             <div className="flex items-center mb-2">
                 <img
                     src={commentAuthor ? commentAuthor.profilePicture : died}
@@ -255,11 +262,21 @@ function Comment({ comment, replies, onReplyAdded }) {
             )}
             {showDeleteConfirm && (
                 <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50">
-                    <div className="bg-white p-6 rounded-md w-1/3">
+                    <div className="relative bg-white p-6 rounded-md w-1/3 z-60">
                         <h3 className="text-lg font-semibold mb-4">Are you sure you want to delete this comment?</h3>
                         <div className="flex justify-end gap-4">
-                            <button onClick={() => setShowDeleteConfirm(false)} className="text-sm text-gray-500">Cancel</button>
-                            <button onClick={handleDelete} className="text-sm text-red-500">Delete</button>
+                            <button
+                                onClick={() => setShowDeleteConfirm(false)}
+                                className="text-sm text-gray-500 hover:underline"
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                onClick={handleDelete}
+                                className="text-sm text-red-500 hover:underline"
+                            >
+                                Delete
+                            </button>
                         </div>
                     </div>
                 </div>
