@@ -10,7 +10,8 @@ import DislikeButton from '../components/DislikeButton';
 import { NotifyContext } from '../context/NotifyContext';
 import died from '../assets/died.png';
 import { AuthContext } from '../context/AuthContext';
-import CommentEditor from '../components/CommentEditor';
+// import CommentEditor from '../components/CommentEditor';
+import CommentEditorMarkdown from '../components/CommentEditorMarkdown'
 
 function FullPost() {
     const { id } = useParams();
@@ -179,7 +180,7 @@ function FullPost() {
                 </div>
             </div>
 
-            <div className="mt-8">
+            <div className="my-8">
                 <h3 className="text-xl font-semibold mb-4">Comments</h3>
                 {postComments.length ?
                     postComments.filter((comment) => !comment.replyId)
@@ -188,11 +189,13 @@ function FullPost() {
                                 key={comment.id}
                                 comment={comment}
                                 replies={getReplies(comment.id)}
+                                onReplyAdded={(newReply) => setPostComments((prev) => [...prev, newReply])}
                             />
                         )) :
                     <p className='text-s'>No comments found, be first!</p>}
                 <h3 className="text-xl font-semibold mt-8">Add a Comment</h3>
-                <CommentEditor onSubmit={handleAddComment} />
+                {/* <CommentEditor onSubmit={handleAddComment} /> */}
+                <CommentEditorMarkdown onSubmit={handleAddComment} height={'200px'}/>
             </div>
         </div>
     );

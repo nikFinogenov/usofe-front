@@ -23,10 +23,10 @@ export const deleteCommentLike = async (commentId) => {
     }
 };
 
-export const addComment = async (postId, content) => {
+export const addComment = async (postId, content, replyId = null) => {
     try {
         const response = await api.post(`${process.env.REACT_APP_API}/posts/${postId}/comments`, {
-            content
+            content, replyId
         });
         return response.data;
     } catch (error) {
@@ -34,3 +34,8 @@ export const addComment = async (postId, content) => {
         throw error;
     }
 };
+
+export const createReply = async() => {
+
+};
+ 

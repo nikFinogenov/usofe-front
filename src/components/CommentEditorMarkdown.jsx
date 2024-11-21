@@ -6,7 +6,7 @@ import MarkdownIt from 'markdown-it';
 // Инициализация Markdown-it для рендеринга Markdown
 const mdParser = new MarkdownIt();
 
-const CommentEditor = ({ onSubmit }) => {
+const CommentEditorMarkdown = ({ onSubmit, height }) => {
     const [value, setValue] = useState('');
 
     const handleEditorChange = ({ text }) => {
@@ -24,7 +24,7 @@ const CommentEditor = ({ onSubmit }) => {
         <div className="mt-2">
             <MarkdownEditor
                 value={value}
-                style={{ height: '200px' }}
+                style={{ height: height }}
                 renderHTML={(text) => mdParser.render(text)} // Рендерим Markdown
                 onChange={handleEditorChange}
                 placeholder="Write your comment..."
@@ -39,4 +39,4 @@ const CommentEditor = ({ onSubmit }) => {
     );
 };
 
-export default CommentEditor;
+export default CommentEditorMarkdown;
