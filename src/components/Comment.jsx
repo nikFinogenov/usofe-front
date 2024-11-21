@@ -64,7 +64,7 @@ function Comment({ comment, replies, onReplyAdded }) {
 
     const handleHide = async () => {
         try {
-            await hideComment(id); // Можно добавить API вызов, если требуется
+            await hideComment(id);
             setIsHidden(!isHidden);
             showNotification('Comment hidden successfully!', 'success');
         } catch (error) {
