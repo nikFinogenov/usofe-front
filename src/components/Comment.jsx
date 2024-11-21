@@ -3,7 +3,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import died from '../assets/died.png';
 import { SlArrowDownCircle, SlArrowUpCircle } from "react-icons/sl";
-import { updateCommentLike, deleteCommentLike, addComment, updateComment, hideComment } from '../services/commentService';
+import { updateCommentLike, deleteCommentLike, addComment, updateComment, deleteComment } from '../services/commentService';
 import { AuthContext } from '../context/AuthContext';
 import { NotifyContext } from '../context/NotifyContext';
 import { GoReply } from "react-icons/go";
@@ -14,7 +14,7 @@ import { Menu, MenuItem, MenuButton } from '@szhsin/react-menu';
 import '@szhsin/react-menu/dist/index.css';
 import '@szhsin/react-menu/dist/transitions/zoom.css';
 
-function Comment({ comment, replies, onReplyAdded }) {
+function Comment({ comment, replies, onReplyAdded, onDelete }) {
     const { id, content: initialContent, user: commentAuthor, likes, replyId } = comment;
     const showNotification = useContext(NotifyContext);
     const { user } = useContext(AuthContext);
@@ -57,14 +57,16 @@ function Comment({ comment, replies, onReplyAdded }) {
             showNotification('Comment updated successfully!', 'success');
             setIsEditing(false);
         } catch (error) {
-            console.log(error);
+            // console.log(error);
             showNotification('Failed to update comment.', 'error');
         }
     };
 
     const handleHide = async () => {
         try {
-            await hideComment(id);
+            // await hideComment(id, isHidden);
+            const newStatus = isHidden ? 'active' : 'inactive';
+            await updateComment(id, null, newStatus);
             setIsHidden(!isHidden);
             showNotification('Comment hidden successfully!', 'success');
         } catch (error) {
@@ -74,7 +76,9 @@ function Comment({ comment, replies, onReplyAdded }) {
 
     const handleDelete = async () => {
         try {
-            await deleteCommentLike(id);
+            await deleteComment(id);
+            onDelete(id);
+            setShowDeleteConfirm(false);
             showNotification('Comment deleted successfully!', 'success');
         } catch (error) {
             showNotification('Failed to delete comment.', 'error');

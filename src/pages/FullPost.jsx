@@ -139,7 +139,7 @@ function FullPost() {
 
     const getReplies = (commentId) =>
         postComments.filter((reply) => reply.replyId === commentId);
-    console.log(postComments);
+    // console.log(postComments);
     return (
         <div className="max-w-2xl mx-auto pt-16 flex flex-col flex-grow">
             {author ? (
@@ -190,6 +190,7 @@ function FullPost() {
                                 comment={comment}
                                 replies={getReplies(comment.id)}
                                 onReplyAdded={(newReply) => setPostComments((prev) => [...prev, newReply])}
+                                onDelete={(commentId) => setPostComments((prev) => prev.filter(comment => comment.id !== commentId))}
                             />
                         )) :
                     <p className='text-s'>No comments found, be first!</p>}

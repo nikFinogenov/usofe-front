@@ -47,19 +47,13 @@ export const updateComment = async(commentId, content, status) => {
     }
 };
 
-export const updateCommentStatus= async(commentId, status) => {
+export const deleteComment = async(commentId) => {
     try {
-        const response = await api.patch(`${process.env.REACT_APP_API}/comments/${commentId}`, {
-            status
-        });
+        const response = await api.delete(`${process.env.REACT_APP_API}/comments/${commentId}`);
         return response.data;
     } catch (error) {
         console.error('Failed to add comment:', error);
         throw error;
     }
-};
-
-export const hideComment = async() => {
-
 };
  
