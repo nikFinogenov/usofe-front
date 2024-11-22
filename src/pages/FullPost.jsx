@@ -12,6 +12,8 @@ import died from '../assets/died.png';
 import { AuthContext } from '../context/AuthContext';
 // import CommentEditor from '../components/CommentEditor';
 import CommentEditorMarkdown from '../components/CommentEditorMarkdown'
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 function FullPost() {
     const { id } = useParams();
@@ -160,7 +162,11 @@ function FullPost() {
             <p className="text-gray-500 text-sm mb-2">
                 Published on {new Date(publishDate).toLocaleDateString()} | Views: {views}
             </p>
-            <p className="text-gray-700 mb-4">{content}</p>
+            {/* <p className="text-gray-700 mb-4">{content}</p> */}
+            <div className="prose mb-4">
+                <ReactMarkdown remarkPlugins={[remarkGfm]}>{content}</ReactMarkdown>
+            </div>
+            
             <CategoryTags categories={categories} maxVisible={categories.length} />
 
             <div className="flex justify-between items-center mt-4 text-gray-500 text-sm">
