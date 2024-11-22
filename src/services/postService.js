@@ -77,6 +77,17 @@ export const createPost = async(title, content, categories) => {
         throw error;
     }
 };
+export const updatePost = async(id, title, content, categories, status) => {
+    try {
+        const response = await api.patch(`${process.env.REACT_APP_API}/posts/${id}`, {
+            title, content, categories, status
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Failed to create post:', error);
+        throw error;
+    }
+};
 
 export const deletePostById = async(id) => {
     try {

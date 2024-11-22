@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { fetchUserPosts } from '../services/userService';
-import { deletePostById } from '../services/postService'
+import { deletePostById, updatePost } from '../services/postService'
 import { AuthContext } from '../context/AuthContext';
 import CategoryTags from '../components/CategoryTags';
 import LoadingSpinner from '../components/LoadingSpinner';

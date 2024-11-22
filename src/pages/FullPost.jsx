@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { useParams } from 'react-router-dom';
-import { fetchPostById, fetchPostComments, updatePostLike, deletePostLike, deletePostById } from '../services/postService';
+import { fetchPostById, fetchPostComments, updatePostLike, deletePostLike, deletePostById, updatePost } from '../services/postService';
 import { addComment } from '../services/commentService';
 import Comment from '../components/Comment';
 import CategoryTags from '../components/CategoryTags';
@@ -31,6 +31,7 @@ function FullPost() {
     const [liked, setLiked] = useState(false);  // Отслеживаем, лайкнут ли пост
     const [disliked, setDisliked] = useState(false);  // Отслеживаем, дизлайкнут ли пост
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+    const [isHidden, setIsHidden] = useState(false);
 
     useEffect(() => {
         const loadPost = async () => {
@@ -146,7 +147,16 @@ function FullPost() {
             showNotification('Failed to add comment.', 'error');
         }
     };
-
+    const handleHide = async () => {
+        try {
+            const newStatus = isHidden ? 'active' : 'inactive';
+            await updatePost(id, null, null, null, newStatus);
+            setIsHidden(!isHidden);
+            showNotification('Post hidden successfully!', 'success');
+        } catch (error) {
+            showNotification('Failed to hide post.', 'error');
+        }
+    };
     if (loading) return <LoadingSpinner />;
     if (!post) return <div>Post not found.</div>;
 
@@ -182,6 +192,15 @@ function FullPost() {
 
                 {user.id === author.id && (
                     <div className="flex space-x-2">
+                        <button
+                            className="bg-gray-500 text-white px-4 py-1 rounded hover:bg-gray-400 transition"
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                handleHide();
+                            }}
+                        >
+                            {isHidden ? 'Show' : 'Hide'}
+                        </button>
                         <Link
                             to={`/edit-post/${post.id}`}
                             className="bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-400 transition"

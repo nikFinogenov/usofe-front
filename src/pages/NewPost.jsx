@@ -80,7 +80,7 @@ const NewPost = () => {
             {/* Поле для названия */}
             <div className="mb-4">
                 <label className="block text-2xl font-semibold mb-2" htmlFor="title">
-                    Title <span className="text-red-500">*</span>
+                    Title
                 </label>
                 <input
                     id="title"
@@ -140,11 +140,11 @@ const NewPost = () => {
             {/* Редактор Markdown */}
             <div className="mb-6">
                 <label className="block text-lg font-semibold mb-2">
-                    Body <span className="text-red-500">*</span>
+                    Body
                 </label>
                 <MarkdownEditor
                     value={body}
-                    style={{ height: '300px' }}
+                    style={{ height: '500px' }}
                     renderHTML={(text) => mdParser.render(text)}
                     onChange={handleEditorChange}
                     placeholder="Write your post here..."
