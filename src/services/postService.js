@@ -79,6 +79,7 @@ export const createPost = async(title, content, categories) => {
 };
 export const updatePost = async(id, title, content, categories, status) => {
     try {
+        console.log(status);
         const response = await api.patch(`${process.env.REACT_APP_API}/posts/${id}`, {
             title, content, categories, status
         });

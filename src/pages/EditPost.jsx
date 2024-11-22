@@ -2,7 +2,6 @@ import React, { useState, useEffect, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { fetchPostById, updatePost } from '../services/postService';
 import { NotifyContext } from '../context/NotifyContext';
-import { AuthContext } from '../context/AuthContext';
 import LoadingSpinner from '../components/LoadingSpinner';
 import MarkdownEditor from 'react-markdown-editor-lite';
 import 'react-markdown-editor-lite/lib/index.css';
@@ -17,7 +16,6 @@ function EditPost() {
     const { id } = useParams();
     const navigate = useNavigate();
     const showNotification = useContext(NotifyContext);
-    const { user } = useContext(AuthContext);
 
     const [post, setPost] = useState(null);
     const [title, setTitle] = useState('');

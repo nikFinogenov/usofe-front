@@ -290,6 +290,13 @@ function FullPost() {
                     </div>
                 </div>
             )}
+            {isHidden && (
+                <div className="fixed top-1/4 left-1/2 transform -translate-x-1/2 bg-gray-200 border border-gray-300 p-4 rounded shadow text-center animate-slow-pulse max-w-md w-full">
+                    <p className="text-gray-600 text-3xl font-medium">
+                        This post is <span className='text-red-500'>INACTIVE</span>. Please review the content privately and contact the administration for restoration if needed.
+                    </p>
+                </div>
+            )}
 
         </div>
     );
