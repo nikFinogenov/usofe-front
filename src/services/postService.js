@@ -76,5 +76,15 @@ export const createPost = async(title, content, categories) => {
         console.error('Failed to create post:', error);
         throw error;
     }
-}
+};
+
+export const deletePostById = async(id) => {
+    try {
+        const response = await api.delete(`${process.env.REACT_APP_API}/posts/${id}`);
+        return response.data;
+    } catch (error) {
+        console.error('Failed to create post:', error);
+        throw error;
+    }
+};
 

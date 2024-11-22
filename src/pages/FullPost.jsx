@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { useParams } from 'react-router-dom';
-import { fetchPostById, fetchPostComments, updatePostLike, deletePostLike } from '../services/postService';
+import { fetchPostById, fetchPostComments, updatePostLike, deletePostLike, deletePostById } from '../services/postService';
 import { addComment } from '../services/commentService';
 import Comment from '../components/Comment';
 import CategoryTags from '../components/CategoryTags';
@@ -14,9 +14,11 @@ import { AuthContext } from '../context/AuthContext';
 import CommentEditorMarkdown from '../components/CommentEditorMarkdown'
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import { Link, useNavigate } from 'react-router-dom';
 
 function FullPost() {
     const { id } = useParams();
+    const navigate = useNavigate();
     const showNotification = useContext(NotifyContext);
     const { user } = useContext(AuthContext);
 
@@ -28,6 +30,7 @@ function FullPost() {
     const [dislikesCount, setDislikesCount] = useState(0);
     const [liked, setLiked] = useState(false);  // Отслеживаем, лайкнут ли пост
     const [disliked, setDisliked] = useState(false);  // Отслеживаем, дизлайкнут ли пост
+    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
     useEffect(() => {
         const loadPost = async () => {
@@ -122,7 +125,17 @@ function FullPost() {
             setIsFetchingLike(false);
         }
     };
-
+    const handleDeletePost = async () => {
+        try {
+            await deletePostById(post.id); // Вызываем API для удаления поста
+            // onDelete(post.id); // Вызываем callback, чтобы обновить состояние в родительском компоненте
+            setShowDeleteConfirm(false); // Закрываем модальное окно
+            navigate('/');
+            showNotification('Post deleted successfully!', 'success'); // Отображаем уведомление
+        } catch (error) {
+            showNotification('Failed to delete post.', 'error'); // Уведомление об ошибке
+        }
+    };
     const handleAddComment = async (content) => {
         try {
             const newComment = await addComment(id, content); // Предполагаем, что `addComment` добавляет комментарий
@@ -144,19 +157,50 @@ function FullPost() {
     // console.log(postComments);
     return (
         <div className="max-w-2xl mx-auto pt-16 flex flex-col flex-grow">
-            {author ? (
-                <div className="flex items-center mb-4 mt-5">
-                    <img src={author.profilePicture} alt="Author" className="w-10 h-10 rounded-full mr-2" />
-                    <h2 className="font-semibold text-lg">{author.fullName}</h2>
-                </div>
-            ) : (
-                <div className="flex items-center mb-4 mt-5">
-                    <img src={died} alt="Author" className="w-10 h-10 rounded-full mr-2" />
-                    <h2 className="font-semibold text-lg">
-                        <i>Deleted account</i>
-                    </h2>
-                </div>
-            )}
+            <div className="flex items-center justify-between mb-4 mt-5">
+                {author ? (
+                    <div className="flex items-center">
+                        <img
+                            src={author.profilePicture}
+                            alt="Author"
+                            className="w-10 h-10 rounded-full mr-2"
+                        />
+                        <h2 className="font-semibold text-lg">{author.fullName}</h2>
+                    </div>
+                ) : (
+                    <div className="flex items-center">
+                        <img
+                            src={died}
+                            alt="Author"
+                            className="w-10 h-10 rounded-full mr-2"
+                        />
+                        <h2 className="font-semibold text-lg">
+                            <i>Deleted account</i>
+                        </h2>
+                    </div>
+                )}
+
+                {user.id === author.id && (
+                    <div className="flex space-x-2">
+                        <Link
+                            to={`/edit-post/${post.id}`}
+                            className="bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-400 transition"
+                        >
+                            Edit
+                        </Link>
+                        <button
+                            className="bg-red-500 text-white px-4 py-1 rounded hover:bg-red-400 transition"
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                // handleDeletePost(post.id);
+                                setShowDeleteConfirm(true);
+                            }}
+                        >
+                            Delete
+                        </button>
+                    </div>
+                )}
+            </div>
 
             <h1 className="text-2xl font-bold mb-4">{title}</h1>
             <p className="text-gray-500 text-sm mb-2">
@@ -166,7 +210,7 @@ function FullPost() {
             <div className="prose mb-4">
                 <ReactMarkdown remarkPlugins={[remarkGfm]}>{content}</ReactMarkdown>
             </div>
-            
+
             <CategoryTags categories={categories} maxVisible={categories.length} />
 
             <div className="flex justify-between items-center mt-4 text-gray-500 text-sm">
@@ -202,8 +246,32 @@ function FullPost() {
                     <p className='text-s'>No comments found, be first!</p>}
                 <h3 className="text-xl font-semibold mt-8">Add a Comment</h3>
                 {/* <CommentEditor onSubmit={handleAddComment} /> */}
-                <CommentEditorMarkdown onSubmit={handleAddComment} height={'200px'}/>
+                <CommentEditorMarkdown onSubmit={handleAddComment} height={'200px'} />
             </div>
+            {showDeleteConfirm && (
+                <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50">
+                    <div className="relative bg-white p-6 rounded-md w-1/3 z-60">
+                        <h3 className="text-lg font-semibold mb-4">
+                            Are you sure you want to delete this post?
+                        </h3>
+                        <div className="flex justify-end gap-4">
+                            <button
+                                onClick={() => setShowDeleteConfirm(false)}
+                                className="text-sm text-gray-500 hover:underline"
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                onClick={handleDeletePost}
+                                className="text-sm text-red-500 hover:underline"
+                            >
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
         </div>
     );
 }
