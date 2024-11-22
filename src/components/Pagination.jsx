@@ -27,7 +27,7 @@ function Pagination({ currentPage, totalPages, onPageChange }) {
                     1
                 </button>
             );
-            if (startPage > 2) buttons.push(<span key="ellipsis-start">...</span>);
+            if (startPage > 2) buttons.push(<span key="ellipsis-start" className='mx-1 px-2 py-1 rounded bg-gray-300'>...</span>);
         }
 
         for (let page = startPage; page <= endPage; page++) {
@@ -39,7 +39,7 @@ function Pagination({ currentPage, totalPages, onPageChange }) {
         }
 
         if (endPage < totalPages) {
-            if (endPage < totalPages - 1) buttons.push(<span key="ellipsis-end">...</span>);
+            if (endPage < totalPages - 1) buttons.push(<span key="ellipsis-end" className='mx-1 px-2 py-1 rounded bg-gray-300'>...</span>);
             buttons.push(
                 <button key={totalPages} onClick={() => handlePageChange(totalPages)} className={`mx-1 px-3 py-1 rounded ${currentPage === totalPages ? 'bg-blue-500 text-white' : 'bg-gray-300'}`}>
                     {totalPages}
