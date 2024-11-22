@@ -25,3 +25,13 @@ export const fetchPostsByCategoryId = async (categoryId, page = 1, pageSize = 10
         throw error;
     }
 };
+
+export const fetchCategoriesTags = async() => {
+    try {
+        const response = await axios.get(`${process.env.REACT_APP_API}/categories/tags`);
+        return response.data;
+    } catch (error) {
+        console.error('Failed to fetch categories:', error);
+        throw error;
+    }
+};

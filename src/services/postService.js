@@ -66,3 +66,15 @@ export const deletePostLike = async (postId) => {
     }
 };
 
+export const createPost = async(title, content, categories) => {
+    try {
+        const response = await api.post(`${process.env.REACT_APP_API}/posts`, {
+            title, content, categories
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Failed to create post:', error);
+        throw error;
+    }
+}
+
