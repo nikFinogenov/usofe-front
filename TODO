@@ -1,9 +1,9 @@
-- user preview + user page
-- comments pagination
-- favourites
-- search
-- sorting + filtering to posts
-- role based things
-- adapivtnost
-- rewrite header + footer text
+[x] user preview + user page
+[x] comments pagination
+[ ] favourites
+[ ] search
+[ ] sorting + filtering to posts
+[ ] role based things
+[ ] adapivtnost
+[ ] rewrite header + footer text
 

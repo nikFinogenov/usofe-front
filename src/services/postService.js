@@ -25,9 +25,11 @@ export const fetchPostById = async (id) => {
     }
 };
 
-export const fetchPostComments = async (id) => {
+export const fetchPostComments = async (id, page = 1, pageSize = 10) => {
     try {
-        const response = await axios.get(`${process.env.REACT_APP_API}/posts/${id}/comments`);
+        const response = await axios.get(`${process.env.REACT_APP_API}/posts/${id}/comments`, {
+            params: { page, pageSize }
+        });
         return response.data;
     } catch (error) {
         console.error('Failed to fetch post:', error);
