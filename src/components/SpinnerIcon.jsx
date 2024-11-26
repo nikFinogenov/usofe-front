@@ -4,8 +4,8 @@ function SpinnerIcon({ className }) {
     return (
         <svg
             className={`${className} animate-spin`}
-            width={16}
-            height={16}
+            width={32}
+            height={32}
             viewBox="0 0 38 38"
             xmlns="http://www.w3.org/2000/svg"
             stroke="currentColor"

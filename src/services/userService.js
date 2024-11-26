@@ -14,6 +14,15 @@ export const fetchUser = async (email, password) => {
     }
 };
 
+export const fetchUserStats = async (userId) => {
+    try {
+      const response = await axios.get(`${API_URL}/users/${userId}/stats`);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  };
+
 export const fetchUserPosts = async (page = 1, pageSize = 5, id) => {
     try {
         const response = await axios.get(`${API_URL}/users/${id}/posts`, {

@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import CategoryTags from './CategoryTags';
+import ProfilePreview from './ProfilePreview';
 import died from '../assets/died.png';
 
 function stripMarkdown(content) {
@@ -7,7 +9,25 @@ function stripMarkdown(content) {
 }
 
 function PostPreview({ post }) {
-    const previewContent = stripMarkdown(post.content).slice(0, 50) + (post.content.length > 50 ? '...' : '');
+    const [showProfilePreview, setShowProfilePreview] = useState(false);
+    const [hoverTimer, setHoverTimer] = useState(null);
+
+    const previewContent =
+        stripMarkdown(post.content).slice(0, 50) +
+        (post.content.length > 50 ? '...' : '');
+
+    const handleMouseEnter = () => {
+        setHoverTimer(
+            setTimeout(() => {
+                setShowProfilePreview(true);
+            }, 1000) // Задержка в 1 секунду
+        );
+    };
+
+    const handleMouseLeave = () => {
+        clearTimeout(hoverTimer);
+        setShowProfilePreview(false);
+    };
 
     return (
         <div className="bg-white rounded-lg shadow-md p-6 mt-4 flex flex-col h-full">
@@ -24,18 +44,42 @@ function PostPreview({ post }) {
                     <span>💬 Comments: {post.commentCount}</span>
                 </div>
             </div>
-            <div className="mt-auto flex items-center pt-4 border-t border-gray-200">
+
+            <div
+                className="mt-auto flex items-center pt-4 border-t border-gray-200 relative group"
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
+            >
                 {post.user ? (
                     <>
-                        <img
-                            src={post.user.profilePicture}
-                            alt={post.user.fullName}
-                            className="w-10 h-10 rounded-full mr-3"
-                        />
-                        <div>
-                            <p className="text-sm font-medium">{post.user.fullName}</p>
-                            <p className="text-xs text-gray-400">@{post.user.login}</p>
-                        </div>
+                        <Link
+                            to={`/user/${post.user.id}`}
+                            className="flex items-center w-full text-left"
+                        >
+                            <img
+                                src={post.user.profilePicture}
+                                alt={post.user.fullName}
+                                className="w-10 h-10 rounded-full mr-3"
+                            />
+                            <div>
+                                <p className="text-sm font-medium">
+                                    {post.user.fullName}
+                                </p>
+                                <p className="text-xs text-gray-400">
+                                    @{post.user.login}
+                                </p>
+                            </div>
+                        </Link>
+
+                        {showProfilePreview && (
+                            <div
+                                className="absolute top-full left-0 mt-2 z-10 bg-white rounded-lg shadow-lg border border-gray-200 p-2 transition-opacity duration-300 ease-in-out"
+                                onMouseEnter={() => setShowProfilePreview(true)}
+                                onMouseLeave={() => setShowProfilePreview(false)}
+                            >
+                                <ProfilePreview userId={post.user.id} />
+                            </div>
+                        )}
                     </>
                 ) : (
                     <>
@@ -45,7 +89,9 @@ function PostPreview({ post }) {
                             className="w-10 h-10 rounded-full mr-3"
                         />
                         <div>
-                            <p className="text-sm font-medium"><i>Deleted account</i></p>
+                            <p className="text-sm font-medium">
+                                <i>Deleted account</i>
+                            </p>
                         </div>
                     </>
                 )}
