@@ -188,7 +188,7 @@ function Comment({ comment, replies, onReplyAdded, onDelete }) {
                 </div>
             ) : (
                 <div className='flex'>
-                    <ReactMarkdown className="prose" remarkPlugins={[remarkGfm]}>
+                    <ReactMarkdown className="prose break-words whitespace-pre-wrap" remarkPlugins={[remarkGfm]}>
                         {content}
                     </ReactMarkdown>
                     {user?.id === commentAuthor.id && (

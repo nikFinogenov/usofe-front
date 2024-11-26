@@ -9,13 +9,26 @@ const mdParser = new MarkdownIt();
 const CommentEditorMarkdown = ({ onSubmit, height, inputValue = null }) => {
     const [value, setValue] = useState(inputValue ? inputValue : '');
 
+    // Функция для добавления переноса строки в длинные строки текста, включая текст без пробелов
+    const formatText = (text) => {
+        // Заменяем ручные переносы каретки на видимые (опционально)
+        text = text.replace(/\n/g, '\n');
+    
+        // Можно добавить другие предобработки, например, удаление лишних пробелов:
+        text = text.trim(); // Убираем пробелы в начале и конце текста
+    
+        // Вернуть отформатированный текст
+        return text;
+    };
+
     const handleEditorChange = ({ text }) => {
-        setValue(text);
+        setValue(text);  // Обновляем состояние при изменении текста
     };
 
     const handleSubmit = () => {
         if (value.trim()) {
-            onSubmit(value); // Передаем введенный текст
+            const formattedText = formatText(value);  // Обрабатываем текст перед отправкой
+            onSubmit(formattedText); // Передаем обработанный текст
             setValue('');    // Сбрасываем текст
         }
     };

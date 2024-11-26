@@ -233,9 +233,10 @@ function FullPost() {
                 Published on {new Date(publishDate).toLocaleDateString()} | Views: {views}
             </p>
             {/* <p className="text-gray-700 mb-4">{content}</p> */}
-            <div className="prose mb-4">
+            <div className="prose break-words whitespace-pre-wrap mb-4">
                 <ReactMarkdown remarkPlugins={[remarkGfm]}>{content}</ReactMarkdown>
             </div>
+
 
             <CategoryTags categories={categories} maxVisible={categories.length} />
 
@@ -260,11 +261,13 @@ function FullPost() {
                 <h3 className="text-xl font-semibold mb-4">Comments</h3>
                 <div className="my-8 flex justify-between items-center">
                     {/* Pagination on the left */}
-                    <Pagination
-                        currentPage={currentPage}
-                        totalPages={totalPages}
-                        onPageChange={(page) => setCurrentPage(page)}
-                    />
+                    {totalPages > 1 ? (
+                        <Pagination
+                            currentPage={currentPage}
+                            totalPages={totalPages}
+                            onPageChange={(page) => setCurrentPage(page)}
+                        />
+                    ) : (<div></div>)}
 
                     {/* Sorting and Filtering on the right */}
                     <div className="flex space-x-4">
@@ -286,26 +289,26 @@ function FullPost() {
                         </div>
 
                         {/* Filter Dropdown */}
-{
-    user.id === author.id && (
-        <div className="relative">
-        <select
-            value={filterOption}
-            onChange={handleFilterChange}
-            className="block w-full p-2 pl-3 pr-10 text-gray-700 bg-white border border-gray-300 rounded-lg shadow-sm appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-        >
-            <option value="all">All Comments</option>
-            <option value="favorites">Active</option>
-            <option value="favorites">Inactive</option>
-        </select>
-        <div className="absolute inset-y-0 right-0 flex items-center px-2 text-gray-400 pointer-events-none">
-            <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-            </svg>
-        </div>
-    </div>
-    )
-}
+                        {
+                            user?.id === author.id && (
+                                <div className="relative">
+                                    <select
+                                        value={filterOption}
+                                        onChange={handleFilterChange}
+                                        className="block w-full p-2 pl-3 pr-10 text-gray-700 bg-white border border-gray-300 rounded-lg shadow-sm appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                    >
+                                        <option value="all">All Comments</option>
+                                        <option value="favorites">Active</option>
+                                        <option value="favorites">Inactive</option>
+                                    </select>
+                                    <div className="absolute inset-y-0 right-0 flex items-center px-2 text-gray-400 pointer-events-none">
+                                        <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                                        </svg>
+                                    </div>
+                                </div>
+                            )
+                        }
                     </div>
 
                 </div>
@@ -324,11 +327,13 @@ function FullPost() {
                     <p className='text-s'>No comments found, be first!</p>}
                 <div className="flex justify-between items-center">
                     {/* Pagination on the left */}
-                    <Pagination
-                        currentPage={currentPage}
-                        totalPages={totalPages}
-                        onPageChange={(page) => setCurrentPage(page)}
-                    />
+                    {totalPages > 1 ? (
+                        <Pagination
+                            currentPage={currentPage}
+                            totalPages={totalPages}
+                            onPageChange={(page) => setCurrentPage(page)}
+                        />
+                    ) : (<div></div>)}
                 </div>
                 <h3 className="text-xl font-semibold">Add a Comment</h3>
                 {/* <CommentEditor onSubmit={handleAddComment} /> */}
