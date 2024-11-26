@@ -49,7 +49,7 @@ function FullPost() {
                 // console.log(postData);
 
                 // Проверка, был ли пост лайкнут или дизлайкнут
-                const userLike = likes.find((like) => like.userId === user.id);  // Пример: проверка по userId
+                const userLike = likes.find((like) => like.userId === user?.id);  // Пример: проверка по userId
                 // console.log(userLike);
                 if (userLike) {
                     if (userLike.type === 'like') {
@@ -161,7 +161,6 @@ function FullPost() {
     if (!post) return <div>Post not found.</div>;
 
     const { title, content, publishDate, views, user: author, categories } = post;
-
     const getReplies = (commentId) =>
         postComments.filter((reply) => reply.replyId === commentId);
     // console.log(postComments);
@@ -190,7 +189,7 @@ function FullPost() {
                     </div>
                 )}
 
-                {user.id === author.id && (
+                {user?.id === author.id && (
                     <div className="flex space-x-2">
                         <button
                             className="bg-gray-500 text-white px-4 py-1 rounded hover:bg-gray-400 transition"
