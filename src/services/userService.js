@@ -22,7 +22,14 @@ export const fetchUserStats = async (userId) => {
       throw error;
     }
   };
-
+export const fetchUserProfile = async (userId) => {
+    try {
+        const response = await axios.get(`${API_URL}/users/${userId}`);
+        return response.data;
+      } catch (error) {
+        throw error;
+      }
+};
 export const fetchUserPosts = async (page = 1, pageSize = 5, id) => {
     try {
         const response = await axios.get(`${API_URL}/users/${id}/posts`, {

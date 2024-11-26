@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 import LoadingSpinner from '../components/LoadingSpinner';
 
 function Category() {
-    const { category_id } = useParams();
+    const { id } = useParams();
     const postsPerPage = 12;
     const [posts, setPosts] = useState([]);
     const [title, setTitle] = useState('');
@@ -25,7 +25,7 @@ function Category() {
     useEffect(() => {
         const loadPosts = async () => {
             try {
-                const { title, posts, totalPosts } = await fetchPostsByCategoryId(category_id, currentPage, postsPerPage);
+                const { title, posts, totalPosts } = await fetchPostsByCategoryId(id, currentPage, postsPerPage);
                 setPosts(posts);
                 setTitle(title);
                 setTotalPosts(totalPosts);
@@ -38,7 +38,7 @@ function Category() {
         };
 
         loadPosts();
-    }, [category_id, currentPage]);
+    }, [id, currentPage]);
 
     const totalPages = Math.ceil(totalPosts / postsPerPage);
 

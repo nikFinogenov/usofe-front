@@ -23,6 +23,7 @@ import ConfirmEmail from './pages/ConfirmEmail'
 import { AxiosInterceptor } from './services/index'
 import NewPost from './pages/NewPost';
 import EditPost from './pages/EditPost';
+import User from './pages/User'
 function ScrollToTop() {
     const { pathname } = useLocation();
 
@@ -59,6 +60,7 @@ function AppContent() {
                                     <Route path="/categories" element={<Categories />} />
                                     <Route path="/categories/:category_id/posts" element={<Category />} />
                                     <Route path="/profile" element={<Profile />} />
+                                    <Route path="/user/:id" element={<User />} />
                                     <Route path="/settings" element={<Settings />} />
                                     <Route path="/forgot-password" element={<ForgotPassword />} />
                                     <Route path="/confirm-reset/:token" element={<ConfirmResetPassword />} />
