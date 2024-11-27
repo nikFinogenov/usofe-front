@@ -59,7 +59,7 @@ function AppContent() {
                                     <Route path="/new-post" element={<NewPost />}/>
                                     <Route path="/edit-post/:id" element={<EditPost />}/>
                                     <Route path="/categories" element={<Categories />} />
-                                    <Route path="/categories/:category_id/posts" element={<Category />} />
+                                    <Route path="/categories/:id/posts" element={<Category />} />
                                     <Route path="/profile" element={<Profile />} />
                                     <Route path="/user/:id" element={<User />} />
                                     <Route path="/favourites" element={<Favourites />}/>

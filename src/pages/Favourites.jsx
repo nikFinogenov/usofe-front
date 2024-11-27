@@ -26,7 +26,6 @@ function Favourites() {
         };
 
         loadFavourites();
-        console.log(favourites);
     }, [currentPage, favourites]);
 
     const totalPages = Math.ceil(totalFavourites / postsPerPage);
@@ -38,12 +37,14 @@ function Favourites() {
             <h2 className="text-3xl font-semibold text-gray-800 mt-4 text-left w-full max-w-5xl px-4">Favourites</h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-4 max-w-5xl w-full mb-5">
-                {favourites.map(fav =>
+                {favourites.length >0 ? favourites.map(fav =>
                 (
                     <Link key={fav.id} to={`/post/${fav.Post.id}`} className="hover:shadow-2xl transition-shadow duration-300">
                         <PostPreview post={fav.Post} />
                     </Link>
                 )
+                ) : (
+                    <h2 className='mt-5'><i>No favourites yet!</i></h2>
                 )}
             </div>
 

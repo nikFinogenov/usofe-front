@@ -86,7 +86,7 @@ function User() {
             {/* User's Posts Section */}
             <div className="w-full max-w-5xl">
                 <h2 className="text-2xl font-semibold text-gray-900 mb-4">User Posts</h2>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 px-4 max-w-5xl w-full mb-5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 px-4 max-w-5xl w-full mb-10">
                     {posts.length > 0 ? (
                         posts.map((post) => (
                             <Link key={post.id} to={`/post/${post.id}`} className="hover:shadow-2xl transition-shadow duration-300">

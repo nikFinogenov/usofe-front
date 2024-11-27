@@ -16,7 +16,8 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { Link, useNavigate } from 'react-router-dom';
 import Pagination from '../components/Pagination';
-import FavButton from '../components/FavButton'
+import FavButton from '../components/FavButton';
+import ProfilePreview from '../components/ProfilePreview';
 
 function FullPost() {
     const { id } = useParams();
@@ -39,14 +40,14 @@ function FullPost() {
     const [totalPages, setTotalPages] = useState(1);  // Общее количество страниц
     const [sortOption, setSortOption] = useState('date'); // Sorting state ('date' or 'votes')
     const [filterOption, setFilterOption] = useState('all'); // Filter state ('all' or other)
-
+    const [showProfilePreview, setShowProfilePreview] = useState(false);
+    const [hoverTimer, setHoverTimer] = useState(null);
     useEffect(() => {
         const loadPost = async () => {
             try {
                 const postData = await fetchPostById(id);
                 const commentsData = await fetchPostComments(id, currentPage);  // Загружаем комментарии для текущей страницы
                 setPost(postData);
-                console.log(postData);
                 setPostComments(commentsData.comments);
                 setTotalPages(commentsData.totalPages);  // Получаем общее количество страниц
 
@@ -65,7 +66,7 @@ function FullPost() {
                     }
                 }
                 // console.log(isFavourited);
-                if(isFavourited) setFavourited(isFavourited);
+                if (isFavourited) setFavourited(isFavourited);
             } catch (error) {
                 console.error('Failed to load post:', error);
                 showNotification('Failed to load post data.', 'error');
@@ -158,7 +159,7 @@ function FullPost() {
             }
             setFavourited(!favourited)
         } catch (error) {
-            console.log(error);
+            // console.log(error);
             showNotification('Failed to fav the post.', 'error');
         } finally {
             setIsFetchingLike(false);
@@ -190,6 +191,23 @@ function FullPost() {
     const handleFilterChange = async () => {
         setFilterOption('all');
     };
+    const handleMouseEnter = () => {
+        clearTimeout(hoverTimer); // Очистить таймер, если он был запущен
+        setHoverTimer(
+            setTimeout(() => {
+                setShowProfilePreview(true);
+            }, 300) // Задержка перед показом превью
+        );
+    };
+
+    const handleMouseLeave = () => {
+        clearTimeout(hoverTimer); // Очистить таймер, если он был запущен
+        setHoverTimer(
+            setTimeout(() => {
+                setShowProfilePreview(false);
+            }, 300) // Задержка перед скрытием превью
+        );
+    };
     if (loading) return <LoadingSpinner />;
     if (!post) return <div>Post not found.</div>;
 
@@ -201,13 +219,38 @@ function FullPost() {
         <div className="max-w-2xl mx-auto pt-16 flex flex-col flex-grow">
             <div className="flex items-center justify-between mb-4 mt-5">
                 {author ? (
-                    <div className="flex items-center">
-                        <img
-                            src={author.profilePicture}
-                            alt="Author"
-                            className="w-10 h-10 rounded-full mr-2"
-                        />
-                        <h2 className="font-semibold text-lg">{author.fullName}</h2>
+                    <div className="relative group"
+                    onMouseEnter={handleMouseEnter}
+                    onMouseLeave={handleMouseLeave}
+                    >
+                        <Link
+                            to={`/user/${author?.id}`}
+                            className="flex items-center w-full text-left"
+                        >
+                            <img
+                                src={author.profilePicture}
+                                alt={author.fullName}
+                                className="w-10 h-10 rounded-full mr-3"
+                            />
+                            <div>
+                                <p className="text-sm font-medium">
+                                    {author.fullName}
+                                </p>
+                                <p className="text-xs text-gray-400">
+                                    @{author.login}
+                                </p>
+                            </div>
+                        </Link>
+
+                        {showProfilePreview && (
+                            <div
+                                className="absolute top-full left-0 mt-2 z-50 bg-white rounded-lg shadow-lg border border-gray-200 p-2 transition-opacity duration-300 ease-in-out"
+                                onMouseEnter={() => {setShowProfilePreview(true); console.log("SETTRGIN");}}
+                                onMouseLeave={() => setShowProfilePreview(false)}
+                            >
+                                <ProfilePreview userId={author?.id} />
+                            </div>
+                        )}
                     </div>
                 ) : (
                     <div className="flex items-center">
@@ -222,7 +265,7 @@ function FullPost() {
                     </div>
                 )}
 
-                {user?.id === author.id && (
+                {user?.id === author?.id && (
                     <div className="flex space-x-2">
                         <button
                             className="bg-gray-500 text-white px-4 py-1 rounded hover:bg-gray-400 transition"
@@ -243,7 +286,6 @@ function FullPost() {
                             className="bg-red-500 text-white px-4 py-1 rounded hover:bg-red-400 transition"
                             onClick={(e) => {
                                 e.stopPropagation();
-                                // handleDeletePost(post.id);
                                 setShowDeleteConfirm(true);
                             }}
                         >
@@ -253,12 +295,13 @@ function FullPost() {
                 )}
             </div>
 
+
             <div className='flex justify-between'>
                 <h1 className="text-2xl font-bold mb-4">{title}</h1>
                 <FavButton
-                        favourited={favourited}  // Передаем актуальное состояние
-                        onClick={handleFav}
-                    />
+                    favourited={favourited}  // Передаем актуальное состояние
+                    onClick={handleFav}
+                />
             </div>
             <p className="text-gray-500 text-sm mb-2">
                 Published on {new Date(publishDate).toLocaleDateString()} | Views: {views}
@@ -289,10 +332,10 @@ function FullPost() {
             </div>
 
             <div className="my-8">
-                <h3 className="text-xl font-semibold mb-4">Comments</h3>
+                <h3 className="text-xl font-semibold">Comments</h3>
 
                 {postComments.length > 0 && (
-                    <div className="my-8 flex justify-between items-center">
+                    <div className="mt-2 mb-4 flex justify-between items-center">
                         {/* Pagination on the left */}
                         {totalPages > 1 ? (
                             <Pagination
@@ -323,7 +366,7 @@ function FullPost() {
 
                             {/* Filter Dropdown */}
                             {
-                                user?.id === author.id && (
+                                user?.id === author?.id && (
                                     <div className="relative">
                                         <select
                                             value={filterOption}

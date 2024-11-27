@@ -17,16 +17,21 @@ function PostPreview({ post }) {
         (post.content.length > 50 ? '...' : '');
 
     const handleMouseEnter = () => {
+        clearTimeout(hoverTimer); // Очистить таймер, если он был запущен
         setHoverTimer(
             setTimeout(() => {
                 setShowProfilePreview(true);
-            }, 1000) // Задержка в 1 секунду
+            }, 300) // Задержка перед показом превью
         );
     };
 
     const handleMouseLeave = () => {
-        clearTimeout(hoverTimer);
-        setShowProfilePreview(false);
+        clearTimeout(hoverTimer); // Очистить таймер, если он был запущен
+        setHoverTimer(
+            setTimeout(() => {
+                setShowProfilePreview(false);
+            }, 300) // Задержка перед скрытием превью
+        );
     };
 
     return (
@@ -45,57 +50,55 @@ function PostPreview({ post }) {
                 </div>
             </div>
 
-            <div
-                className="mt-auto flex items-center pt-4 border-t border-gray-200 relative group"
-                onMouseEnter={handleMouseEnter}
-                onMouseLeave={handleMouseLeave}
-            >
-                {post.user ? (
-                    <>
-                        <Link
-                            to={`/user/${post.user.id}`}
-                            className="flex items-center w-full text-left"
-                        >
-                            <img
-                                src={post.user.profilePicture}
-                                alt={post.user.fullName}
-                                className="w-10 h-10 rounded-full mr-3"
-                            />
-                            <div>
-                                <p className="text-sm font-medium">
-                                    {post.user.fullName}
-                                </p>
-                                <p className="text-xs text-gray-400">
-                                    @{post.user.login}
-                                </p>
-                            </div>
-                        </Link>
-
-                        {showProfilePreview && (
-                            <div
-                                className="absolute top-full left-0 mt-2 z-10 bg-white rounded-lg shadow-lg border border-gray-200 p-2 transition-opacity duration-300 ease-in-out"
-                                onMouseEnter={() => setShowProfilePreview(true)}
-                                onMouseLeave={() => setShowProfilePreview(false)}
-                            >
-                                <ProfilePreview userId={post.user.id} />
-                            </div>
-                        )}
-                    </>
-                ) : (
-                    <>
+            {post.user ? (
+                <div
+                    className="mt-auto flex items-center pt-4 border-t border-gray-200 relative group"
+                    onMouseEnter={handleMouseEnter}
+                    onMouseLeave={handleMouseLeave}
+                >
+                    <Link
+                        to={`/user/${post.user.id}`}
+                        className="flex items-center w-full text-left"
+                    >
                         <img
-                            src={died}
-                            alt="Deleted account"
+                            src={post.user.profilePicture}
+                            alt={post.user.fullName}
                             className="w-10 h-10 rounded-full mr-3"
                         />
                         <div>
                             <p className="text-sm font-medium">
-                                <i>Deleted account</i>
+                                {post.user.fullName}
+                            </p>
+                            <p className="text-xs text-gray-400">
+                                @{post.user.login}
                             </p>
                         </div>
-                    </>
-                )}
-            </div>
+                    </Link>
+
+                    {showProfilePreview && (
+                        <div
+                            className="absolute top-full left-0 mt-2 z-10 bg-white rounded-lg shadow-lg border border-gray-200 p-2 transition-opacity duration-300 ease-in-out"
+                            onMouseEnter={handleMouseEnter} // Удерживаем превью, если на него наведён курсор
+                            onMouseLeave={handleMouseLeave} // Скрываем превью с задержкой
+                        >
+                            <ProfilePreview userId={post.user.id} />
+                        </div>
+                    )}
+                </div>
+            ) : (
+                <div className="mt-auto flex items-center pt-4 border-t border-gray-200 relative group">
+                    <img
+                        src={died}
+                        alt="Deleted account"
+                        className="w-10 h-10 rounded-full mr-3"
+                    />
+                    <div>
+                        <p className="text-sm font-medium">
+                            <i>Deleted account</i>
+                        </p>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
