@@ -6,7 +6,7 @@
 [ ] role based things
 [ ] adapivtnost
 [ ] rewrite header + footer text
-[ ] user preview every where
-[ ] user tag ++ comment ++ post
-[ ] comment date -> show
+[x] user preview every where
+[x] user tag ++ comment ++ post
+[x] comment date -> show
 

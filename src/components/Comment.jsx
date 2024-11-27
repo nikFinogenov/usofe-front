@@ -7,10 +7,12 @@ import { updateCommentLike, deleteCommentLike, addComment, updateComment, delete
 import { AuthContext } from '../context/AuthContext';
 import { NotifyContext } from '../context/NotifyContext';
 import { GoReply } from "react-icons/go";
+import { Link } from 'react-router-dom';
 import CommentEditorMarkdown from './CommentEditorMarkdown';
 import { IoSettingsOutline } from "react-icons/io5";
 import { IoIosClose } from "react-icons/io";
 import { Menu, MenuItem, MenuButton } from '@szhsin/react-menu';
+import ProfilePreview from './ProfilePreview';
 import '@szhsin/react-menu/dist/index.css';
 import '@szhsin/react-menu/dist/transitions/zoom.css';
 
@@ -29,7 +31,26 @@ function Comment({ comment, replies, onReplyAdded, onDelete }) {
     const [isHidden, setIsHidden] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
     const [content, setContent] = useState(initialContent);
+    const [showProfilePreview, setShowProfilePreview] = useState(false);
+    const [hoverTimer, setHoverTimer] = useState(null);
 
+    const handleMouseEnter = () => {
+        clearTimeout(hoverTimer); // Очистить таймер, если он был запущен
+        setHoverTimer(
+            setTimeout(() => {
+                setShowProfilePreview(true);
+            }, 300) // Задержка перед показом превью
+        );
+    };
+
+    const handleMouseLeave = () => {
+        clearTimeout(hoverTimer); // Очистить таймер, если он был запущен
+        setHoverTimer(
+            setTimeout(() => {
+                setShowProfilePreview(false);
+            }, 300) // Задержка перед скрытием превью
+        );
+    };
     const handleMenuAction = (action) => {
         switch (action) {
             case 'Edit':
@@ -163,14 +184,53 @@ function Comment({ comment, replies, onReplyAdded, onDelete }) {
                 </div>
             )}
             <div className="flex items-center mb-2">
-                <img
-                    src={commentAuthor ? commentAuthor.profilePicture : died}
-                    alt="Commentator"
-                    className="w-8 h-8 rounded-full mr-2"
-                />
-                <h4 className="font-semibold text-gray-800">
-                    {commentAuthor ? commentAuthor.fullName : <i>Deleted account</i>}
-                </h4>
+            {commentAuthor ? (
+    <div
+        className="flex items-center relative group"
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+    >
+        <Link
+            to={`/user/${commentAuthor.id}`}
+            className="flex items-center text-left"
+        >
+            <img
+                src={commentAuthor.profilePicture}
+                alt={commentAuthor.fullName}
+                className="w-8 h-8 rounded-full mr-2"
+            />
+            <div>
+                <p className="text-sm font-medium">
+                    {commentAuthor.fullName}
+                </p>
+            </div>
+        </Link>
+
+        {showProfilePreview && (
+            <div
+                className="absolute top-full left-0 mt-2 z-10 bg-white rounded-lg shadow-lg border border-gray-200 p-2 transition-opacity duration-300 ease-in-out"
+                onMouseEnter={handleMouseEnter} // Keep preview open when hovered
+                onMouseLeave={handleMouseLeave} // Hide preview with delay
+            >
+                <ProfilePreview userId={commentAuthor.id} />
+            </div>
+        )}
+    </div>
+) : (
+    <div className="flex items-center">
+        <img
+            src={died}
+            alt="Deleted account"
+            className="w-8 h-8 rounded-full mr-2"
+        />
+        <div>
+            <p className="text-sm font-medium">
+                <i>Deleted account</i>
+            </p>
+        </div>
+    </div>
+)}
+
                 {<span className="text-sm text-gray-500 ml-2">{replyId ? "replied" : "answered"} on {new Date(createdAt).toLocaleDateString('en-US', {
                     year: 'numeric',
                     month: 'short',
