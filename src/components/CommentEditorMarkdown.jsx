@@ -4,20 +4,18 @@ import 'react-markdown-editor-lite/lib/index.css';
 import MarkdownIt from 'markdown-it';
 
 // Инициализация Markdown-it для рендеринга Markdown
-const mdParser = new MarkdownIt();
+const mdParser = new MarkdownIt(
+    {
+        breaks: true, // Включает поддержку переносов строк
+        gfm: true
+    }
+);
 
 const CommentEditorMarkdown = ({ onSubmit, height, inputValue = null }) => {
     const [value, setValue] = useState(inputValue ? inputValue : '');
 
     // Функция для добавления переноса строки в длинные строки текста, включая текст без пробелов
     const formatText = (text) => {
-        // Заменяем ручные переносы каретки на видимые (опционально)
-        text = text.replace(/\n/g, '\n');
-    
-        // Можно добавить другие предобработки, например, удаление лишних пробелов:
-        text = text.trim(); // Убираем пробелы в начале и конце текста
-    
-        // Вернуть отформатированный текст
         return text;
     };
 

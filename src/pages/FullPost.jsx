@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { useParams } from 'react-router-dom';
-import { fetchPostById, fetchPostComments, updatePostLike, deletePostLike, deletePostById, updatePost } from '../services/postService';
+import { fetchPostById, fetchPostComments, updatePostLike, deletePostLike, deletePostById, updatePost, favouritePost, deleteFavouritePost } from '../services/postService';
 import { addComment } from '../services/commentService';
 import Comment from '../components/Comment';
 import CategoryTags from '../components/CategoryTags';
@@ -16,6 +16,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { Link, useNavigate } from 'react-router-dom';
 import Pagination from '../components/Pagination';
+import FavButton from '../components/FavButton'
 
 function FullPost() {
     const { id } = useParams();
@@ -31,6 +32,7 @@ function FullPost() {
     const [dislikesCount, setDislikesCount] = useState(0);
     const [liked, setLiked] = useState(false);  // Отслеживаем, лайкнут ли пост
     const [disliked, setDisliked] = useState(false);  // Отслеживаем, дизлайкнут ли пост
+    const [favourited, setFavourited] = useState(false);  // Отслеживаем, дизлайкнут ли пост
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
     const [isHidden, setIsHidden] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);  // Текущая страница
@@ -44,6 +46,7 @@ function FullPost() {
                 const postData = await fetchPostById(id);
                 const commentsData = await fetchPostComments(id, currentPage);  // Загружаем комментарии для текущей страницы
                 setPost(postData);
+                console.log(postData);
                 setPostComments(commentsData.comments);
                 setTotalPages(commentsData.totalPages);  // Получаем общее количество страниц
 
@@ -53,6 +56,7 @@ function FullPost() {
                 setDislikesCount(likes.filter((like) => like.type === 'dislike').length);
 
                 const userLike = likes.find((like) => like.userId === user?.id);
+                const isFavourited = postData.isFavourited || false;
                 if (userLike) {
                     if (userLike.type === 'like') {
                         setLiked(true);
@@ -60,6 +64,8 @@ function FullPost() {
                         setDisliked(true);
                     }
                 }
+                // console.log(isFavourited);
+                if(isFavourited) setFavourited(isFavourited);
             } catch (error) {
                 console.error('Failed to load post:', error);
                 showNotification('Failed to load post data.', 'error');
@@ -139,6 +145,25 @@ function FullPost() {
             showNotification('Failed to delete post.', 'error'); // Уведомление об ошибке
         }
     };
+    const handleFav = async () => {
+        if (isFetchingLike) return;
+        setIsFetchingLike(true);
+
+        try {
+            // If the post is already liked, delete the like
+            if (favourited) {
+                await deleteFavouritePost(id);  // Remove the like
+            } else {
+                await favouritePost(id);
+            }
+            setFavourited(!favourited)
+        } catch (error) {
+            console.log(error);
+            showNotification('Failed to fav the post.', 'error');
+        } finally {
+            setIsFetchingLike(false);
+        }
+    };
     const handleAddComment = async (content) => {
         try {
             const newComment = await addComment(id, content); // Предполагаем, что `addComment` добавляет комментарий
@@ -160,10 +185,10 @@ function FullPost() {
         }
     };
     const handleSortChange = async () => {
-
+        setSortOption('date');
     };
     const handleFilterChange = async () => {
-
+        setFilterOption('all');
     };
     if (loading) return <LoadingSpinner />;
     if (!post) return <div>Post not found.</div>;
@@ -228,7 +253,13 @@ function FullPost() {
                 )}
             </div>
 
-            <h1 className="text-2xl font-bold mb-4">{title}</h1>
+            <div className='flex justify-between'>
+                <h1 className="text-2xl font-bold mb-4">{title}</h1>
+                <FavButton
+                        favourited={favourited}  // Передаем актуальное состояние
+                        onClick={handleFav}
+                    />
+            </div>
             <p className="text-gray-500 text-sm mb-2">
                 Published on {new Date(publishDate).toLocaleDateString()} | Views: {views}
             </p>
@@ -259,59 +290,62 @@ function FullPost() {
 
             <div className="my-8">
                 <h3 className="text-xl font-semibold mb-4">Comments</h3>
-                <div className="my-8 flex justify-between items-center">
-                    {/* Pagination on the left */}
-                    {totalPages > 1 ? (
-                        <Pagination
-                            currentPage={currentPage}
-                            totalPages={totalPages}
-                            onPageChange={(page) => setCurrentPage(page)}
-                        />
-                    ) : (<div></div>)}
 
-                    {/* Sorting and Filtering on the right */}
-                    <div className="flex space-x-4">
-                        {/* Sort Dropdown */}
-                        <div className="relative">
-                            <select
-                                value={sortOption}
-                                onChange={handleSortChange}
-                                className="block w-full p-2 pl-3 pr-10 text-gray-700 bg-white border border-gray-300 rounded-lg shadow-sm appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                            >
-                                <option value="date">Sort by Date</option>
-                                <option value="votes">Sort by Votes</option>
-                            </select>
-                            <div className="absolute inset-y-0 right-0 flex items-center px-2 text-gray-400 pointer-events-none">
-                                <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-                                </svg>
+                {postComments.length > 0 && (
+                    <div className="my-8 flex justify-between items-center">
+                        {/* Pagination on the left */}
+                        {totalPages > 1 ? (
+                            <Pagination
+                                currentPage={currentPage}
+                                totalPages={totalPages}
+                                onPageChange={(page) => setCurrentPage(page)}
+                            />
+                        ) : (<div></div>)}
+
+                        {/* Sorting and Filtering on the right */}
+                        <div className="flex space-x-4">
+                            {/* Sort Dropdown */}
+                            <div className="relative">
+                                <select
+                                    value={sortOption}
+                                    onChange={handleSortChange}
+                                    className="block w-full p-2 pl-3 pr-10 text-gray-700 bg-white border border-gray-300 rounded-lg shadow-sm appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                >
+                                    <option value="date">Sort by Date</option>
+                                    <option value="votes">Sort by Votes</option>
+                                </select>
+                                <div className="absolute inset-y-0 right-0 flex items-center px-2 text-gray-400 pointer-events-none">
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                                    </svg>
+                                </div>
                             </div>
+
+                            {/* Filter Dropdown */}
+                            {
+                                user?.id === author.id && (
+                                    <div className="relative">
+                                        <select
+                                            value={filterOption}
+                                            onChange={handleFilterChange}
+                                            className="block w-full p-2 pl-3 pr-10 text-gray-700 bg-white border border-gray-300 rounded-lg shadow-sm appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                        >
+                                            <option value="all">All Comments</option>
+                                            <option value="favourites">Active</option>
+                                            <option value="favourites">Inactive</option>
+                                        </select>
+                                        <div className="absolute inset-y-0 right-0 flex items-center px-2 text-gray-400 pointer-events-none">
+                                            <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                                            </svg>
+                                        </div>
+                                    </div>
+                                )
+                            }
                         </div>
 
-                        {/* Filter Dropdown */}
-                        {
-                            user?.id === author.id && (
-                                <div className="relative">
-                                    <select
-                                        value={filterOption}
-                                        onChange={handleFilterChange}
-                                        className="block w-full p-2 pl-3 pr-10 text-gray-700 bg-white border border-gray-300 rounded-lg shadow-sm appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                                    >
-                                        <option value="all">All Comments</option>
-                                        <option value="favorites">Active</option>
-                                        <option value="favorites">Inactive</option>
-                                    </select>
-                                    <div className="absolute inset-y-0 right-0 flex items-center px-2 text-gray-400 pointer-events-none">
-                                        <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-                                        </svg>
-                                    </div>
-                                </div>
-                            )
-                        }
                     </div>
-
-                </div>
+                )}
 
                 {postComments.length ?
                     postComments.filter((comment) => !comment.replyId)
@@ -324,17 +358,20 @@ function FullPost() {
                                 onDelete={(commentId) => setPostComments((prev) => prev.filter(comment => comment.id !== commentId))}
                             />
                         )) :
-                    <p className='text-s'>No comments found, be first!</p>}
-                <div className="flex justify-between items-center">
-                    {/* Pagination on the left */}
-                    {totalPages > 1 ? (
-                        <Pagination
-                            currentPage={currentPage}
-                            totalPages={totalPages}
-                            onPageChange={(page) => setCurrentPage(page)}
-                        />
-                    ) : (<div></div>)}
-                </div>
+                    <p className='text-s mb-4'>No comments found, be first!</p>}
+                {
+                    postComments.length > 0 && (
+                        <div className="flex justify-between items-center">
+                            {/* Pagination on the left */}
+                            {totalPages > 1 ? (
+                                <Pagination
+                                    currentPage={currentPage}
+                                    totalPages={totalPages}
+                                    onPageChange={(page) => setCurrentPage(page)}
+                                />) : (<div></div>)}
+                        </div>
+                    )
+                }
                 <h3 className="text-xl font-semibold">Add a Comment</h3>
                 {/* <CommentEditor onSubmit={handleAddComment} /> */}
                 <CommentEditorMarkdown onSubmit={handleAddComment} height={'200px'} />

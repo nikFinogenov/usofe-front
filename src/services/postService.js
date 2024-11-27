@@ -17,7 +17,7 @@ export const fetchPosts = async (page = 1, pageSize = 10) => {
 
 export const fetchPostById = async (id) => {
     try {
-        const response = await axios.get(`${process.env.REACT_APP_API}/posts/${id}`);
+        const response = await api.get(`${process.env.REACT_APP_API}/posts/${id}`);
         return response.data;
     } catch (error) {
         console.error('Failed to fetch post:', error);
@@ -81,10 +81,11 @@ export const createPost = async(title, content, categories) => {
 };
 export const updatePost = async(id, title, content, categories, status) => {
     try {
-        console.log(status);
+        
         const response = await api.patch(`${process.env.REACT_APP_API}/posts/${id}`, {
             title, content, categories, status
         });
+        // console.log(response);
         return response.data;
     } catch (error) {
         console.error('Failed to create post:', error);
@@ -102,3 +103,22 @@ export const deletePostById = async(id) => {
     }
 };
 
+export const favouritePost = async(id) => {
+    try {
+        const response = await api.post(`${process.env.REACT_APP_API}/favourites/${id}`);
+        return response.data;
+    } catch (error) {
+        console.error('Failed to update post fav:', error);
+        throw error;
+    }
+};
+
+export const deleteFavouritePost = async(id) => {
+    try {
+        const response = await api.delete(`${process.env.REACT_APP_API}/favourites/${id}`);
+        return response.data;
+    } catch (error) {
+        console.error('Failed to update post fav:', error);
+        throw error;
+    }
+};

@@ -42,6 +42,16 @@ export const fetchUserPosts = async (page = 1, pageSize = 5, id) => {
     }
 };
 
+export const fetchFavourites = async (page, limit) => {
+    try {
+        const response = await api.get(`/favourites?page=${page}&limit=${limit}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching favourites:', error);
+        throw error;
+    }
+};
+
 export const fetchCurrentUser = async () => {
     const token = localStorage.getItem('token');
     if (!token) return null;

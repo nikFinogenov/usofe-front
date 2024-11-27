@@ -10,7 +10,10 @@ import MarkdownIt from 'markdown-it'; // Markdown parser
 import died from '../assets/died.png';
 
 // Initialize the Markdown parser
-const mdParser = new MarkdownIt();
+const mdParser = new MarkdownIt({
+    breaks: true, // Включает поддержку переносов строк\
+    gfm: true
+});
 
 function EditPost() {
     const { id } = useParams();
@@ -174,7 +177,7 @@ function EditPost() {
                 />
             </div>
 
-            <div className="flex justify-end space-x-4">
+            <div className="flex justify-end space-x-4 mb-5">
                 <button
                     onClick={() => navigate(`/post/${id}`)}
                     className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-400 transition"

@@ -24,6 +24,7 @@ import { AxiosInterceptor } from './services/index'
 import NewPost from './pages/NewPost';
 import EditPost from './pages/EditPost';
 import User from './pages/User'
+import Favourites from './pages/Favourites';
 function ScrollToTop() {
     const { pathname } = useLocation();
 
@@ -61,6 +62,7 @@ function AppContent() {
                                     <Route path="/categories/:category_id/posts" element={<Category />} />
                                     <Route path="/profile" element={<Profile />} />
                                     <Route path="/user/:id" element={<User />} />
+                                    <Route path="/favourites" element={<Favourites />}/>
                                     <Route path="/settings" element={<Settings />} />
                                     <Route path="/forgot-password" element={<ForgotPassword />} />
                                     <Route path="/confirm-reset/:token" element={<ConfirmResetPassword />} />

@@ -9,7 +9,12 @@ import { fetchCategoriesTags } from '../services/categoryService'; // Серви
 import { createPost } from '../services/postService'
 
 // Инициализация Markdown-it
-const mdParser = new MarkdownIt();
+const mdParser = new MarkdownIt(
+    {
+        breaks: true, // Включает поддержку переносов строк
+        gfm: true
+    }
+);
 
 const NewPost = () => {
     const navigate = useNavigate();

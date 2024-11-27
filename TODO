@@ -1,9 +1,12 @@
 [x] user preview + user page
 [x] comments pagination
-[ ] favourites
+[x] favourites
 [ ] search
 [ ] sorting + filtering to posts
 [ ] role based things
 [ ] adapivtnost
 [ ] rewrite header + footer text
+[ ] user preview every where
+[ ] user tag ++ comment ++ post
+[ ] comment date -> show
 

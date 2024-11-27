@@ -11,9 +11,6 @@ module.exports = {
           '50%': { opacity: 0.9 },
         },
       },
-      wordBreak: {
-        anywhere: 'break-word',
-      },
     },
   },
   plugins: [require('@tailwindcss/typography')],

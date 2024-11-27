@@ -31,7 +31,7 @@ const AxiosInterceptor = () => {
         }
 
         // Добавляем токен авторизации
-        config.headers.Authorization = `Bearer ${localStorage.getItem("token")}`;
+        if(user) config.headers.Authorization = `Bearer ${localStorage.getItem("token")}`;
         return config;
     });
 
