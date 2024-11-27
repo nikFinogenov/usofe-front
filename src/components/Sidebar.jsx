@@ -3,15 +3,14 @@ import { Link, useNavigate } from 'react-router-dom';
 import { fetchRandomPost } from '../services/postService';
 
 function Sidebar() {
-    const [randomId, setRandomId] = useState(null);
     const navigate = useNavigate();
 
     const handleRandomClick = async () => {
         try {
             const { id } = await fetchRandomPost();
-            if(id === null) setRandomId(1);
-            setRandomId(id); // обновляем состояние, чтобы ссылка изменилась
-            navigate(`/post/${randomId}`); // перенаправляем на новую страницу случайного поста
+            // console.log(id);
+            // if(id === null) setRandomId(1);// обновляем состояние, чтобы ссылка изменилась
+            navigate(`/post/${id}`); // перенаправляем на новую страницу случайного поста
         } catch (error) {
             console.error('Failed to load random post:', error);
         }
