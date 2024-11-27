@@ -15,7 +15,7 @@ import '@szhsin/react-menu/dist/index.css';
 import '@szhsin/react-menu/dist/transitions/zoom.css';
 
 function Comment({ comment, replies, onReplyAdded, onDelete }) {
-    const { id, content: initialContent, user: commentAuthor, likes, replyId } = comment;
+    const { id, content: initialContent, user: commentAuthor, likes, replyId, createdAt } = comment;
     const showNotification = useContext(NotifyContext);
     const { user } = useContext(AuthContext);
     const [showReplies, setShowReplies] = useState(false);
@@ -171,7 +171,14 @@ function Comment({ comment, replies, onReplyAdded, onDelete }) {
                 <h4 className="font-semibold text-gray-800">
                     {commentAuthor ? commentAuthor.fullName : <i>Deleted account</i>}
                 </h4>
-                {replyId && <span className="text-sm text-gray-500 ml-2">replied</span>}
+                {<span className="text-sm text-gray-500 ml-2">{replyId ? "replied" : "answered"} on {new Date(createdAt).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric',
+                })}</span>}
+                {/* <span className="text-sm text-gray-500 ml-2">{}</span> */}
+                {/* {replyId && <span className="text-sm text-gray-500 ml-2">answered on</span>} */}
+
                 <button onClick={() => setShowReplyDialog(true)} className="ml-auto">
                     <GoReply className="text-lg" />
                 </button>
