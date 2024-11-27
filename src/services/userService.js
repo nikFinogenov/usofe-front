@@ -1,4 +1,4 @@
-import axios from 'axios';
+// import axios from 'axios';
 import { api } from './index'
 
 const API_URL = process.env.REACT_APP_API;
@@ -7,7 +7,7 @@ const API_URL = process.env.REACT_APP_API;
 
 export const fetchUser = async (email, password) => {
     try {
-        const response = await axios.post(`${API_URL}/auth/login`, { email, password });
+        const response = await api.post(`${API_URL}/auth/login`, { email, password });
         return response.data;
     } catch (error) {
         throw error;
@@ -16,7 +16,7 @@ export const fetchUser = async (email, password) => {
 
 export const fetchUserStats = async (userId) => {
     try {
-      const response = await axios.get(`${API_URL}/users/${userId}/stats`);
+      const response = await api.get(`${API_URL}/users/${userId}/stats`);
       return response.data;
     } catch (error) {
       throw error;
@@ -24,7 +24,7 @@ export const fetchUserStats = async (userId) => {
   };
 export const fetchUserProfile = async (userId) => {
     try {
-        const response = await axios.get(`${API_URL}/users/${userId}`);
+        const response = await api.get(`${API_URL}/users/${userId}`);
         return response.data;
       } catch (error) {
         throw error;
@@ -32,7 +32,7 @@ export const fetchUserProfile = async (userId) => {
 };
 export const fetchUserPosts = async (page = 1, pageSize = 5, id) => {
     try {
-        const response = await axios.get(`${API_URL}/users/${id}/posts`, {
+        const response = await api.get(`${API_URL}/users/${id}/posts`, {
             params: { page, pageSize }
         });
         return response.data;
@@ -56,13 +56,13 @@ export const fetchCurrentUser = async () => {
     const token = localStorage.getItem('token');
     if (!token) return null;
 
-    const response = await axios.post(`${API_URL}/auth/me`, { token });
+    const response = await api.post(`${API_URL}/auth/me`, { token });
     return response.data.user;
 };
 
 export const createUser = async (login, email, fullName, password) => {
     try {
-        const response = await axios.post(`${API_URL}/auth/register`, {
+        const response = await api.post(`${API_URL}/auth/register`, {
             login, email, fullName, password
         });
         return response.data;
@@ -130,7 +130,7 @@ export const deleteAllComments = async (userId) => {
 
 export const passwordReset = async (email) => {
     try {
-        const response = await axios.post(`${API_URL}/auth/password-reset`, { email });
+        const response = await api.post(`${API_URL}/auth/password-reset`, { email });
         return response.data;
     } catch (error) {
         throw error;
@@ -139,7 +139,7 @@ export const passwordReset = async (email) => {
 
 export const passwordResetConfirm = async (confirmToken, newPassword) => {
     try {
-        const response = await axios.post(`${API_URL}/auth/password-reset/${confirmToken}`, { newPassword });
+        const response = await api.post(`${API_URL}/auth/password-reset/${confirmToken}`, { newPassword });
         return response.data;
     } catch (error) {
         throw error;
@@ -148,8 +148,7 @@ export const passwordResetConfirm = async (confirmToken, newPassword) => {
 
 export const emailConfirm = async (confirmToken) => {
     try {
-        console.log("PIDRILA");
-        const response = await axios.get(`${API_URL}/auth/confirm/${confirmToken}`);
+        const response = await api.get(`${API_URL}/auth/confirm/${confirmToken}`);
         return response.data;
     } catch (error) {
         throw error;

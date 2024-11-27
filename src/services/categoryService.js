@@ -1,10 +1,11 @@
 // services/categoryService.js
 
-import axios from 'axios';
+// import axios from 'axios';
+import { api } from './index'
 
 export const fetchCategories = async (page = 1, pageSize = 10) => {
     try {
-        const response = await axios.get(`${process.env.REACT_APP_API}/categories`,{
+        const response = await api.get(`${process.env.REACT_APP_API}/categories`,{
             params: { page, pageSize }
         });
         return response.data;
@@ -16,7 +17,7 @@ export const fetchCategories = async (page = 1, pageSize = 10) => {
 
 export const fetchPostsByCategoryId = async (categoryId, page = 1, pageSize = 10) => {
     try {
-        const response = await axios.get(`${process.env.REACT_APP_API}/categories/${categoryId}/posts`, {
+        const response = await api.get(`${process.env.REACT_APP_API}/categories/${categoryId}/posts`, {
             params: { page, pageSize }
         });
         return response.data;
@@ -28,7 +29,7 @@ export const fetchPostsByCategoryId = async (categoryId, page = 1, pageSize = 10
 
 export const fetchCategoriesTags = async() => {
     try {
-        const response = await axios.get(`${process.env.REACT_APP_API}/categories/tags`);
+        const response = await api.get(`${process.env.REACT_APP_API}/categories/tags`);
         return response.data;
     } catch (error) {
         console.error('Failed to fetch categories:', error);

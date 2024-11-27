@@ -1,11 +1,11 @@
 // src/services/postService.js
 
-import axios from 'axios';
+// import axios from 'axios';
 import { api } from './index'
 
 export const fetchPosts = async (page = 1, pageSize = 10) => {
     try {
-        const response = await axios.get(`${process.env.REACT_APP_API}/posts`, {
+        const response = await api.get(`${process.env.REACT_APP_API}/posts`, {
             params: { page, pageSize }
         });
         return response.data;
@@ -27,7 +27,7 @@ export const fetchPostById = async (id) => {
 
 export const fetchPostComments = async (id, page = 1, pageSize = 10) => {
     try {
-        const response = await axios.get(`${process.env.REACT_APP_API}/posts/${id}/comments`, {
+        const response = await api.get(`${process.env.REACT_APP_API}/posts/${id}/comments`, {
             params: { page, pageSize }
         });
         return response.data;
@@ -38,7 +38,7 @@ export const fetchPostComments = async (id, page = 1, pageSize = 10) => {
 };
 export const fetchRandomPost = async () => {
     try {
-        const response = await axios.get(`${process.env.REACT_APP_API}/posts/random`);
+        const response = await api.get(`${process.env.REACT_APP_API}/posts/random`);
         return response.data;
     } catch (error) {
         console.error('Failed to fetch random post:', error);

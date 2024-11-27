@@ -176,8 +176,6 @@ function Comment({ comment, replies, onReplyAdded, onDelete }) {
                     month: 'short',
                     day: 'numeric',
                 })}</span>}
-                {/* <span className="text-sm text-gray-500 ml-2">{}</span> */}
-                {/* {replyId && <span className="text-sm text-gray-500 ml-2">answered on</span>} */}
 
                 <button onClick={() => setShowReplyDialog(true)} className="ml-auto">
                     <GoReply className="text-lg" />

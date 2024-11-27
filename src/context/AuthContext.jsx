@@ -16,7 +16,7 @@ export const AuthProvider = ({ children }) => {
                     setUser(currentUser);
                 }
             } catch (error) {
-                // console.error('Failed to load user:', error);
+                console.error('Failed to load user:', error);
             } finally {
                 setIsLoading(false);
             }
