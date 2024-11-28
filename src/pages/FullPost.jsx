@@ -42,6 +42,7 @@ function FullPost() {
     const [filterOption, setFilterOption] = useState('all'); // Filter state ('all' or other)
     const [showProfilePreview, setShowProfilePreview] = useState(false);
     const [hoverTimer, setHoverTimer] = useState(null);
+
     useEffect(() => {
         const loadPost = async () => {
             try {
@@ -185,8 +186,11 @@ function FullPost() {
             showNotification('Failed to hide post.', 'error');
         }
     };
-    const handleSortChange = async () => {
-        setSortOption('date');
+    const handleSortChange = async (event) => {
+        const selectedSort = event.target.value;
+        setSortOption(selectedSort);
+        // Здесь вы можете вызвать функцию для загрузки комментариев с выбранной сортировкой
+        await loadComments(selectedSort); // Предполагается, что у вас есть функция loadComments
     };
     const handleFilterChange = async () => {
         setFilterOption('all');
