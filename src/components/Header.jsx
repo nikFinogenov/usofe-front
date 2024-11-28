@@ -1,13 +1,28 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import UserDropdown from './UserDropdown';
 
 function Header() {
     const [searchText, setSearchText] = useState('');
     const [showSuggestions, setShowSuggestions] = useState(false);
+    const navigate = useNavigate();
 
-    const handleSearch = () => {
-        console.log('Searching for:', searchText);
+    const handleSearch = async () => {
+        try {
+            if (!searchText.trim()) {
+                console.log('Search text is empty');
+                return;
+            }
+
+            // const results = await search(searchText.trim());
+            // console.log('Search results:', results);
+            // You can navigate to a search results page or update state to display results
+            navigate(`/search?q=${encodeURIComponent(searchText.trim())}`);
+            setSearchText('');
+            setShowSuggestions(false);
+        } catch (error) {
+            console.error('Error during search:', error);
+        }
     };
 
     const handleInputChange = (e) => {
@@ -35,15 +50,11 @@ function Header() {
                     />
                     {showSuggestions && (
                         <div className="absolute top-full left-0 w-full bg-white shadow-md rounded mt-2 z-10 p-4">
-                            {/* Подсказки */}
                             <div className="flex justify-between text-gray-500">
-                                <div className='text-sm pr-2'>                                
-                                    <p><strong>@userTag</strong> — search for users by tag</p>
+                                <div className="text-sm pr-2">
+                                    <p><strong>@userTag</strong> — search users by tag</p>
                                     <p><strong>u/c/p:name</strong> — search users/categories/posts</p>
-                                    {/* <p><strong>c:name</strong> — search for categories</p>
-                                    <p><strong>p:name</strong> — search for posts</p> */}
-                                    </div>
-                                {/* Кнопка поиска */}
+                                </div>
                                 <button
                                     onClick={handleSearch}
                                     className="bg-blue-600 text-white px-4 rounded hover:bg-blue-700 transition"

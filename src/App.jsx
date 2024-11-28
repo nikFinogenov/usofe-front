@@ -25,6 +25,7 @@ import NewPost from './pages/NewPost';
 import EditPost from './pages/EditPost';
 import User from './pages/User'
 import Favourites from './pages/Favourites';
+import Search from './pages/Search'
 function ScrollToTop() {
     const { pathname } = useLocation();
 
@@ -54,6 +55,7 @@ function AppContent() {
                                     <Route path="/" element={<Main />} />
                                     <Route path="/login" element={<Login />} />
                                     <Route path="/register" element={<Register />} />
+                                    <Route path="/search" element={<Search />}/>
                                     <Route path="/post/:id" element={<FullPost />} />
                                     <Route path="/posts" element={<Posts />} />
                                     <Route path="/new-post" element={<NewPost />}/>
