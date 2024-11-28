@@ -14,9 +14,6 @@ function Header() {
                 return;
             }
 
-            // const results = await search(searchText.trim());
-            // console.log('Search results:', results);
-            // You can navigate to a search results page or update state to display results
             navigate(`/search?q=${encodeURIComponent(searchText.trim())}`);
             setSearchText('');
             setShowSuggestions(false);
@@ -29,6 +26,20 @@ function Header() {
         const value = e.target.value;
         setSearchText(value);
         setShowSuggestions(value.trim().length > 0);
+    };
+
+    const handleBlur = () => {
+        setTimeout(() => {
+            setShowSuggestions(false);
+        }, 100);
+    };
+
+    const handleFocus = () => {
+        setShowSuggestions(searchText.trim().length > 0);
+    };
+
+    const handleSearchButtonMouseDown = (e) => {
+        e.preventDefault();  // Prevent the blur event from being triggered
     };
 
     return (
@@ -46,6 +57,8 @@ function Header() {
                         placeholder="Search..."
                         value={searchText}
                         onChange={handleInputChange}
+                        onBlur={handleBlur}  // Close suggestions on blur
+                        onFocus={handleFocus} // Show suggestions on focus
                         className="w-full px-4 py-2 rounded text-black focus:outline-none focus:ring-2 focus:ring-blue-300"
                     />
                     {showSuggestions && (
@@ -56,6 +69,7 @@ function Header() {
                                     <p><strong>u/c/p:name</strong> — search users/categories/posts</p>
                                 </div>
                                 <button
+                                    onMouseDown={handleSearchButtonMouseDown} // Use onMouseDown to prevent blur trigger
                                     onClick={handleSearch}
                                     className="bg-blue-600 text-white px-4 rounded hover:bg-blue-700 transition"
                                 >
