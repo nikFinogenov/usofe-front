@@ -26,6 +26,7 @@ import EditPost from './pages/EditPost';
 import User from './pages/User'
 import Favourites from './pages/Favourites';
 import Search from './pages/Search'
+import 'prismjs/themes/prism-tomorrow.css';
 function ScrollToTop() {
     const { pathname } = useLocation();
 

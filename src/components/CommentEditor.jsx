@@ -1,33 +1,41 @@
 import React, { useState } from 'react';
-import ReactQuill from 'react-quill-new';
-import 'react-quill-new/dist/quill.snow.css';
+import MarkdownEditor from 'react-markdown-editor-lite';
+import MarkdownIt from 'markdown-it';
+import rehypePrism from 'rehype-prism-plus'; // Импортируем плагин для подсветки
+import { unified } from 'unified';
+import rehypeParse from 'rehype-parse';
+import rehypeStringify from 'rehype-stringify';
 
-const CommentEditor = ({ onSubmit }) => {
-    const [value, setValue] = useState('');
+// Инициализируем Markdown парсер
+const mdParser = new MarkdownIt({
+    breaks: true, // Включает поддержку переносов строк
+    gfm: true, // Включает поддержку GFM (GitHub Flavored Markdown)
+});
 
-    const handleSubmit = () => {
-        if (value.trim()) {
-            onSubmit(value); // Передаем введенный текст
-            setValue('');    // Сбрасываем текст
-        }
+function MarkdownWithPreview({ content, handleEditorChange }) {
+    // Функция для рендеринга с подсветкой синтаксиса
+    const renderWithSyntaxHighlighting = (text) => {
+        const htmlContent = mdParser.render(text);
+
+        // Используем rehype для обработки HTML с подсветкой синтаксиса
+        const processedContent = unified()
+            .use(rehypeParse, { fragment: true })
+            .use(rehypePrism) // Добавляем подсветку синтаксиса
+            .use(rehypeStringify)
+            .processSync(htmlContent);
+
+        return String(processedContent);
     };
 
     return (
-        <div className="mt-2">
-            <ReactQuill
-                theme="snow"
-                value={value}
-                onChange={setValue}
-                placeholder="Write your comment..."
-            />
-            <button
-                onClick={handleSubmit}
-                className="mt-4 px-4 py-2 bg-blue-500 text-white rounded"
-            >
-                Submit
-            </button>
-        </div>
+        <MarkdownEditor
+            value={content}
+            style={{ height: '500px' }}
+            renderHTML={(text) => renderWithSyntaxHighlighting(text)} // Применяем рендер с подсветкой
+            onChange={handleEditorChange}
+            placeholder="Write your post content in markdown..."
+        />
     );
-};
+}
 
-export default CommentEditor;
+export default MarkdownWithPreview;
