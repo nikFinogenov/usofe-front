@@ -25,10 +25,10 @@ export const fetchPostById = async (id) => {
     }
 };
 
-export const fetchPostComments = async (id, page = 1, pageSize = 10, sortBy = 'date', order = 'desc') => {
+export const fetchPostComments = async (id, page = 1, pageSize = 10, sortBy = 'rating', order = 'desc', filter = 'all') => {
     try {
         const response = await api.get(`${process.env.REACT_APP_API}/posts/${id}/comments`, {
-            params: { page, pageSize, sortBy, order } // Добавляем параметры сортировки
+            params: { page, pageSize, sortBy, order, filter } // Добавляем параметры сортировки
         });
         return response.data;
     } catch (error) {

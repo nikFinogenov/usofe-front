@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { fetchPostById, fetchPostComments, updatePostLike, deletePostLike, deletePostById, updatePost, favouritePost, deleteFavouritePost } from '../services/postService';
 import { addComment } from '../services/commentService';
 import Comment from '../components/Comment';
@@ -10,14 +10,14 @@ import DislikeButton from '../components/DislikeButton';
 import { NotifyContext } from '../context/NotifyContext';
 import died from '../assets/died.png';
 import { AuthContext } from '../context/AuthContext';
-// import CommentEditor from '../components/CommentEditor';
-import CommentEditorMarkdown from '../components/CommentEditorMarkdown'
+import CommentEditorMarkdown from '../components/CommentEditorMarkdown';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { Link, useNavigate } from 'react-router-dom';
 import Pagination from '../components/Pagination';
 import FavButton from '../components/FavButton';
 import ProfilePreview from '../components/ProfilePreview';
+import SortDropdown from '../components/SortDropdown';  // Import the SortDropdown component
+import FilterDropdown from '../components/FilterDropdown';  // Import the FilterDropdown component
 
 function FullPost() {
     const { id } = useParams();
@@ -31,15 +31,15 @@ function FullPost() {
     const [isFetchingLike, setIsFetchingLike] = useState(false);
     const [likesCount, setLikesCount] = useState(0);
     const [dislikesCount, setDislikesCount] = useState(0);
-    const [liked, setLiked] = useState(false);  // Отслеживаем, лайкнут ли пост
-    const [disliked, setDisliked] = useState(false);  // Отслеживаем, дизлайкнут ли пост
-    const [favourited, setFavourited] = useState(false);  // Отслеживаем, дизлайкнут ли пост
+    const [liked, setLiked] = useState(false);
+    const [disliked, setDisliked] = useState(false);
+    const [favourited, setFavourited] = useState(false);
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
     const [isHidden, setIsHidden] = useState(false);
-    const [currentPage, setCurrentPage] = useState(1);  // Текущая страница
-    const [totalPages, setTotalPages] = useState(1);  // Общее количество страниц
-    const [sortOption, setSortOption] = useState('date'); // Sorting state ('date' or 'votes')
-    const [filterOption, setFilterOption] = useState('all'); // Filter state ('all' or other)
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+    const [sortOption, setSortOption] = useState(sessionStorage.getItem('sortOption') || 'rating');
+    const [filterOption, setFilterOption] = useState(sessionStorage.getItem('filterOption') || 'all');
     const [showProfilePreview, setShowProfilePreview] = useState(false);
     const [hoverTimer, setHoverTimer] = useState(null);
 
@@ -47,12 +47,11 @@ function FullPost() {
         const loadPost = async () => {
             try {
                 const postData = await fetchPostById(id);
-                const commentsData = await fetchPostComments(id, currentPage);  // Загружаем комментарии для текущей страницы
+                const commentsData = await fetchPostComments(id, currentPage, 10, sortOption, 'desc', filterOption);
                 setPost(postData);
                 setPostComments(commentsData.comments);
-                setTotalPages(commentsData.totalPages);  // Получаем общее количество страниц
+                setTotalPages(commentsData.totalPages);
 
-                // Подсчет лайков и дизлайков
                 const likes = postData.likes || [];
                 setLikesCount(likes.filter((like) => like.type === 'like').length);
                 setDislikesCount(likes.filter((like) => like.type === 'dislike').length);
@@ -66,7 +65,6 @@ function FullPost() {
                         setDisliked(true);
                     }
                 }
-                // console.log(isFavourited);
                 if (isFavourited) setFavourited(isFavourited);
             } catch (error) {
                 console.error('Failed to load post:', error);
@@ -77,26 +75,21 @@ function FullPost() {
         };
 
         loadPost();
-    }, [id, currentPage, showNotification, user]);
-
+    }, [id, currentPage, showNotification, user, sortOption, filterOption]);
 
     const handleLike = async () => {
         if (isFetchingLike) return;
         setIsFetchingLike(true);
 
         try {
-            // If the post is already liked, delete the like
             if (liked) {
-                await deletePostLike(id);  // Remove the like
+                await deletePostLike(id);
                 setLiked(false);
                 setLikesCount((prevCount) => prevCount - 1);
             } else {
-                // If not liked yet, add the like (this could be implemented via another API call)
                 await updatePostLike(id, 'like');
                 setLiked(true);
                 setLikesCount((prevCount) => prevCount + 1);
-
-                // If the post was disliked, remove the dislike
                 if (disliked) {
                     setDisliked(false);
                     setDislikesCount((prevCount) => prevCount - 1);
@@ -108,23 +101,20 @@ function FullPost() {
             setIsFetchingLike(false);
         }
     };
+
     const handleDislike = async () => {
         if (isFetchingLike) return;
         setIsFetchingLike(true);
 
         try {
-            // If the post is already disliked, delete the dislike
             if (disliked) {
-                await deletePostLike(id);  // Remove the dislike
+                await deletePostLike(id);
                 setDisliked(false);
                 setDislikesCount((prevCount) => prevCount - 1);
             } else {
-                // If not disliked yet, add the dislike (this could be implemented via another API call)
                 await updatePostLike(id, 'dislike');
                 setDisliked(true);
                 setDislikesCount((prevCount) => prevCount + 1);
-
-                // If the post was liked, remove the like
                 if (liked) {
                     setLiked(false);
                     setLikesCount((prevCount) => prevCount - 1);
@@ -136,39 +126,39 @@ function FullPost() {
             setIsFetchingLike(false);
         }
     };
+
     const handleDeletePost = async () => {
         try {
-            await deletePostById(post.id); // Вызываем API для удаления поста
-            // onDelete(post.id); // Вызываем callback, чтобы обновить состояние в родительском компоненте
-            setShowDeleteConfirm(false); // Закрываем модальное окно
+            await deletePostById(post.id);
+            setShowDeleteConfirm(false);
             navigate('/');
-            showNotification('Post deleted successfully!', 'success'); // Отображаем уведомление
+            showNotification('Post deleted successfully!', 'success');
         } catch (error) {
-            showNotification('Failed to delete post.', 'error'); // Уведомление об ошибке
+            showNotification('Failed to delete post.', 'error');
         }
     };
+
     const handleFav = async () => {
         if (isFetchingLike) return;
         setIsFetchingLike(true);
 
         try {
-            // If the post is already liked, delete the like
             if (favourited) {
-                await deleteFavouritePost(id);  // Remove the like
+                await deleteFavouritePost(id);
             } else {
                 await favouritePost(id);
             }
-            setFavourited(!favourited)
+            setFavourited(!favourited);
         } catch (error) {
-            // console.log(error);
             showNotification('Failed to fav the post.', 'error');
         } finally {
             setIsFetchingLike(false);
         }
     };
+
     const handleAddComment = async (content) => {
         try {
-            const newComment = await addComment(id, content); // Предполагаем, что `addComment` добавляет комментарий
+            const newComment = await addComment(id, content);
             setPostComments((prevComments) => [...prevComments, newComment]);
             showNotification('Comment added successfully!', 'success');
         } catch (error) {
@@ -176,6 +166,7 @@ function FullPost() {
             showNotification('Failed to add comment.', 'error');
         }
     };
+
     const handleHide = async () => {
         try {
             const newStatus = isHidden ? 'active' : 'inactive';
@@ -186,46 +177,49 @@ function FullPost() {
             showNotification('Failed to hide post.', 'error');
         }
     };
-    const handleSortChange = async (event) => {
-        const selectedSort = event.target.value;
-        setSortOption(selectedSort);
-        // Здесь вы можете вызвать функцию для загрузки комментариев с выбранной сортировкой
-        await loadComments(selectedSort); // Предполагается, что у вас есть функция loadComments
+
+    const handleSortChange = (event) => {
+        setSortOption(event.target.value);
+        sessionStorage.setItem('sortOption', event.target.value)
     };
-    const handleFilterChange = async () => {
-        setFilterOption('all');
+
+    const handleFilterChange = (event) => {
+        setFilterOption(event.target.value);
+        sessionStorage.setItem('filterOption', event.target.value)
     };
+
     const handleMouseEnter = () => {
-        clearTimeout(hoverTimer); // Очистить таймер, если он был запущен
+        clearTimeout(hoverTimer);
         setHoverTimer(
             setTimeout(() => {
                 setShowProfilePreview(true);
-            }, 300) // Задержка перед показом превью
+            }, 300)
         );
     };
 
     const handleMouseLeave = () => {
-        clearTimeout(hoverTimer); // Очистить таймер, если он был запущен
+        clearTimeout(hoverTimer);
         setHoverTimer(
             setTimeout(() => {
                 setShowProfilePreview(false);
-            }, 300) // Задержка перед скрытием превью
+            }, 300)
         );
     };
+
     if (loading) return <LoadingSpinner />;
     if (!post) return <div>Post not found.</div>;
 
     const { title, content, publishDate, views, user: author, categories } = post;
     const getReplies = (commentId) =>
         postComments.filter((reply) => reply.replyId === commentId);
-    // console.log(postComments);
+
     return (
         <div className="max-w-2xl mx-auto pt-16 flex flex-col flex-grow">
             <div className="flex items-center justify-between mb-4 mt-5">
                 {author ? (
                     <div className="relative group"
-                    onMouseEnter={handleMouseEnter}
-                    onMouseLeave={handleMouseLeave}
+                        onMouseEnter={handleMouseEnter}
+                        onMouseLeave={handleMouseLeave}
                     >
                         <Link
                             to={`/user/${author?.id}`}
@@ -249,7 +243,7 @@ function FullPost() {
                         {showProfilePreview && (
                             <div
                                 className="absolute top-full left-0 mt-2 z-50 bg-white rounded-lg shadow-lg border border-gray-200 p-2 transition-opacity duration-300 ease-in-out"
-                                onMouseEnter={() => {setShowProfilePreview(true); console.log("SETTRGIN");}}
+                                onMouseEnter={() => { setShowProfilePreview(true); }}
                                 onMouseLeave={() => setShowProfilePreview(false)}
                             >
                                 <ProfilePreview userId={author?.id} />
@@ -299,33 +293,30 @@ function FullPost() {
                 )}
             </div>
 
-
             <div className='flex justify-between'>
                 <h1 className="text-2xl font-bold mb-4">{title}</h1>
                 <FavButton
-                    favourited={favourited}  // Передаем актуальное состояние
+                    favourited={favourited}
                     onClick={handleFav}
                 />
             </div>
             <p className="text-gray-500 text-sm mb-2">
                 Published on {new Date(publishDate).toLocaleDateString()} | Views: {views}
             </p>
-            {/* <p className="text-gray-700 mb-4">{content}</p> */}
             <div className="prose break-words whitespace-pre-wrap mb-4">
                 <ReactMarkdown remarkPlugins={[remarkGfm]}>{content}</ReactMarkdown>
             </div>
-
 
             <CategoryTags categories={categories} maxVisible={categories.length} />
 
             <div className="flex justify-between items-center mt-4 text-gray-500 text-sm">
                 <div className="flex items-center gap-4">
                     <LikeButton
-                        liked={liked}  // Передаем актуальное состояние
+                        liked={liked}
                         onClick={handleLike}
                     />
                     <DislikeButton
-                        disliked={disliked}  // Передаем актуальное состояние
+                        disliked={disliked}
                         onClick={handleDislike}
                     />
                 </div>
@@ -338,9 +329,8 @@ function FullPost() {
             <div className="my-8">
                 <h3 className="text-xl font-semibold">Comments</h3>
 
-                {postComments.length > 0 && (
+                {(postComments.length > 0 || filterOption === 'inactive') && (
                     <div className="mt-2 mb-4 flex justify-between items-center">
-                        {/* Pagination on the left */}
                         {totalPages > 1 ? (
                             <Pagination
                                 currentPage={currentPage}
@@ -349,50 +339,19 @@ function FullPost() {
                             />
                         ) : (<div></div>)}
 
-                        {/* Sorting and Filtering on the right */}
                         <div className="flex space-x-4">
-                            {/* Sort Dropdown */}
-                            <div className="relative">
-                                <select
-                                    value={sortOption}
-                                    onChange={handleSortChange}
-                                    className="block w-full p-2 pl-3 pr-10 text-gray-700 bg-white border border-gray-300 rounded-lg shadow-sm appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                                >
-                                    <option value="date">Sort by Date</option>
-                                    <option value="votes">Sort by Votes</option>
-                                </select>
-                                <div className="absolute inset-y-0 right-0 flex items-center px-2 text-gray-400 pointer-events-none">
-                                    <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-                                    </svg>
-                                </div>
-                            </div>
-
-                            {/* Filter Dropdown */}
-                            {
-                                user?.id === author?.id && (
-                                    <div className="relative">
-                                        <select
-                                            value={filterOption}
-                                            onChange={handleFilterChange}
-                                            className="block w-full p-2 pl-3 pr-10 text-gray-700 bg-white border border-gray-300 rounded-lg shadow-sm appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                                        >
-                                            <option value="all">All Comments</option>
-                                            <option value="favourites">Active</option>
-                                            <option value="favourites">Inactive</option>
-                                        </select>
-                                        <div className="absolute inset-y-0 right-0 flex items-center px-2 text-gray-400 pointer-events-none">
-                                            <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-                                            </svg>
-                                        </div>
-                                    </div>
-                                )
-                            }
+                            <SortDropdown
+                                sortOption={sortOption}
+                                onSortChange={handleSortChange}
+                            />
+                            <FilterDropdown
+                                filterOption={filterOption}
+                                onFilterChange={handleFilterChange}
+                                isAuthor={user?.id === author?.id}
+                            />
                         </div>
-
                     </div>
-                )}
+                 )}
 
                 {postComments.length ?
                     postComments.filter((comment) => !comment.replyId)
@@ -409,7 +368,6 @@ function FullPost() {
                 {
                     postComments.length > 0 && (
                         <div className="flex justify-between items-center">
-                            {/* Pagination on the left */}
                             {totalPages > 1 ? (
                                 <Pagination
                                     currentPage={currentPage}
@@ -420,7 +378,6 @@ function FullPost() {
                     )
                 }
                 <h3 className="text-xl font-semibold">Add a Comment</h3>
-                {/* <CommentEditor onSubmit={handleAddComment} /> */}
                 <CommentEditorMarkdown onSubmit={handleAddComment} height={'200px'} />
             </div>
             {showDeleteConfirm && (
@@ -451,9 +408,8 @@ function FullPost() {
                     <p className="text-gray-600 text-3xl font-medium">
                         This post is <span className='text-red-500'>INACTIVE</span>. Please review the content privately and contact the administration for restoration if needed.
                     </p>
-                </div>
+                </ div>
             )}
-
         </div>
     );
 }
