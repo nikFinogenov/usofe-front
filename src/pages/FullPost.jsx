@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState, useContext, useRef } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { fetchPostById, fetchPostComments, updatePostLike, deletePostLike, deletePostById, updatePost, favouritePost, deleteFavouritePost } from '../services/postService';
 import { addComment } from '../services/commentService';
@@ -11,8 +11,12 @@ import { NotifyContext } from '../context/NotifyContext';
 import died from '../assets/died.png';
 import { AuthContext } from '../context/AuthContext';
 import CommentEditorMarkdown from '../components/CommentEditorMarkdown';
-import ReactMarkdown from 'react-markdown';
+// import ReactMarkdown from 'react-markdown';
+import { marked } from 'marked';
 import remarkGfm from 'remark-gfm';
+import remarkBreaks from 'remark-breaks';
+import hljs from 'highlight.js';
+import 'highlight.js/styles/github.css';
 import Pagination from '../components/Pagination';
 import FavButton from '../components/FavButton';
 import ProfilePreview from '../components/ProfilePreview';
@@ -24,6 +28,19 @@ function FullPost() {
     const navigate = useNavigate();
     const showNotification = useContext(NotifyContext);
     const { user } = useContext(AuthContext);
+    marked.setOptions({
+        gfm: true,
+        breaks: true,
+        smartLists: true,
+        smartypants: true,
+        highlight: (code, lang) => {
+            if (hljs.getLanguage(lang)) {
+                return hljs.highlight(lang, code).value;
+            } else {
+                return hljs.highlightAuto(code).value;
+            }
+        },
+    });
 
     const [post, setPost] = useState(null);
     const [postComments, setPostComments] = useState([]);
@@ -42,6 +59,7 @@ function FullPost() {
     const [filterOption, setFilterOption] = useState(sessionStorage.getItem('filterOption') || 'all');
     const [showProfilePreview, setShowProfilePreview] = useState(false);
     const [hoverTimer, setHoverTimer] = useState(null);
+    const postRef = useRef(null);
 
     useEffect(() => {
         const loadPost = async () => {
@@ -76,6 +94,12 @@ function FullPost() {
 
         loadPost();
     }, [id, currentPage, showNotification, user, sortOption, filterOption]);
+    
+    useEffect(() => {
+        if (postRef.current) {
+            hljs.highlightAll();
+        }
+    }, [post]);
 
     const handleLike = async () => {
         if (isFetchingLike) return;
@@ -303,8 +327,8 @@ function FullPost() {
             <p className="text-gray-500 text-sm mb-2">
                 Published on {new Date(publishDate).toLocaleDateString()} | Views: {views}
             </p>
-            <div className="prose break-words whitespace-pre-wrap mb-4">
-                <ReactMarkdown remarkPlugins={[remarkGfm]}>{content}</ReactMarkdown>
+            <div className="prose prose-lg break-words mb-4" ref={postRef} dangerouslySetInnerHTML={{ __html: marked(content) }}>
+                {/* <ReactMarkdown remarkPlugins={[remarkGfm, remarkBreaks]} >{content}</ReactMarkdown> */}
             </div>
 
             <CategoryTags categories={categories} maxVisible={categories.length} />
@@ -351,7 +375,7 @@ function FullPost() {
                             />
                         </div>
                     </div>
-                 )}
+                )}
 
                 {postComments.length ?
                     postComments.filter((comment) => !comment.replyId)
