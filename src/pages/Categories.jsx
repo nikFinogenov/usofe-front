@@ -4,7 +4,6 @@ import { fetchCategories } from '../services/categoryService';
 import Pagination from '../components/Pagination';
 import LoadingSpinner from '../components/LoadingSpinner';
 
-
 function Categories() {
     const categoriesPerPage = 8;
     const [categories, setCategories] = useState([]);
@@ -23,9 +22,9 @@ function Categories() {
     useEffect(() => {
         const loadCategories = async () => {
             try {
-                const { categories, totalCategories} = await fetchCategories(currentPage, categoriesPerPage);
+                const { categories, totalCategories } = await fetchCategories(currentPage, categoriesPerPage);
                 setCategories(categories);
-                setTotalCategories(totalCategories); // Assuming the API provides total pages
+                setTotalCategories(totalCategories); // Assuming the API provides total categories
             } catch (error) {
                 console.error('Failed to load categories:', error);
             } finally {
@@ -43,22 +42,28 @@ function Categories() {
     return (
         <div className="max-w-2xl mx-auto pt-16 mt-5">
             <h1 className="text-2xl font-bold mb-4">Categories</h1>
-            <ul className="space-y-4 mb-5">
+            <ul className="space-y-6">
                 {categories.map(category => (
-                    <li key={category.id} className="border p-4 rounded flex justify-between items-center">
-                        <div>
-                            <span className="bg-blue-100 text-blue-600 text-xs font-semibold mr-5 mb-2 px-3 py-1 rounded-full">
+                    <Link
+                        key={category.id}
+                        to={`/categories/${category.id}/posts`}
+                        className="bg-white border border-gray-300 rounded-lg shadow-md p-6 flex flex-col items-start justify-between hover:bg-blue-50"
+                    >
+                        <div className="flex items-start mb-4">
+                            <span className="bg-blue-100 text-blue-600 text-xs font-bold mr-3 px-3 py-1 rounded-full">
                                 {category.title}
                             </span>
-                            <p className="mt-1">
-                                {category.description.length > 50 ? `${category.description.slice(0, 50)}...` : category.description}
-                            </p>
-                            <span className="text-gray-500">Posts: {category.postCount}</span>
                         </div>
-                        <Link to={`/categories/${category.id}/posts`} className="text-blue-500 hover:underline text-nowrap">
-                            View Posts
-                        </Link>
-                    </li>
+                        <p className="text-gray-600 mb-2">
+                            {category.description
+                                ? (category.description.length > 50
+                                    ? `${category.description.slice(0, 50)}...`
+                                    : category.description)
+                                : "No description available."}
+                        </p>
+                        <p className="text-gray-500 mb-4">Posts: {category.postCount}</p>
+                        <span className="text-sm text-blue-500 font-semibold">Click to View</span>
+                    </Link>
                 ))}
             </ul>
 
