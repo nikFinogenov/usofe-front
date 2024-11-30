@@ -39,7 +39,7 @@ function PostPreview({ post }) {
             className={`bg-white rounded-lg shadow-md p-6 mt-4 flex flex-col h-full relative `}
         >
             {post.status === 'inactive' && (
-                <div className="absolute top-0 left-0 w-full bg-red-400 opacity-50 text-white text-center py-1 rounded-t-lg">
+                <div className="absolute top-0 left-0 w-full bg-red-400 opacity-70 text-white text-center py-1 rounded-t-lg">
                     INACTIVE
                 </div>
             )}
