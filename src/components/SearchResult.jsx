@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa'; // Importing chevron icons
+import CategoryTags from './CategoryTags';
 
 const SearchResult = ({ title, data, linkPrefix }) => {
     const [isCollapsed, setIsCollapsed] = useState(false);
     const navigate = useNavigate();
+    function stripMarkdown(content) {
+        return content.replace(/[#_*~`>|-]/g, '').replace(/\[.*?\]\(.*?\)/g, '').trim();
+    }
 
     const handleToggle = () => setIsCollapsed(!isCollapsed);
 
@@ -20,9 +24,9 @@ const SearchResult = ({ title, data, linkPrefix }) => {
 
     return (
         <div className="search-result mb-6">
-            <div 
+            <div
                 className="flex items-center justify-between cursor-pointer bg-gray-100 p-3 rounded-lg mb-4"
-                onClick={handleToggle }
+                onClick={handleToggle}
             >
                 <h2 className="text-2xl font-bold">{title}</h2>
                 <button className="text-sm text-blue-500">
@@ -57,12 +61,27 @@ const SearchResult = ({ title, data, linkPrefix }) => {
                             )}
                             {title === "Posts" && (
                                 <>
-                                    <h3 className="text-lg font-semibold">{item.title}</h3>
-                                    <p className="text-gray-600">{item.content}</p>
-                                    <p className="text-gray-500">
-                                        Published on: {new Date(item.publishDate).toLocaleDateString()}
-                                    </p>
-                                    <p className="text-gray-500">Views: {item.views}</p>
+                                    <div className='flex justify-between'>
+                                        <div>
+                                            {/* Show inactive badge if the post is inactive */}
+                                            {item.status === 'inactive' && (
+                                                <span className="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full mr-2">
+                                                    Inactive
+                                                </span>
+                                            )}
+                                            <h3 className="text-lg font-semibold">{item.title}</h3>
+
+                                            <p className="text-gray-600">
+                                                {stripMarkdown(item.content).slice(0, 50) +
+                                                    (item.content.length > 50 ? '...' : '')}
+                                            </p>
+                                            <p className="text-gray-500">
+                                                Published on: {new Date(item.publishDate).toLocaleDateString()}
+                                            </p>
+                                            <p className="text-gray-500">Views: {item.views}</p>
+                                        </div>
+                                        <CategoryTags categories={item.categories} maxVisible={5} />
+                                    </div>
                                 </>
                             )}
                             {title === "Categories" && (
