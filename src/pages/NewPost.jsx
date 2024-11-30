@@ -3,18 +3,23 @@ import React, { useState, useEffect, useContext } from 'react';
 import MarkdownEditor from 'react-markdown-editor-lite';
 import 'react-markdown-editor-lite/lib/index.css';
 import { useNavigate } from 'react-router-dom';
-import MarkdownIt from 'markdown-it';
+// import MarkdownIt from 'markdown-it';
 import { NotifyContext } from '../context/NotifyContext'; // Уведомления
 import { fetchCategoriesTags } from '../services/categoryService'; // Сервис для запросов
-import { createPost } from '../services/postService'
+import { createPost } from '../services/postService';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import remarkBreaks from 'remark-breaks';
+import rehypePrism from 'rehype-prism-plus';
+import 'prismjs/themes/prism-tomorrow.css';
 
 // Инициализация Markdown-it
-const mdParser = new MarkdownIt(
-    {
-        breaks: true, // Включает поддержку переносов строк
-        gfm: true
-    }
-);
+// const mdParser = new MarkdownIt(
+//     {
+//         breaks: true, // Включает поддержку переносов строк
+//         gfm: true
+//     }
+// );
 
 const NewPost = () => {
     const navigate = useNavigate();
@@ -37,6 +42,38 @@ const NewPost = () => {
         };
         fetchTags();
     }, [showNotification]);
+    const renderMarkdownPreview = (text) => {
+        return (
+            <div className="prose break-words">
+                <ReactMarkdown
+                    children={text}
+                    remarkPlugins={[remarkGfm, remarkBreaks]}
+                    rehypePlugins={[
+                        [
+                            rehypePrism,
+                            {
+                                ignoreMissing: true, // Игнорируем неизвестные языки
+                                defaultLanguage: 'plaintext', // Язык по умолчанию
+                            },
+                        ],
+                    ]}
+                />
+            </div>
+        );
+    };
+
+    // useEffect для поиска элементов <pre> и добавления класса, если его нет
+    useEffect(() => {
+        // Находим все элементы <pre> на странице
+        const preElements = document.querySelectorAll('pre');
+        
+        preElements.forEach((pre) => {
+            // Если у элемента нет классов, добавляем language-plaintext
+            if (!pre.classList.length) {
+                pre.classList.add('language-plaintext');
+            }
+        });
+    }, [body]); 
 
     const handleEditorChange = ({ text }) => {
         setBody(text);
@@ -150,7 +187,7 @@ const NewPost = () => {
                 <MarkdownEditor
                     value={body}
                     style={{ height: '500px' }}
-                    renderHTML={(text) => mdParser.render(text)}
+                    renderHTML={(text) => renderMarkdownPreview(text)}
                     onChange={handleEditorChange}
                     placeholder="Write your post here..."
                 />

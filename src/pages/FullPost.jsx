@@ -10,7 +10,7 @@ import DislikeButton from '../components/DislikeButton';
 import { NotifyContext } from '../context/NotifyContext';
 import died from '../assets/died.png';
 import { AuthContext } from '../context/AuthContext';
-import CommentEditorMarkdown from '../components/CommentEditorMarkdown';
+// import CommentEditorMarkdown from '../components/CommentEditorMarkdown';
 import CommentEditor from '../components/CommentEditor';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -80,7 +80,17 @@ function FullPost() {
 
         loadPost();
     }, [id, currentPage, showNotification, user, sortOption, filterOption]);
+    useEffect(() => {
+        // Находим все элементы <pre> на странице
+        const preElements = document.querySelectorAll('pre');
 
+        preElements.forEach((pre) => {
+            // Если у элемента нет классов, добавляем language-plaintext
+            if (!pre.classList.length) {
+                pre.classList.add('language-plaintext');
+            }
+        });
+    }, [post]);
     const handleLike = async () => {
         if (isFetchingLike) return;
         setIsFetchingLike(true);
@@ -309,7 +319,15 @@ function FullPost() {
             </p>
             <div className="prose break-words mb-4">
                 <ReactMarkdown remarkPlugins={[remarkGfm, remarkBreaks]}
-                rehypePlugins={[rehypePrism]} 
+                    rehypePlugins={[
+                        [
+                            rehypePrism,
+                            {
+                                ignoreMissing: true, // Игнорируем неизвестные языки
+                                defaultLanguage: 'plaintext', // Язык по умолчанию
+                            },
+                        ],
+                    ]}
                 >
                     {content}
                 </ReactMarkdown>

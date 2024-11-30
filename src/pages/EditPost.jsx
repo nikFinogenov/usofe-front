@@ -4,16 +4,21 @@ import { fetchPostById, updatePost } from '../services/postService';
 import { NotifyContext } from '../context/NotifyContext';
 import LoadingSpinner from '../components/LoadingSpinner';
 import MarkdownEditor from 'react-markdown-editor-lite';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import remarkBreaks from 'remark-breaks';
+import rehypePrism from 'rehype-prism-plus';
 import 'react-markdown-editor-lite/lib/index.css';
+import 'prismjs/themes/prism-tomorrow.css';
 import { fetchCategoriesTags } from '../services/categoryService'; // Service for fetching categories
-import MarkdownIt from 'markdown-it'; // Markdown parser
+// import MarkdownIt from 'markdown-it'; // Markdown parser
 import died from '../assets/died.png';
-
+import 'prismjs/themes/prism-tomorrow.css';
 // Initialize the Markdown parser
-const mdParser = new MarkdownIt({
-    breaks: true, // Включает поддержку переносов строк\
-    gfm: true
-});
+// const mdParser = new MarkdownIt({
+//     breaks: true, // Включает поддержку переносов строк\
+//     gfm: true
+// });
 
 function EditPost() {
     const { id } = useParams();
@@ -77,6 +82,38 @@ function EditPost() {
             showNotification('Failed to update post.', 'error');
         }
     };
+    const renderMarkdownPreview = (text) => {
+        return (
+            <div className="prose break-words">
+                <ReactMarkdown
+                    children={text}
+                    remarkPlugins={[remarkGfm, remarkBreaks]}
+                    rehypePlugins={[
+                        [
+                            rehypePrism,
+                            {
+                                ignoreMissing: true, // Игнорируем неизвестные языки
+                                defaultLanguage: 'plaintext', // Язык по умолчанию
+                            },
+                        ],
+                    ]}
+                />
+            </div>
+        );
+    };
+
+    // useEffect для поиска элементов <pre> и добавления класса, если его нет
+    useEffect(() => {
+        // Находим все элементы <pre> на странице
+        const preElements = document.querySelectorAll('pre');
+        
+        preElements.forEach((pre) => {
+            // Если у элемента нет классов, добавляем language-plaintext
+            if (!pre.classList.length) {
+                pre.classList.add('language-plaintext');
+            }
+        });
+    }, [content]); 
 
     if (loading) return <LoadingSpinner />;
     if (!post) return <div>Post not found.</div>;
@@ -171,7 +208,7 @@ function EditPost() {
                 <MarkdownEditor
                     value={content}
                     style={{ height: '500px' }}
-                    renderHTML={(text) => mdParser.render(text)}
+                    renderHTML={(text) => renderMarkdownPreview(text)}
                     onChange={handleEditorChange}
                     placeholder="Write your post content in markdown..."
                 />

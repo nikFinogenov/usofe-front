@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import remarkBreaks from 'remark-breaks';
@@ -10,10 +10,11 @@ import { AuthContext } from '../context/AuthContext';
 import { NotifyContext } from '../context/NotifyContext';
 import { GoReply } from "react-icons/go";
 import { Link } from 'react-router-dom';
-import CommentEditorMarkdown from './CommentEditorMarkdown';
+import CommentEditor from './CommentEditor';
 import { IoSettingsOutline } from "react-icons/io5";
 import { IoIosClose } from "react-icons/io";
 import { Menu, MenuItem, MenuButton } from '@szhsin/react-menu';
+import 'prismjs/themes/prism-tomorrow.css';
 import ProfilePreview from './ProfilePreview';
 import '@szhsin/react-menu/dist/index.css';
 import '@szhsin/react-menu/dist/transitions/zoom.css';
@@ -157,6 +158,17 @@ function Comment({ comment, replies, onReplyAdded, onDelete }) {
             setIsFetchingLike(false);
         }
     };
+    useEffect(() => {
+        // Находим все элементы <pre> на странице
+        const preElements = document.querySelectorAll('pre');
+        
+        preElements.forEach((pre) => {
+            // Если у элемента нет классов, добавляем language-plaintext
+            if (!pre.classList.length) {
+                pre.classList.add('language-plaintext');
+            }
+        });
+    }, [content]); 
 
     const handleReplySubmit = async (replyContent) => {
         try {
@@ -245,7 +257,7 @@ function Comment({ comment, replies, onReplyAdded, onDelete }) {
             </div>
             {isEditing ? (
                 <div className='flex'>
-                    <CommentEditorMarkdown
+                    <CommentEditor
                         inputValue={content}
                         onSubmit={handleEditSubmit}
                     />
@@ -255,7 +267,18 @@ function Comment({ comment, replies, onReplyAdded, onDelete }) {
                 </div>
             ) : (
                 <div className='flex'>
-                    <ReactMarkdown className="prose break-words" remarkPlugins={[remarkGfm, remarkBreaks]} rehypePlugins={[rehypePrism]} >
+                    <ReactMarkdown className="prose break-words" 
+                    remarkPlugins={[remarkGfm, remarkBreaks]} 
+                    rehypePlugins={[
+                        [
+                            rehypePrism,
+                            {
+                                ignoreMissing: true, // Игнорируем неизвестные языки
+                                defaultLanguage: 'plaintext', // Язык по умолчанию
+                            },
+                        ],
+                    ]}
+                    >
                         {content}
                     </ReactMarkdown>
                     {user?.id === commentAuthor.id && (
@@ -324,7 +347,7 @@ function Comment({ comment, replies, onReplyAdded, onDelete }) {
                             <IoIosClose />
                         </button>
                         <h3 className="text-lg font-semibold mb-4">Reply to Comment</h3>
-                        <CommentEditorMarkdown
+                        <CommentEditor
                             onSubmit={handleReplySubmit}
                             height="200px"
                         />
