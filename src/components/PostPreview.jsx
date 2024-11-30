@@ -35,7 +35,15 @@ function PostPreview({ post }) {
     };
 
     return (
-        <div className="bg-white rounded-lg shadow-md p-6 mt-4 flex flex-col h-full">
+        <div
+            className={`bg-white rounded-lg shadow-md p-6 mt-4 flex flex-col h-full relative `}
+        >
+            {post.status === 'inactive' && (
+                <div className="absolute top-0 left-0 w-full bg-red-400 opacity-50 text-white text-center py-1 rounded-t-lg">
+                    INACTIVE
+                </div>
+            )}
+
             <h2 className="text-xl font-bold mb-2">{post.title}</h2>
             <p className="text-gray-700 mb-4">{previewContent}</p>
             <CategoryTags categories={post.categories} maxVisible={5} />

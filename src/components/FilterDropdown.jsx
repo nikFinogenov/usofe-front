@@ -10,7 +10,7 @@ const FilterDropdown = ({ filterOption, onFilterChange, isAuthor }) => {
                     onChange={onFilterChange}
                     className="block w-full p-2 pl-3 pr-10 text-gray-700 bg-white border border-gray-300 rounded-lg shadow-sm appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 >
-                    <option value="all">All Comments</option>
+                    <option value="all">All</option>
                     <option value="active">Active</option>
                     <option value="inactive">Inactive</option>
                 </select>

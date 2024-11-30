@@ -2,8 +2,7 @@
 [x] comments pagination
 [x] favourites
 [x] search 
-[ ] sorting + filtering to posts
-[ ] sorting newest + sorting oldest
+[ ] sorting + filtering to posts (all pages)
 [ ] role based things
 [ ] adapivtnost
 [ ] rewrite header + footer text

@@ -281,7 +281,7 @@ function Comment({ comment, replies, onReplyAdded, onDelete }) {
                     >
                         {content}
                     </ReactMarkdown>
-                    {user?.id === commentAuthor.id && (
+                    {user?.id === commentAuthor?.id && (
                         <Menu
                             menuButton={<MenuButton className='ml-auto self-start'><IoSettingsOutline /></MenuButton>}
                             key={'right'}

@@ -28,8 +28,9 @@ function Posts() {
     useEffect(() => {
         const loadPosts = async () => {
             try {
-                const { posts, totalPosts } = await fetchPosts(currentPage, postsPerPage, sortOption); // Include sortOption
+                const { posts, totalPosts } = await fetchPosts(currentPage, postsPerPage, sortOption, 'desc', filterOption); // Include sortOption
                 setPosts(posts);
+                console.log(posts);
                 setTotalPosts(totalPosts);
             } catch (error) {
                 console.error('Failed to load posts:', error);

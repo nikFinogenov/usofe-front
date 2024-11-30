@@ -61,7 +61,8 @@ function FullPost() {
                 setDislikesCount(likes.filter((like) => like.type === 'dislike').length);
 
                 const userLike = likes.find((like) => like.userId === user?.id);
-                const isFavourited = postData.isFavourited || false;
+                const isFavouritedPost = postData.isFavourited || false;
+                const isHiddenPost = postData.status === 'inactive';
                 if (userLike) {
                     if (userLike.type === 'like') {
                         setLiked(true);
@@ -69,7 +70,8 @@ function FullPost() {
                         setDisliked(true);
                     }
                 }
-                if (isFavourited) setFavourited(isFavourited);
+                if (isFavouritedPost) setFavourited(isFavouritedPost);
+                if(isHiddenPost) setIsHidden(isHiddenPost)
             } catch (error) {
                 console.error('Failed to load post:', error);
                 showNotification('Failed to load post data.', 'error');

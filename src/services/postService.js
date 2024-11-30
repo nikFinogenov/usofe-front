@@ -3,10 +3,10 @@
 // import axios from 'axios';
 import { api } from './index'
 
-export const fetchPosts = async (page = 1, pageSize = 10) => {
+export const fetchPosts = async (page = 1, pageSize = 10, sortBy = 'date', order = 'desc', filter = 'all') => {
     try {
         const response = await api.get(`${process.env.REACT_APP_API}/posts`, {
-            params: { page, pageSize }
+            params: { page, pageSize, sortBy, order, filter }
         });
         return response.data;
     } catch (error) {
