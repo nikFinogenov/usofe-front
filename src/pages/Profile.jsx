@@ -100,10 +100,19 @@ function Profile() {
                         posts.map((post) => (
                             <div
                                 key={post.id}
-                                className="flex items-center bg-white rounded-lg shadow-md p-6 cursor-pointer hover:shadow-lg transition"
-                                onClick={() => navigate(`/post/${post.id}`)}
+                                className="relative flex items-center bg-white rounded-lg shadow-md p-6 cursor-pointer hover:shadow-lg transition"
+                                onClick={() => post.status !== 'inactive' && navigate(`/post/${post.id}`)}
                             >
-                                {/* Post Title and Content */}
+                                {/* Наложение для неактивных постов */}
+                                {post.status === 'inactive' && (
+                                    <div className="absolute inset-0 bg-black/30 flex justify-center items-center pointer-events-none rounded-lg">
+                                        <span className="text-4xl font-bold text-white opacity-50 transform rotate-[-15deg]">
+                                            INACTIVE
+                                        </span>
+                                    </div>
+                                )}
+
+                                {/* Заголовок и контент поста */}
                                 <div className="flex-grow">
                                     <h3 className="text-xl font-bold text-gray-800 mb-1">{post.title}</h3>
                                     <p className="text-gray-700">
@@ -113,12 +122,12 @@ function Profile() {
                                     </p>
                                 </div>
 
-                                {/* Category Tags */}
+                                {/* Теги категорий */}
                                 <div className="flex-shrink-0 ml-4">
                                     <CategoryTags categories={post.categories} maxVisible={3} />
                                 </div>
 
-                                {/* Post Stats */}
+                                {/* Статистика поста */}
                                 <div className="flex flex-col ml-6 text-gray-500 text-sm text-nowrap">
                                     <span>❤️ {post.likeCount}</span>
                                     <span>👎 {post.dislikeCount}</span>
@@ -126,11 +135,11 @@ function Profile() {
                                     <span>💬 {post.commentCount}</span>
                                 </div>
 
-                                {/* Edit and Delete Buttons */}
+                                {/* Кнопки редактирования и удаления */}
                                 <div className="ml-6 flex flex-col space-y-2 text-nowrap">
                                     <Link
                                         to={`/edit-post/${post.id}`}
-                                        className="bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-400 transition"
+                                        className={`bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-400 transition`}
                                         onClick={(e) => e.stopPropagation()}
                                     >
                                         Edit
@@ -139,15 +148,16 @@ function Profile() {
                                         className="bg-red-500 text-white px-4 py-1 rounded hover:bg-red-400 transition"
                                         onClick={(e) => {
                                             e.stopPropagation();
-                                            handleDeleteConfirmation(post.id);  // Trigger confirmation
+                                            handleDeleteConfirmation(post.id);
                                         }}
-                                    >Delete
+                                    >
+                                        Delete
                                     </button>
                                 </div>
                             </div>
                         ))
                     ) : (
-                        <p className="text-gray-500">No posts yet.</p>
+                    <p className="text-gray-500">No posts yet.</p>
                     )}
                 </div>
 
