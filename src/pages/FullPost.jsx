@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext, useRef } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { fetchPostById, fetchPostComments, updatePostLike, deletePostLike, deletePostById, updatePost, favouritePost, deleteFavouritePost } from '../services/postService';
 import { addComment } from '../services/commentService';
@@ -11,6 +11,7 @@ import { NotifyContext } from '../context/NotifyContext';
 import died from '../assets/died.png';
 import { AuthContext } from '../context/AuthContext';
 import CommentEditorMarkdown from '../components/CommentEditorMarkdown';
+import CommentEditor from '../components/CommentEditor';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import remarkBreaks from 'remark-breaks';
@@ -306,7 +307,7 @@ function FullPost() {
             <p className="text-gray-500 text-sm mb-2">
                 Published on {new Date(publishDate).toLocaleDateString()} | Views: {views}
             </p>
-            <div className="prose prose-lg break-words mb-4">
+            <div className="prose break-words mb-4">
                 <ReactMarkdown remarkPlugins={[remarkGfm, remarkBreaks]}
                 rehypePlugins={[rehypePrism]} 
                 >
@@ -385,7 +386,7 @@ function FullPost() {
                     )
                 }
                 <h3 className="text-xl font-semibold">Add a Comment</h3>
-                <CommentEditorMarkdown onSubmit={handleAddComment} height={'200px'} />
+                <CommentEditor onSubmit={handleAddComment} height={'200px'} />
             </div>
             {showDeleteConfirm && (
                 <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50">

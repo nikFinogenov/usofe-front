@@ -1,6 +1,8 @@
 import React, { useState, useContext } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import remarkBreaks from 'remark-breaks';
+import rehypePrism from 'rehype-prism-plus';
 import died from '../assets/died.png';
 import { SlArrowDownCircle, SlArrowUpCircle } from "react-icons/sl";
 import { updateCommentLike, deleteCommentLike, addComment, updateComment, deleteComment } from '../services/commentService';
@@ -184,52 +186,52 @@ function Comment({ comment, replies, onReplyAdded, onDelete }) {
                 </div>
             )}
             <div className="flex items-center mb-2">
-            {commentAuthor ? (
-    <div
-        className="flex items-center relative group"
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
-    >
-        <Link
-            to={`/user/${commentAuthor.id}`}
-            className="flex items-center text-left"
-        >
-            <img
-                src={commentAuthor.profilePicture}
-                alt={commentAuthor.fullName}
-                className="w-8 h-8 rounded-full mr-2"
-            />
-            <div>
-                <p className="text-sm font-medium">
-                    {commentAuthor.fullName}
-                </p>
-            </div>
-        </Link>
+                {commentAuthor ? (
+                    <div
+                        className="flex items-center relative group"
+                        onMouseEnter={handleMouseEnter}
+                        onMouseLeave={handleMouseLeave}
+                    >
+                        <Link
+                            to={`/user/${commentAuthor.id}`}
+                            className="flex items-center text-left"
+                        >
+                            <img
+                                src={commentAuthor.profilePicture}
+                                alt={commentAuthor.fullName}
+                                className="w-8 h-8 rounded-full mr-2"
+                            />
+                            <div>
+                                <p className="text-sm font-medium">
+                                    {commentAuthor.fullName}
+                                </p>
+                            </div>
+                        </Link>
 
-        {showProfilePreview && (
-            <div
-                className="absolute top-full left-0 mt-2 z-10 bg-white rounded-lg shadow-lg border border-gray-200 p-2 transition-opacity duration-300 ease-in-out"
-                onMouseEnter={handleMouseEnter} // Keep preview open when hovered
-                onMouseLeave={handleMouseLeave} // Hide preview with delay
-            >
-                <ProfilePreview userId={commentAuthor.id} />
-            </div>
-        )}
-    </div>
-) : (
-    <div className="flex items-center">
-        <img
-            src={died}
-            alt="Deleted account"
-            className="w-8 h-8 rounded-full mr-2"
-        />
-        <div>
-            <p className="text-sm font-medium">
-                <i>Deleted account</i>
-            </p>
-        </div>
-    </div>
-)}
+                        {showProfilePreview && (
+                            <div
+                                className="absolute top-full left-0 mt-2 z-10 bg-white rounded-lg shadow-lg border border-gray-200 p-2 transition-opacity duration-300 ease-in-out"
+                                onMouseEnter={handleMouseEnter} // Keep preview open when hovered
+                                onMouseLeave={handleMouseLeave} // Hide preview with delay
+                            >
+                                <ProfilePreview userId={commentAuthor.id} />
+                            </div>
+                        )}
+                    </div>
+                ) : (
+                    <div className="flex items-center">
+                        <img
+                            src={died}
+                            alt="Deleted account"
+                            className="w-8 h-8 rounded-full mr-2"
+                        />
+                        <div>
+                            <p className="text-sm font-medium">
+                                <i>Deleted account</i>
+                            </p>
+                        </div>
+                    </div>
+                )}
 
                 {<span className="text-sm text-gray-500 ml-2">{replyId ? "replied" : "answered"} on {new Date(createdAt).toLocaleDateString('en-US', {
                     year: 'numeric',
@@ -253,7 +255,7 @@ function Comment({ comment, replies, onReplyAdded, onDelete }) {
                 </div>
             ) : (
                 <div className='flex'>
-                    <ReactMarkdown className="prose break-words whitespace-pre-wrap" remarkPlugins={[remarkGfm]}>
+                    <ReactMarkdown className="prose break-words" remarkPlugins={[remarkGfm, remarkBreaks]} rehypePlugins={[rehypePrism]} >
                         {content}
                     </ReactMarkdown>
                     {user?.id === commentAuthor.id && (
