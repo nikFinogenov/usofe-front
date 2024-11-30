@@ -2,7 +2,9 @@
 [x] comments pagination
 [x] favourites
 [x] search 
-[ ] sorting + filtering to posts (all pages)
+[x] sorting + filtering to posts (all pages)
+[ ] sorting by asc/desc
+[x] search compenent + fix
 [ ] role based things
 [ ] adapivtnost
 [ ] rewrite header + footer text
