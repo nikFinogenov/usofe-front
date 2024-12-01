@@ -39,12 +39,26 @@ function PostPreview({ post }) {
             className={`bg-white rounded-lg shadow-md p-6 mt-4 flex flex-col h-full relative `}
         >
             {post.status === 'inactive' && (
-                <p>                <span className="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full mr-2">
-                    Inactive
-                </span></p>
+                <p>
+                    <span className="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full mr-2">
+                        Inactive
+                    </span>
+                </p>
             )}
 
-            <h2 className="text-xl font-bold mb-2">{post.title}</h2>
+
+            <div className='flex justify-between'>
+                <h2 className="text-xl font-bold mb-2">{post.title}</h2>
+                <Link to={`/date/${new Date(post.createdAt).toLocaleDateString('en-CA')}/posts`}>
+                    <span className="bg-green-500 text-white text-xs font-bold px-2 py-1 rounded-full mr-2">
+                        {new Date(post.createdAt).toLocaleDateString('en-US', {
+                            day: '2-digit',
+                            month: '2-digit',
+                            year: '2-digit',
+                        })}
+                    </span>
+                </Link>
+            </div>
             <p className="text-gray-700 mb-4">{previewContent}</p>
             <CategoryTags categories={post.categories} maxVisible={5} />
             <div className="flex justify-between items-center text-gray-500 text-sm my-4 border-t border-gray-200 pt-4">

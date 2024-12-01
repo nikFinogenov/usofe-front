@@ -123,3 +123,15 @@ export const deleteFavouritePost = async(id) => {
         throw error;
     }
 };
+
+export const fetchPostsByDate = async(date, page = 1, pageSize = 10) => {
+    try {
+        const response = await api.get(`${process.env.REACT_APP_API}/date/${date}/posts`, {
+            params: { page, pageSize }
+        });
+        return response.data;
+    } catch (error) {
+        console.error(`Failed to fetch posts for date ${date}:`, error);
+        throw error;
+    }
+};

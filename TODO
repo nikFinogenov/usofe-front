@@ -3,9 +3,10 @@
 [x] favourites
 [x] search 
 [x] sorting + filtering to posts (all pages)
-[ ] sorting by asc/desc
+[x] sorting by asc/desc
 [x] search compenent + fix
 [ ] role based things
+[ ] create category
 [ ] adapivtnost
 [ ] rewrite header + footer text
 [x] user preview every where

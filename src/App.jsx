@@ -26,6 +26,7 @@ import EditPost from './pages/EditPost';
 import User from './pages/User'
 import Favourites from './pages/Favourites';
 import Search from './pages/Search'
+import Date from './pages/Date'
 function ScrollToTop() {
     const { pathname } = useLocation();
 
@@ -62,6 +63,7 @@ function AppContent() {
                                     <Route path="/edit-post/:id" element={<EditPost />}/>
                                     <Route path="/categories" element={<Categories />} />
                                     <Route path="/categories/:id/posts" element={<Category />} />
+                                    <Route path="/date/:date/posts" element={<Date />} />
                                     <Route path="/profile" element={<Profile />} />
                                     <Route path="/user/:id" element={<User />} />
                                     <Route path="/favourites" element={<Favourites />}/>
