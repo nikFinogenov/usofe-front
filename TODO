@@ -5,6 +5,9 @@
 [x] sorting + filtering to posts (all pages)
 [x] sorting by asc/desc
 [x] search compenent + fix
+[x] date view
+[x] date search
+[x] lazy loading fix
 [ ] role based things
 [ ] create category
 [ ] adapivtnost

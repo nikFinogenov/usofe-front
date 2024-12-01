@@ -51,7 +51,7 @@ function PostPreview({ post }) {
                 <h2 className="text-xl font-bold mb-2">{post.title}</h2>
                 <Link to={`/date/${new Date(post.createdAt).toLocaleDateString('en-CA')}/posts`}>
                     <span className="bg-green-500 text-white text-xs font-bold px-2 py-1 rounded-full mr-2">
-                        {new Date(post.createdAt).toLocaleDateString('en-US', {
+                        {new Date(post.createdAt).toLocaleDateString('en-GB', {
                             day: '2-digit',
                             month: '2-digit',
                             year: '2-digit',

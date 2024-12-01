@@ -76,7 +76,8 @@ function Header() {
                             <div className="flex justify-between text-gray-500">
                                 <div className="text-sm pr-2">
                                     <p><strong>@userTag</strong> — search users by tag</p>
-                                    <p><strong>u/c/p:name</strong> — search users/categories/posts</p>
+                                    <p><strong>u/c/p:name</strong> — filter by users/categories/posts</p>
+                                    <p><strong>d:date</strong> — filter by date</p>
                                 </div>
                                 <button
                                     onMouseDown={handleSearchButtonMouseDown} // Use onMouseDown to prevent blur trigger
