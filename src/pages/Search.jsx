@@ -28,8 +28,9 @@ const Search = () => {
             try {
                 setLoading(true);
                 const response = await search(query, currentPage);
-
-                if (response.users.length === 0 && response.categories.length === 0 && response.posts.length === 0) {
+                // console.log(results.users.length + results.categories.length + results.posts.length);
+                // console.log(response.totalResults);
+                if (results.users.length + results.categories.length + results.posts.length === response.totalResults) {
                     setHasMoreResults(false);
                 } else {
                     // Update results safely using the functional form of setState

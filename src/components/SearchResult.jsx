@@ -76,7 +76,7 @@ const SearchResult = ({ title, data, linkPrefix }) => {
                                                     (item.content.length > 50 ? '...' : '')}
                                             </p>
                                             <p className="text-gray-500">
-                                                Published on: {new Date(item.publishDate).toLocaleDateString()}
+                                                Published by <b>@{item.user.login}</b> on: {new Date(item.publishDate).toLocaleDateString()}
                                             </p>
                                             <p className="text-gray-500">Views: {item.views}</p>
                                         </div>

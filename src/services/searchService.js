@@ -3,7 +3,7 @@ import { api } from './index'
 export const search = async (query, page = 1) => {
     try {
         const response = await api.get(`${process.env.REACT_APP_API}/search`, {
-            params: { q: query }, // Pass the entire query string as `q`
+            params: { q: query, page }, // Pass the entire query string as `q`
         });
         return response.data;
     } catch (error) {
