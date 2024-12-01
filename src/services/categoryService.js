@@ -36,3 +36,40 @@ export const fetchCategoriesTags = async() => {
         throw error;
     }
 };
+
+export const createCategory = async (title, description) => {
+    try {
+        const response = await api.post(`${process.env.REACT_APP_API}/categories`, {
+            title,
+            description,
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Failed to create category:', error);
+        throw error;
+    }
+};
+
+
+export const deleteCategory = async (categoryId) => {
+    try {
+        const response = await api.delete(`${process.env.REACT_APP_API}/categories/${categoryId}`);
+        return response.data;
+    } catch (error) {
+        console.error('Failed to delete category:', error);
+        throw error;
+    }
+};
+export const updateCategory = async (categoryId, title, description) => {
+    try {
+        const response = await api.patch(`${process.env.REACT_APP_API}/categories/${categoryId}`, {
+            title,
+            description,
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Failed to update category:', error);
+        throw error;
+    }
+};
+
