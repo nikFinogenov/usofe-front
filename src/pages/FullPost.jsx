@@ -42,7 +42,7 @@ function FullPost() {
     const [isHidden, setIsHidden] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
-    const [sortOption, setSortOption] = useState(sessionStorage.getItem('sortOption') || 'rating');
+    const [sortOption, setSortOption] = useState(sessionStorage.getItem('sortOption') || 'most');
     const [filterOption, setFilterOption] = useState(sessionStorage.getItem('filterOption') || 'all');
     const [showProfilePreview, setShowProfilePreview] = useState(false);
     const [hoverTimer, setHoverTimer] = useState(null);
@@ -51,7 +51,8 @@ function FullPost() {
         const loadPost = async () => {
             try {
                 const postData = await fetchPostById(id);
-                const commentsData = await fetchPostComments(id, currentPage, 10, sortOption, 'desc', filterOption);
+                const way = (sortOption === 'newest' || sortOption === 'most') ? 'desc' : 'asc';
+                const commentsData = await fetchPostComments(id, currentPage, 10, sortOption, way, filterOption);
                 setPost(postData);
                 setPostComments(commentsData.comments);
                 setTotalPages(commentsData.totalPages);
@@ -371,6 +372,7 @@ function FullPost() {
                             <SortDropdown
                                 sortOption={sortOption}
                                 onSortChange={handleSortChange}
+                                type={"comment"}
                             />
                             <FilterDropdown
                                 filterOption={filterOption}

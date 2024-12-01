@@ -14,7 +14,7 @@ function Posts() {
     const [loading, setLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPosts, setTotalPosts] = useState(0);
-    const [sortOption, setSortOption] = useState(sessionStorage.getItem('sortOptionPost') || 'date'); // Default sort option
+    const [sortOption, setSortOption] = useState(sessionStorage.getItem('sortOptionPost') || 'newest'); // Default sort option
     const [filterOption, setFilterOption] = useState(sessionStorage.getItem('filterOptionPost') || 'all'); // Default sort option
     const { user } = useContext(AuthContext);
     const location = useLocation();
@@ -28,9 +28,10 @@ function Posts() {
     useEffect(() => {
         const loadPosts = async () => {
             try {
-                const { posts, totalPosts } = await fetchPosts(currentPage, postsPerPage, sortOption, 'desc', filterOption); // Include sortOption
+                const way = (sortOption === 'newest' || sortOption === 'most' || sortOption === 'popular') ? 'desc' : 'asc';
+                const { posts, totalPosts } = await fetchPosts(currentPage, postsPerPage, sortOption, way, filterOption); // Include sortOption
                 setPosts(posts);
-                console.log(posts);
+                // console.log(posts);
                 setTotalPosts(totalPosts);
             } catch (error) {
                 console.error('Failed to load posts:', error);
@@ -61,7 +62,7 @@ function Posts() {
             <div className="flex items-center justify-between w-full max-w-5xl px-4 mt-4">
                 <h2 className="text-3xl font-semibold text-gray-800">Posts</h2>
                 <div className="flex items-center gap-4">
-                    <SortDropdown sortOption={sortOption} onSortChange={handleSortChange} />
+                    <SortDropdown sortOption={sortOption} onSortChange={handleSortChange} type={"post"} />
                     <FilterDropdown filterOption={filterOption} onFilterChange={handleFilterChange} isAuthor={user?.role === 'admin'} />
                 </div>
             </div>

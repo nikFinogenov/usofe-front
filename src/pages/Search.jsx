@@ -19,7 +19,7 @@ const Search = () => {
             try {
                 setLoading(true);
                 const response = await search(query, currentPage);
-                console.log(response);
+                // console.log(response);
                 
                 if (response.users.length === 0 && response.categories.length === 0 && response.posts.length === 0) {
                     setHasMoreResults(false);

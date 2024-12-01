@@ -3,7 +3,7 @@
 // import axios from 'axios';
 import { api } from './index'
 
-export const fetchPosts = async (page = 1, pageSize = 10, sortBy = 'date', order = 'desc', filter = 'all') => {
+export const fetchPosts = async (page = 1, pageSize = 10, sortBy = 'newest', order = 'desc', filter = 'all') => {
     try {
         const response = await api.get(`${process.env.REACT_APP_API}/posts`, {
             params: { page, pageSize, sortBy, order, filter }
@@ -25,7 +25,7 @@ export const fetchPostById = async (id) => {
     }
 };
 
-export const fetchPostComments = async (id, page = 1, pageSize = 10, sortBy = 'rating', order = 'desc', filter = 'all') => {
+export const fetchPostComments = async (id, page = 1, pageSize = 10, sortBy = 'most', order = 'desc', filter = 'all') => {
     try {
         const response = await api.get(`${process.env.REACT_APP_API}/posts/${id}/comments`, {
             params: { page, pageSize, sortBy, order, filter } // Добавляем параметры сортировки
