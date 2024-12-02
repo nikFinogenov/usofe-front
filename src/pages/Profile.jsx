@@ -61,6 +61,10 @@ function Profile() {
         setPostIdToDelete(postId);  // Set the post ID to be deleted
         setShowDeleteConfirm(true);  // Show the confirmation modal
     };
+    const handleBorderClick = () => {
+        // console.log('Border clicked!');
+        window.open('https://github.com/DMYTRO-DOLHII', '_blank');
+    };
 
     if (loading) return <LoadingSpinner />;
 
@@ -71,11 +75,19 @@ function Profile() {
             {/* User Info Section */}
             <div className="w-full max-w-3xl mb-6 p-4 bg-white rounded-lg shadow-lg sm:p-6">
                 <div className="flex flex-col sm:flex-row items-center sm:space-x-4">
-                    <img
-                        src={user?.profilePicture}
-                        alt={`${user?.fullName}'s profile`}
-                        className="w-20 h-20 sm:w-24 sm:h-24 rounded-full object-cover"
-                    />
+                    <div
+                        className="relative w-25 h-25 sm:w-28 sm:h-28 rounded-full bg-gradient-to-bl from-[#0800A7] to-[#EC7EEA] p-[5px]"
+                        onClick={handleBorderClick}
+                    >
+                        <img
+                            src={user?.profilePicture}
+                            alt={`${user?.fullName}'s profile`}
+                            className="w-full h-full rounded-full object-cover"
+                            onClick={(e) => e.stopPropagation()}  // Prevent event propagation on the image
+                        />
+                    </div>
+
+
                     <div className="mt-4 sm:mt-0">
                         <h1 className="text-xl sm:text-3xl font-bold text-gray-900">{user?.fullName}</h1>
                         <p className="text-sm sm:text-lg text-gray-600">@{user?.login}</p>
