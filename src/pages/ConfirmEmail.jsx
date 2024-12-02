@@ -21,8 +21,8 @@ function ConfirmEmail() {
 
             } catch (err) {
                 
-                setError(err.response.data.error);
-                console.log(err);
+                // setError(err.response.data.error);
+                // console.log(err);
             } finally {
                 setLoading(false);
             }
