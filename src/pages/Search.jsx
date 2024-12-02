@@ -30,6 +30,7 @@ const Search = () => {
                 const response = await search(query, currentPage);
                 // console.log(results.users.length + results.categories.length + results.posts.length);
                 // console.log(response.totalResults);
+
                 if (results.users.length + results.categories.length + results.posts.length === response.totalResults) {
                     setHasMoreResults(false);
                 } else {
@@ -52,7 +53,8 @@ const Search = () => {
         if (query) {
             fetchSearchResults();
         }
-    }, [query, currentPage, showNotification]);
+        // eslint-disable-next-line
+    }, [query, currentPage, showNotification]); 
 
     useEffect(() => {
         const handleScroll = () => {

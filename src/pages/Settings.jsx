@@ -7,6 +7,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 function Settings() {
     const { user, logout, setNewUser } = useContext(AuthContext);
+    console.log(user);
     const showNotification = useContext(NotifyContext);
     const [activeSection, setActiveSection] = useState("edit");
     const [formData, setFormData] = useState({
@@ -115,8 +116,8 @@ function Settings() {
             setNewUser(updatedUser);
             showNotification('Account updated successfully', 'success');
         } catch (error) {
-            console.log(error);
-            // showNotification(error.response.data.error, 'error');
+            // console.log(error);
+            // showNotification('Error updating account', 'error');
         } finally {
             setLoading(false);
         }

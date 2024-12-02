@@ -1,10 +1,13 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { emailConfirm } from '../services/userService';
 import LoadingSpinner from '../components/LoadingSpinner';
+import { AuthContext } from '../context/AuthContext';
+
 
 function ConfirmEmail() {
     const { token } = useParams();
+    const { user } = useContext(AuthContext);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
     const [success, setSuccess] = useState(false);
@@ -14,6 +17,8 @@ function ConfirmEmail() {
             try {
                 await emailConfirm(token);
                 setSuccess(true);
+                user.emailConfirmed = true;
+
             } catch (err) {
                 // setError('There was an error confirming your email. Please try again.');
                 setError(err.response.data.error);
@@ -24,7 +29,7 @@ function ConfirmEmail() {
         };
 
         confirmEmail();
-    }, [token]);
+    }, [token, user]);
 
     if (loading) {
         return <LoadingSpinner />;

@@ -1,11 +1,11 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { NotifyContext } from '../context/NotifyContext';
 import { useNavigate } from 'react-router-dom';
 import LoadingSpinner from '../components/LoadingSpinner';
 
 function Register() {
-    const { register } = useContext(AuthContext);
+    const { register, user } = useContext(AuthContext); // Получаем user из AuthContext
     const showNotification = useContext(NotifyContext);
     const [email, setEmail] = useState('');
     const [username, setUsername] = useState('');
@@ -16,6 +16,14 @@ function Register() {
     const [serverError, setServerError] = useState('');
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
+
+    // Проверяем, если пользователь уже авторизован, перенаправляем на главную
+    useEffect(() => {
+        if (user) {
+            showNotification("Already logged in!", 'info');
+            navigate('/');
+        }
+    }, [user, navigate, showNotification]);
 
     const validate = () => {
         const errors = {};

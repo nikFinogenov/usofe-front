@@ -10,6 +10,7 @@ export const fetchUser = async (email, password) => {
         const response = await api.post(`${API_URL}/auth/login`, { email, password });
         return response.data;
     } catch (error) {
+        console.log(error);
         throw error;
     }
 };

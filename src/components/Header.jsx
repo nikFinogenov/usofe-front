@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import UserDropdown from './UserDropdown';
+import { AuthContext } from '../context/AuthContext';
 
 function Header() {
     const [searchText, setSearchText] = useState('');
     const [showSuggestions, setShowSuggestions] = useState(false);
     const navigate = useNavigate();
+    const { user } = useContext(AuthContext);
 
     const handleSearch = async () => {
         try {
@@ -40,7 +42,7 @@ function Header() {
     const handleSearchButtonMouseDown = (e) => {
         e.preventDefault();  // Prevent the blur event from being triggered
     };
-    
+
     const handleLabelClick = (e) => {
         setSearchText('');
     };
@@ -93,12 +95,15 @@ function Header() {
 
                 {/* Кнопка и дропдаун */}
                 <div className="ml-auto flex items-center gap-4">
-                    <Link
-                        to="/new-post"
-                        className="bg-slate-100 text-blue-500 px-4 py-2 rounded hover:bg-blue-100 transition"
-                    >
-                        Add post
-                    </Link>
+                    {
+                        user &&
+                        <Link
+                            to="/new-post"
+                            className="bg-slate-100 text-blue-500 px-4 py-2 rounded hover:bg-blue-100 transition"
+                        >
+                            Add post
+                        </Link>
+                    }
                     <UserDropdown />
                 </div>
             </nav>

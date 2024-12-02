@@ -1,18 +1,25 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { NotifyContext } from '../context/NotifyContext';
 import LoadingSpinner from '../components/LoadingSpinner';
 
 function Login() {
-    const { login } = useContext(AuthContext);
+    const { login, user } = useContext(AuthContext);  // Получаем user из AuthContext
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    // const [rememberMe, setRememberMe] = useState(false);
     const showNotification = useContext(NotifyContext);
     const [serverError, setServerError] = useState('');
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
+
+    // Проверяем, если пользователь уже авторизован, перенаправляем на главную
+    useEffect(() => {
+        if (user) {
+            showNotification("Already logged in!", 'info');
+            navigate('/');
+        }
+    }, [user, navigate, showNotification]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -31,12 +38,6 @@ function Login() {
             setLoading(false);
         }
     };
-
-    // useEffect(() => {
-    //     if(rememberMe)  {
-
-    //     }
-    // }, [rememberMe]);
 
     return (
         loading ? (<LoadingSpinner />) : (
@@ -58,15 +59,6 @@ function Login() {
                         placeholder="Password"
                         className="p-3 mb-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
-                    {/* <div className="flex items-center mb-4">
-                        <input
-                            type="checkbox"
-                            checked={rememberMe}
-                            onChange={(e) => setRememberMe(e.target.checked)}
-                            className="mr-2"
-                        />
-                        <span>Remember me</span>
-                    </div> */}
                     <button type="submit" className="bg-blue-500 text-white p-3 rounded-md hover:bg-blue-600">
                         Login
                     </button>

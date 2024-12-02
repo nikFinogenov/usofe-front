@@ -16,22 +16,41 @@ const AxiosInterceptor = () => {
     const showNotification = useContext(NotifyContext);
     const { logout, user } = useContext(AuthContext); // Получаем пользователя из AuthContext
 
+    const allowedGetPaths = ['/posts', '/tags', '/me', '/categories', '/search', '/user', '/confirm']; // Пути, разрешенные для GET
+    const allowedPostPaths = ['/me']; // Пути, разрешенные для POST
+    const allowedDeletePaths = user ? [`/users/${user?.id}/posts`, `/users/${user?.id}/comments`, `/users/${user.id}/`] : []; // Пути, разрешенные для POST
+    
     api.interceptors.request.use((config) => {
+        console.log(config.method, config.url); // Для отладки
 
         if (user && !user.emailConfirmed) {
-
-            const controller = new AbortController();
-            config.signal = controller.signal; // Привязываем сигнал отмены к запросу
-
-            controller.abort();
-            showNotification("Please confirm your email to perform this action.", "error");
-
-            // Возвращаем запрос с отмененным сигналом
-            return config; // Запрос все равно не выполнится из-за аборта
+            let isAllowed = false;
+    
+            // Проверяем доступные пути в зависимости от метода
+            if (config.method.toLowerCase() === 'get') {
+                isAllowed = allowedGetPaths.some(path => config.url.includes(path));
+            } else if (config.method.toLowerCase() === 'post') {
+                isAllowed = allowedPostPaths.some(path => config.url.includes(path));
+            } 
+            else if (config.method.toLowerCase() === 'delete') {
+                isAllowed = allowedDeletePaths.some(path => config.url.includes(path));
+            }
+    
+            if (!isAllowed) {
+                const controller = new AbortController();
+                config.signal = controller.signal; // Привязываем сигнал отмены к запросу
+    
+                controller.abort();
+                showNotification("Please confirm your email to perform this action.", "error");
+    
+                // Возвращаем конфигурацию с отмененным сигналом
+                return config; // Запрос не выполнится из-за аборта
+            }
         }
-
+    
         // Добавляем токен авторизации
-        if(user) config.headers.Authorization = `Bearer ${localStorage.getItem("token")}`;
+        if (user) config.headers.Authorization = `Bearer ${localStorage.getItem("token")}`;
+    
         return config;
     });
 

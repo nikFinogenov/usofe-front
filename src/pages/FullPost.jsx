@@ -51,11 +51,7 @@ function FullPost() {
         const loadPost = async () => {
             try {
                 const postData = await fetchPostById(id);
-                const way = (sortOption === 'newest' || sortOption === 'most') ? 'desc' : 'asc';
-                const commentsData = await fetchPostComments(id, currentPage, 10, sortOption, way, filterOption);
                 setPost(postData);
-                setPostComments(commentsData.comments);
-                setTotalPages(commentsData.totalPages);
 
                 const likes = postData.likes || [];
                 setLikesCount(likes.filter((like) => like.type === 'like').length);
@@ -64,6 +60,7 @@ function FullPost() {
                 const userLike = likes.find((like) => like.userId === user?.id);
                 const isFavouritedPost = postData.isFavourited || false;
                 const isHiddenPost = postData.status === 'inactive';
+
                 if (userLike) {
                     if (userLike.type === 'like') {
                         setLiked(true);
@@ -72,7 +69,7 @@ function FullPost() {
                     }
                 }
                 if (isFavouritedPost) setFavourited(isFavouritedPost);
-                if(isHiddenPost) setIsHidden(isHiddenPost)
+                if (isHiddenPost) setIsHidden(isHiddenPost);
             } catch (error) {
                 console.error('Failed to load post:', error);
                 showNotification('Failed to load post data.', 'error');
@@ -82,7 +79,26 @@ function FullPost() {
         };
 
         loadPost();
-    }, [id, currentPage, showNotification, user, sortOption, filterOption]);
+    }, [id, showNotification, user]);
+
+    // Загрузка комментариев
+    useEffect(() => {
+        const loadComments = async () => {
+            try {
+                const way = (sortOption === 'newest' || sortOption === 'most') ? 'desc' : 'asc';
+                const commentsData = await fetchPostComments(id, currentPage, 10, sortOption, way, filterOption);
+                setPostComments(commentsData.comments);
+                setTotalPages(commentsData.totalPages);
+            } catch (error) {
+                console.error('Failed to load comments:', error);
+                showNotification('Failed to load comments.', 'error');
+            }
+        };
+
+        if (id) {
+            loadComments();
+        }
+    }, [id, currentPage, sortOption, filterOption, showNotification]);
     useEffect(() => {
         // Находим все элементы <pre> на странице
         const preElements = document.querySelectorAll('pre');
@@ -179,8 +195,8 @@ function FullPost() {
             setPostComments((prevComments) => [...prevComments, newComment]);
             showNotification('Comment added successfully!', 'success');
         } catch (error) {
-            console.error('Failed to add comment:', error);
-            showNotification('Failed to add comment.', 'error');
+            // console.error('Failed to add comment:', error);
+            // showNotification('Failed to add comment.', 'error');
         }
     };
 
