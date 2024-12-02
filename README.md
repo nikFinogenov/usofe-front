@@ -1,70 +1,111 @@
-# Getting Started with Create React App
+<p align="center">
+  <a href="" rel="noopener">
+    <img src="public/muf.png" alt="Project logo"></a>
+</p>
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+<div align="center">
+<h3 align="center">Usofe Front</h3>
 
-## Available Scripts
+[![Status](https://img.shields.io/badge/status-active-success.svg)]()
+[![GitHub Issues](https://img.shields.io/github/issues/nikFinogenov/usofe-front.svg)](https://github.com/nikFinogenov/usofe-front/issues)
+[![GitHub Pull Requests](https://img.shields.io/github/issues-pr/nikFinogenov/usofe-front.svg)](https://github.com/nikFinogenov/usofe-front/pulls)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](/LICENSE)
 
-In the project directory, you can run:
+</div>
 
-### `npm start`
+---
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+<p align="center" style="font-size: 25px;">
+    <b>A front-end platform for the Muffin forum, where users can ask, discuss, and answer questions on various topics.</b>
+    <br> 
+</p>
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## 📝 Table of Contents
 
-### `npm test`
+- [About](#about)
+- [Getting Started](#getting_started)
+- [Built Using](#built_using)
+- [Authors](#authors)
+- [Acknowledgments](#acknowledgement)
+- [Backend](#backend)
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## 🧐 About <a name = "about"></a>
 
-### `npm run build`
+Usofe Front is the front-end of the Muffin forum platform, a Q&A forum designed to facilitate discussions and knowledge sharing on various topics. Users can ask questions, provide answers, and engage with each other in a supportive community. The project aims to create an easy-to-use platform that encourages learning and collaboration.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## 🏁 Getting Started <a name = "getting_started"></a>
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+These instructions will help you set up a local development environment for Usofe Front.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Prerequisites
 
-### `npm run eject`
+Make sure you have the following installed on your machine:
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+- Node.js (v20 or higher)
+- npm (Node Package Manager)
+- A backend server running (check out [Usofe Backend](https://github.com/nikFinogenov/usofe-back))
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+You can verify the installation and versions by running:
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+```bash
+node -v
+npm -v
+```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### Installing
 
-## Learn More
+1. Clone the repository:
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+   ```bash
+   git clone https://github.com/nikFinogenov/usofe-front
+   ```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+2. Navigate to the project directory:
 
-### Code Splitting
+   ```bash
+   cd usofe-front
+   ```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+3. Install the required dependencies:
 
-### Analyzing the Bundle Size
+   ```bash
+   npm install
+   ```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+4. Create a `.env` file based on `.env-example` and fill in the required environment variables:
 
-### Making a Progressive Web App
+   ```ini
+   REACT_APP_URL="http://localhost:3000"
+   REACT_APP_API="http://localhost:3306/api"
+   REACT_APP_BASE="http://localhost:3306"
+   ```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+5. Start the application:
 
-### Advanced Configuration
+   ```bash
+   npm start
+   ```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+Now, your front-end application should be running at `http://localhost:3000`.
 
-### Deployment
+## ⛏️ Built Using <a name = "built_using"></a>
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+- [React](https://reactjs.org/) - Front-end Framework
+- [Tailwind CSS](https://tailwindcss.com/) - Styling Framework
+- [Axios](https://axios-http.com/) - HTTP Client
+- [React Router](https://reactrouter.com/) - Routing
 
-### `npm run build` fails to minify
+## ✍️ Authors <a name = "authors"></a>
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- [@nikFinogenov](https://github.com/nikFinogenov) - Idea & Initial work
+
+## 🎉 Acknowledgements <a name = "acknowledgement"></a>
+
+- Thanks to the Muffin community for support and feedback.
+
+## Backend <a name = "backend"></a>
+
+For the backend of the project, please visit the [Usofe Backend repository](https://github.com/nikFinogenov/usofe-back).
+```
+
+This README includes sections about the project, installation instructions, environment variables, and a link to the backend repository.
