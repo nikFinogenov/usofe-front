@@ -1,4 +1,4 @@
-// FilterDropdown.js
+
 import React from 'react';
 
 const FilterDropdown = ({ filterOption, onFilterChange, isAuthor }) => {

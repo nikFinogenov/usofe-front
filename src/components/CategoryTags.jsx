@@ -2,7 +2,6 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 function CategoryTags({ categories, maxVisible }) {
-    // Обрезаем категории, если их больше `maxVisible`
     const visibleCategories = categories.slice(0, maxVisible);
     const remainingCount = categories.length - maxVisible;
 
@@ -10,7 +9,7 @@ function CategoryTags({ categories, maxVisible }) {
         <div className="flex flex-wrap mt-4">
             {visibleCategories.map((category) => (
                 <Link
-                    key={category.id} // Уникальный ключ на корневом элементе списка
+                    key={category.id}
                     className="mb-2"
                     to={`/categories/${category.id}/posts`}
                 >

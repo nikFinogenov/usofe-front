@@ -56,7 +56,7 @@ function Category() {
                     <Link key={post.id} to={`/post/${post.id}`} className="hover:shadow-2xl transition-shadow duration-300">
                         <PostPreview post={post} />
                     </Link>
-                    // <PostPreview key={post.id} post={post} />
+                    
                 ))}
             </div>
 

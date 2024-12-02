@@ -1,11 +1,11 @@
-// src/pages/NewPost.jsx
+
 import React, { useState, useEffect, useContext } from 'react';
 import MarkdownEditor from 'react-markdown-editor-lite';
 import 'react-markdown-editor-lite/lib/index.css';
 import { useNavigate } from 'react-router-dom';
-// import MarkdownIt from 'markdown-it';
-import { NotifyContext } from '../context/NotifyContext'; // Уведомления
-import { fetchCategoriesTags } from '../services/categoryService'; // Сервис для запросов
+
+import { NotifyContext } from '../context/NotifyContext'; 
+import { fetchCategoriesTags } from '../services/categoryService'; 
 import { createPost } from '../services/postService';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -13,25 +13,25 @@ import remarkBreaks from 'remark-breaks';
 import rehypePrism from 'rehype-prism-plus';
 import 'prismjs/themes/prism-tomorrow.css';
 
-// Инициализация Markdown-it
-// const mdParser = new MarkdownIt(
-//     {
-//         breaks: true, // Включает поддержку переносов строк
-//         gfm: true
-//     }
-// );
+
+
+
+
+
+
+
 
 const NewPost = () => {
     const navigate = useNavigate();
     const [title, setTitle] = useState('');
     const [body, setBody] = useState('');
-    const [tags, setTags] = useState([]); // Выбранные теги
-    const [search, setSearch] = useState(''); // Поиск по тегам
-    const [availableTags, setAvailableTags] = useState([]); // Доступные теги
+    const [tags, setTags] = useState([]); 
+    const [search, setSearch] = useState(''); 
+    const [availableTags, setAvailableTags] = useState([]); 
     const showNotification = useContext(NotifyContext);
 
     useEffect(() => {
-        // Получение списка тегов
+        
         const fetchTags = async () => {
             try {
                 const response = await fetchCategoriesTags();
@@ -52,8 +52,8 @@ const NewPost = () => {
                         [
                             rehypePrism,
                             {
-                                ignoreMissing: true, // Игнорируем неизвестные языки
-                                defaultLanguage: 'plaintext', // Язык по умолчанию
+                                ignoreMissing: true, 
+                                defaultLanguage: 'plaintext', 
                             },
                         ],
                     ]}
@@ -62,13 +62,13 @@ const NewPost = () => {
         );
     };
 
-    // useEffect для поиска элементов <pre> и добавления класса, если его нет
+    
     useEffect(() => {
-        // Находим все элементы <pre> на странице
+        
         const preElements = document.querySelectorAll('pre');
         
         preElements.forEach((pre) => {
-            // Если у элемента нет классов, добавляем language-plaintext
+            
             if (!pre.classList.length) {
                 pre.classList.add('language-plaintext');
             }
@@ -85,7 +85,7 @@ const NewPost = () => {
             return;
         }
         setTags([...tags, tag]);
-        setSearch(''); // Очистка поиска
+        setSearch(''); 
     };
 
     const handleRemoveTag = (id) => {
@@ -95,13 +95,13 @@ const NewPost = () => {
     const handlePublish = async () => {
         if (title.trim() && body.trim() && tags.length > 0) {
             try {
-                // const payload = {
-                //     title,
-                //     content: body,
-                //     tags: tags.map((tag) => tag.id),
-                // };
+                
+                
+                
+                
+                
                 await createPost(title, body, tags.map((tag) => tag.id))
-                // console.log(payload); // Здесь отправка на сервер
+                
                 showNotification('Post published successfully!', 'success');
                 setTitle('');
                 setBody('');
@@ -118,8 +118,6 @@ const NewPost = () => {
     return (
         <div className="max-w-3xl mx-auto pt-16 pb-4 mbl:px-4 tbl:px-4 2tbl:px-4">
             <h1 className="text-3xl font-bold mb-6 mt-5">Create a New Post</h1>
-
-            {/* Поле для названия */}
             <div className="mb-4">
                 <label className="block text-2xl font-semibold mb-2" htmlFor="title">
                     Title
@@ -134,7 +132,7 @@ const NewPost = () => {
                 />
             </div>
 
-            {/* Поле для тегов */}
+
             <div className="mb-4">
                 <label className="block text-lg font-semibold mb-2">Tags</label>
                 <input
@@ -179,7 +177,6 @@ const NewPost = () => {
                 </div>
             </div>
 
-            {/* Редактор Markdown */}
             <div className="mb-6">
                 <label className="block text-lg font-semibold mb-2">
                     Body
@@ -193,7 +190,6 @@ const NewPost = () => {
                 />
             </div>
 
-            {/* Кнопка Publish */}
             <button
                 onClick={handlePublish}
                 className={`w-full px-4 py-2 bg-blue-500 text-white font-semibold rounded hover:bg-blue-600 transition ${!title || !body || tags.length === 0 ? 'opacity-50 cursor-not-allowed' : ''

@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { FaTimes } from 'react-icons/fa'; // Import close icon
+import { FaTimes } from 'react-icons/fa'; 
 
 function Footer() {
     const [showAboutModal, setShowAboutModal] = useState(false);
     const [showContactModal, setShowContactModal] = useState(false);
-    const [isTripleClicked, setIsTripleClicked] = useState(false); // To track if triple-clicked
+    const [isTripleClicked, setIsTripleClicked] = useState(false); 
 
     const handleFooterClick = (e) => {
         if (e.detail === 3) {
@@ -15,7 +15,6 @@ function Footer() {
     return (
         <footer className="bg-gray-800 text-white p-4 text-center mt-auto">
             <div className="flex justify-between items-center">
-                {/* Footer text with triple-click detection */}
                 <p
                     onClick={handleFooterClick}
                     className="text-center cursor-pointer"
@@ -46,7 +45,6 @@ function Footer() {
                 </div>
             </div>
 
-            {/* About Modal */}
             {
                 showAboutModal && (
                     <div className="fixed inset-0 flex justify-center items-center bg-gray-500 bg-opacity-50 text-black">
@@ -65,7 +63,6 @@ function Footer() {
                 )
             }
 
-            {/* Contact Modal */}
             {
                 showContactModal && (
                     <div className="fixed inset-0 flex justify-center items-center bg-gray-500 bg-opacity-50">

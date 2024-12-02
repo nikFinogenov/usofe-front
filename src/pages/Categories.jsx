@@ -166,7 +166,6 @@ function Categories() {
                 onPageChange={(newPage) => setCurrentPage(newPage)}
             />
 
-            {/* Modal for adding a new category */}
             {showModal && (
                 <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-50">
                     <div className="bg-white p-6 rounded-md w-96">
@@ -202,7 +201,6 @@ function Categories() {
                 </div>
             )}
 
-            {/* Modal for editing a category */}
             {showEditModal && (
                 <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-50">
                     <div className="bg-white p-6 rounded-md w-96">
@@ -238,7 +236,6 @@ function Categories() {
                 </div>
             )}
 
-            {/* Delete Confirmation Modal */}
             {showDeleteConfirm && (
                 <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-50">
                     <div className="bg-white p-6 rounded-md w-96">

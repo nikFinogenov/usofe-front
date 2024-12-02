@@ -20,7 +20,7 @@ function ConfirmEmail() {
                 user.emailConfirmed = true;
 
             } catch (err) {
-                // setError('There was an error confirming your email. Please try again.');
+                
                 setError(err.response.data.error);
                 console.log(err);
             } finally {

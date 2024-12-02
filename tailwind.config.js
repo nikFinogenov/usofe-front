@@ -3,7 +3,7 @@ module.exports = {
   theme: {
     extend: {
       animation: {
-        'slow-pulse': 'pulse-slow 3s ease-in-out infinite', // Анимация каждые 3 секунды
+        'slow-pulse': 'pulse-slow 3s ease-in-out infinite',
       },
       keyframes: {
         'pulse-slow': {
@@ -12,9 +12,9 @@ module.exports = {
         },
       },
       screens: {
-        'mbl': {'max': '639px'},  // Это определяет медиазапрос для экранов шириной менее 640px
-        'tbl': {'max': '1023px'},  // Это определяет медиазапрос для экранов шириной менее 640px
-        '2tbl': {'max': '1279px'},  // Это определяет медиазапрос для экранов шириной менее 640px
+        'mbl': {'max': '639px'},
+        'tbl': {'max': '1023px'},
+        '2tbl': {'max': '1279px'},
       },
     },
   },

@@ -11,8 +11,8 @@ function Pagination({ currentPage, totalPages, onPageChange }) {
 
     const renderButtons = () => {
         const buttons = [];
-        const isMobile = window.innerWidth < 640; // Проверка: мобильное устройство или нет
-        const maxVisibleButtons = isMobile ? 4 : 10; // 5 кнопок на мобильных, 10 на десктопе
+        const isMobile = window.innerWidth < 640; 
+        const maxVisibleButtons = isMobile ? 4 : 10; 
 
         let startPage = Math.max(1, currentPage - Math.floor(maxVisibleButtons / 2));
         let endPage = Math.min(totalPages, startPage + maxVisibleButtons - 1);

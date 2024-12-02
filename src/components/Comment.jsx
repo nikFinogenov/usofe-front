@@ -38,20 +38,20 @@ function Comment({ comment, replies, onReplyAdded, onDelete }) {
     const [hoverTimer, setHoverTimer] = useState(null);
 
     const handleMouseEnter = () => {
-        clearTimeout(hoverTimer); // Очистить таймер, если он был запущен
+        clearTimeout(hoverTimer);
         setHoverTimer(
             setTimeout(() => {
                 setShowProfilePreview(true);
-            }, 300) // Задержка перед показом превью
+            }, 300)
         );
     };
 
     const handleMouseLeave = () => {
-        clearTimeout(hoverTimer); // Очистить таймер, если он был запущен
+        clearTimeout(hoverTimer);
         setHoverTimer(
             setTimeout(() => {
                 setShowProfilePreview(false);
-            }, 300) // Задержка перед скрытием превью
+            }, 300)
         );
     };
     const handleMenuAction = (action) => {
@@ -81,14 +81,12 @@ function Comment({ comment, replies, onReplyAdded, onDelete }) {
             showNotification('Comment updated successfully!', 'success');
             setIsEditing(false);
         } catch (error) {
-            // console.log(error);
             showNotification('Failed to update comment.', 'error');
         }
     };
 
     const handleHide = async () => {
         try {
-            // await hideComment(id, isHidden);
             const newStatus = isHidden ? 'active' : 'inactive';
             await updateComment(id, null, newStatus);
             setIsHidden(!isHidden);
@@ -129,7 +127,7 @@ function Comment({ comment, replies, onReplyAdded, onDelete }) {
                 }
             }
         } catch (error) {
-            // showNotification('Failed to like the comment.', 'error');
+            showNotification('Failed to like the comment.', 'error');
         } finally {
             setIsFetchingLike(false);
         }
@@ -153,17 +151,17 @@ function Comment({ comment, replies, onReplyAdded, onDelete }) {
                 }
             }
         } catch (error) {
-            // showNotification('Failed to dislike the comment.', 'error');
+            
         } finally {
             setIsFetchingLike(false);
         }
     };
     useEffect(() => {
-        // Находим все элементы <pre> на странице
+        
         const preElements = document.querySelectorAll('pre');
         
         preElements.forEach((pre) => {
-            // Если у элемента нет классов, добавляем language-plaintext
+            
             if (!pre.classList.length) {
                 pre.classList.add('language-plaintext');
             }
@@ -173,16 +171,14 @@ function Comment({ comment, replies, onReplyAdded, onDelete }) {
     const handleReplySubmit = async (replyContent) => {
         try {
             const originalCommentId = comment.replyId ? comment.replyId : comment.id;
-            // Создаем новый комментарий с `replyId`, который равен `id` текущего комментария
-            const newReply = await addComment(comment.postId, replyContent, originalCommentId); // Используем postId и текущий id как replyId
-            if (onReplyAdded) onReplyAdded(newReply); // Вызываем callback, чтобы обновить родительское состояние
-            // Обновляем локальное состояние (например, если есть механизм для обновления комментариев в глобальном или локальном состоянии)
+            const newReply = await addComment(comment.postId, replyContent, originalCommentId);
+            if (onReplyAdded) onReplyAdded(newReply);
             showNotification('Reply added successfully!', 'success');
         } catch (error) {
             console.error('Failed to add reply:', error);
             showNotification('Failed to add reply.', 'error');
         } finally {
-            setShowReplyDialog(false); // Закрываем диалоговое окно
+            setShowReplyDialog(false); 
         }
     };
 
@@ -223,8 +219,8 @@ function Comment({ comment, replies, onReplyAdded, onDelete }) {
                         {showProfilePreview && (
                             <div
                                 className="absolute top-full left-0 mt-2 z-10 bg-white rounded-lg shadow-lg border border-gray-200 p-2 transition-opacity duration-300 ease-in-out"
-                                onMouseEnter={handleMouseEnter} // Keep preview open when hovered
-                                onMouseLeave={handleMouseLeave} // Hide preview with delay
+                                onMouseEnter={handleMouseEnter} 
+                                onMouseLeave={handleMouseLeave} 
                             >
                                 <ProfilePreview userId={commentAuthor.id} />
                             </div>
@@ -273,8 +269,8 @@ function Comment({ comment, replies, onReplyAdded, onDelete }) {
                         [
                             rehypePrism,
                             {
-                                ignoreMissing: true, // Игнорируем неизвестные языки
-                                defaultLanguage: 'plaintext', // Язык по умолчанию
+                                ignoreMissing: true, 
+                                defaultLanguage: 'plaintext', 
                             },
                         ],
                     ]}

@@ -9,7 +9,7 @@ import { IoIosClose } from "react-icons/io";
 function Header() {
     const [searchText, setSearchText] = useState('');
     const [showSuggestions, setShowSuggestions] = useState(false);
-    const [isMenuOpen, setIsMenuOpen] = useState(false);  // Состояние для открытия меню
+    const [isMenuOpen, setIsMenuOpen] = useState(false);  
     const navigate = useNavigate();
     const { user } = useContext(AuthContext);
 
@@ -41,9 +41,9 @@ function Header() {
     const handleRandomClick = async () => {
         try {
             const { id } = await fetchRandomPost();
-            // console.log(id);
-            // if(id === null) setRandomId(1);// обновляем состояние, чтобы ссылка изменилась
-            navigate(`/post/${id}`); // перенаправляем на новую страницу случайного поста
+            
+            
+            navigate(`/post/${id}`); 
         } catch (error) {
             console.error('Failed to load random post:', error);
         }
@@ -54,7 +54,7 @@ function Header() {
     };
 
     const handleSearchButtonMouseDown = (e) => {
-        e.preventDefault();  // Prevent the blur event from being triggered
+        e.preventDefault();  
     };
 
     const handleLabelClick = (e) => {
@@ -70,7 +70,6 @@ function Header() {
     return (
         <header className="fixed top-0 left-0 right-0 bg-blue-500 text-white py-3 px-4 z-10 shadow-md">
             <nav className="flex items-center">
-                {/* Бургер-меню на мобильных */}
                 <button
                     className="block xl:hidden text-2xl"
                     onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -78,21 +77,19 @@ function Header() {
                     {isMenuOpen ? <IoIosClose /> : <RxHamburgerMenu />}
                 </button>
 
-                {/* Заголовок */}
                 <h1 className="text-2xl font-bold ml-4 sm:block hidden">
                     <Link to="/" onClick={handleLabelClick}>Muffin</Link>
                 </h1>
 
-                {/* Поисковая строка */}
                 <div className="mx-auto w-full max-w-md px-4 relative">
                     <input
                         type="text"
                         placeholder="Search..."
                         value={searchText}
                         onChange={handleInputChange}
-                        onBlur={handleBlur}  // Close suggestions on blur
-                        onFocus={handleFocus} // Show suggestions on focus
-                        onKeyDown={handleKeyDown} // Trigger search on Enter
+                        onBlur={handleBlur}  
+                        onFocus={handleFocus} 
+                        onKeyDown={handleKeyDown} 
                         className="w-full px-4 py-2 rounded text-black focus:outline-none focus:ring-2 focus:ring-blue-300"
                     />
                     {showSuggestions && (
@@ -104,7 +101,7 @@ function Header() {
                                     <p><strong>d:date</strong> — filter by date</p>
                                 </div>
                                 <button
-                                    onMouseDown={handleSearchButtonMouseDown} // Use onMouseDown to prevent blur trigger
+                                    onMouseDown={handleSearchButtonMouseDown} 
                                     onClick={handleSearch}
                                     className="bg-blue-600 text-white px-4 rounded hover:bg-blue-700 transition"
                                 >
@@ -115,7 +112,6 @@ function Header() {
                     )}
                 </div>
 
-                {/* Кнопка и дропдаун */}
                 <div className="ml-auto flex items-center gap-4">
                     {
                         user &&
@@ -132,7 +128,6 @@ function Header() {
                 </div>
             </nav>
 
-            {/* Меню для мобильных */}
             {isMenuOpen && (
                 <div className="xl:hidden bg-blue-500 text-white py-4">
                     <ul className="space-y-4 text-left">

@@ -1,6 +1,4 @@
-// src/services/postService.js
 
-// import axios from 'axios';
 import { api } from './index'
 
 export const fetchPosts = async (page = 1, pageSize = 10, sortBy = 'newest', order = 'desc', filter = 'all') => {
@@ -28,7 +26,7 @@ export const fetchPostById = async (id) => {
 export const fetchPostComments = async (id, page = 1, pageSize = 10, sortBy = 'most', order = 'desc', filter = 'all') => {
     try {
         const response = await api.get(`${process.env.REACT_APP_API}/posts/${id}/comments`, {
-            params: { page, pageSize, sortBy, order, filter } // Добавляем параметры сортировки
+            params: { page, pageSize, sortBy, order, filter }
         });
         return response.data;
     } catch (error) {
@@ -86,7 +84,6 @@ export const updatePost = async(id, title, content, categories, status) => {
         const response = await api.patch(`${process.env.REACT_APP_API}/posts/${id}`, {
             title, content, categories, status
         });
-        // console.log(response);
         return response.data;
     } catch (error) {
         console.error('Failed to create post:', error);

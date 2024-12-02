@@ -1,4 +1,4 @@
-// src/context/AuthContext.jsx
+
 import React, { createContext, useState, useEffect } from 'react';
 import { fetchUser, fetchCurrentUser, createUser } from '../services/userService';
 
@@ -31,7 +31,7 @@ export const AuthProvider = ({ children }) => {
             setUser(data.user);
             return data;
         } catch (error) {
-            // console.error('Login failed:', error);
+            
             throw error;
         }
     };
@@ -45,10 +45,10 @@ export const AuthProvider = ({ children }) => {
 
     const register = async (email, username, fullName, password) => {
         try {
-            const data = await createUser(username, email, fullName, password); // Передаем все параметры
-            // localStorage.setItem('token', data.token);
-            // setUser(data.user);
-            // console.log(data);
+            const data = await createUser(username, email, fullName, password); 
+            
+            
+            
             return data.message;
         } catch (error) {
             console.error('Registration failed:', error);

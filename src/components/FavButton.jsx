@@ -10,7 +10,7 @@ function FavButton({ favourited, onClick }) {
             {favourited ? (
                 <PiStarFill
                     size={24}
-                    color="#FACC15" // Жёлтый цвет (Tailwind yellow-400)
+                    color="#FACC15" 
                 />
             ) : (
                 <PiStar

@@ -5,7 +5,7 @@ import { NotifyContext } from '../context/NotifyContext';
 import LoadingSpinner from '../components/LoadingSpinner';
 
 function Login() {
-    const { login, user } = useContext(AuthContext);  // Получаем user из AuthContext
+    const { login, user } = useContext(AuthContext);  
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const showNotification = useContext(NotifyContext);
@@ -13,7 +13,7 @@ function Login() {
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
-    // Проверяем, если пользователь уже авторизован, перенаправляем на главную
+    
     useEffect(() => {
         if (user) {
             showNotification("Already logged in!", 'info');

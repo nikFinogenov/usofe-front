@@ -3,10 +3,10 @@ import MarkdownEditor from 'react-markdown-editor-lite';
 import 'react-markdown-editor-lite/lib/index.css';
 import MarkdownIt from 'markdown-it';
 
-// Инициализация Markdown-it для рендеринга Markdown
+
 const mdParser = new MarkdownIt(
     {
-        breaks: true, // Включает поддержку переносов строк
+        breaks: true, 
         gfm: true
     }
 );
@@ -14,20 +14,20 @@ const mdParser = new MarkdownIt(
 const CommentEditorMarkdown = ({ onSubmit, height, inputValue = null }) => {
     const [value, setValue] = useState(inputValue ? inputValue : '');
 
-    // Функция для добавления переноса строки в длинные строки текста, включая текст без пробелов
+    
     const formatText = (text) => {
         return text;
     };
 
     const handleEditorChange = ({ text }) => {
-        setValue(text);  // Обновляем состояние при изменении текста
+        setValue(text);  
     };
 
     const handleSubmit = () => {
         if (value.trim()) {
-            const formattedText = formatText(value);  // Обрабатываем текст перед отправкой
-            onSubmit(formattedText); // Передаем обработанный текст
-            setValue('');    // Сбрасываем текст
+            const formattedText = formatText(value);  
+            onSubmit(formattedText); 
+            setValue('');    
         }
     };
 
@@ -36,7 +36,7 @@ const CommentEditorMarkdown = ({ onSubmit, height, inputValue = null }) => {
             <MarkdownEditor
                 value={value}
                 style={{ height: height }}
-                renderHTML={(text) => mdParser.render(text)} // Рендерим Markdown
+                renderHTML={(text) => mdParser.render(text)} 
                 onChange={handleEditorChange}
                 placeholder="Write your comment..."
             />

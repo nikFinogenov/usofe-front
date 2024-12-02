@@ -10,19 +10,19 @@ import DislikeButton from '../components/DislikeButton';
 import { NotifyContext } from '../context/NotifyContext';
 import died from '../assets/died.png';
 import { AuthContext } from '../context/AuthContext';
-// import CommentEditorMarkdown from '../components/CommentEditorMarkdown';
+
 import CommentEditor from '../components/CommentEditor';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import remarkBreaks from 'remark-breaks';
 import rehypePrism from 'rehype-prism-plus';
-// import rehypeHighlight from "rehype-highlight";
-// import "highlight.js/styles/github.css";
+
+
 import Pagination from '../components/Pagination';
 import FavButton from '../components/FavButton';
 import ProfilePreview from '../components/ProfilePreview';
-import SortDropdown from '../components/SortDropdown';  // Import the SortDropdown component
-import FilterDropdown from '../components/FilterDropdown';  // Import the FilterDropdown component
+import SortDropdown from '../components/SortDropdown';  
+import FilterDropdown from '../components/FilterDropdown';  
 
 function FullPost() {
     const { id } = useParams();
@@ -81,7 +81,7 @@ function FullPost() {
         loadPost();
     }, [id, showNotification, user]);
 
-    // Загрузка комментариев
+    
     useEffect(() => {
         const loadComments = async () => {
             try {
@@ -100,11 +100,11 @@ function FullPost() {
         }
     }, [id, currentPage, sortOption, filterOption, showNotification]);
     useEffect(() => {
-        // Находим все элементы <pre> на странице
+        
         const preElements = document.querySelectorAll('pre');
 
         preElements.forEach((pre) => {
-            // Если у элемента нет классов, добавляем language-plaintext
+            
             if (!pre.classList.length) {
                 pre.classList.add('language-plaintext');
             }
@@ -129,7 +129,7 @@ function FullPost() {
                 }
             }
         } catch (error) {
-            // showNotification('Failed to like the post.', 'error');
+            
         } finally {
             setIsFetchingLike(false);
         }
@@ -154,7 +154,7 @@ function FullPost() {
                 }
             }
         } catch (error) {
-            // showNotification('Failed to dislike the post.', 'error');
+            
         } finally {
             setIsFetchingLike(false);
         }
@@ -183,7 +183,7 @@ function FullPost() {
             }
             setFavourited(!favourited);
         } catch (error) {
-            // showNotification('Failed to fav the post.', 'error');
+            
         } finally {
             setIsFetchingLike(false);
         }
@@ -195,8 +195,8 @@ function FullPost() {
             setPostComments((prevComments) => [...prevComments, newComment]);
             showNotification('Comment added successfully!', 'success');
         } catch (error) {
-            // console.error('Failed to add comment:', error);
-            // showNotification('Failed to add comment.', 'error');
+            
+            
         }
     };
 
@@ -344,8 +344,8 @@ function FullPost() {
                         [
                             rehypePrism,
                             {
-                                ignoreMissing: true, // Игнорируем неизвестные языки
-                                defaultLanguage: 'plaintext', // Язык по умолчанию
+                                ignoreMissing: true, 
+                                defaultLanguage: 'plaintext', 
                             },
                         ],
                     ]}

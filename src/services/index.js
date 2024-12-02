@@ -14,19 +14,18 @@ const api = axios.create({
 const AxiosInterceptor = () => {
     const navigate = useNavigate();
     const showNotification = useContext(NotifyContext);
-    const { logout, user } = useContext(AuthContext); // Получаем пользователя из AuthContext
+    const { logout, user } = useContext(AuthContext);
 
-    const allowedGetPaths = ['/posts', '/tags', '/me', '/categories', '/search', '/user', '/confirm']; // Пути, разрешенные для GET
-    const allowedPostPaths = ['/me']; // Пути, разрешенные для POST
-    const allowedDeletePaths = user ? [`/users/${user?.id}/posts`, `/users/${user?.id}/comments`, `/users/${user.id}/`] : []; // Пути, разрешенные для POST
+    const allowedGetPaths = ['/posts', '/tags', '/me', '/categories', '/search', '/user', '/confirm'];
+    const allowedPostPaths = ['/me'];
+    const allowedDeletePaths = user ? [`/users/${user?.id}/posts`, `/users/${user?.id}/comments`, `/users/${user.id}/`] : [];
     
     api.interceptors.request.use((config) => {
-        console.log(config.method, config.url); // Для отладки
+        console.log(config.method, config.url);
 
         if (user && !user.emailConfirmed) {
             let isAllowed = false;
     
-            // Проверяем доступные пути в зависимости от метода
             if (config.method.toLowerCase() === 'get') {
                 isAllowed = allowedGetPaths.some(path => config.url.includes(path));
             } else if (config.method.toLowerCase() === 'post') {
@@ -38,17 +37,15 @@ const AxiosInterceptor = () => {
     
             if (!isAllowed) {
                 const controller = new AbortController();
-                config.signal = controller.signal; // Привязываем сигнал отмены к запросу
+                config.signal = controller.signal;
     
                 controller.abort();
                 showNotification("Please confirm your email to perform this action.", "error");
     
-                // Возвращаем конфигурацию с отмененным сигналом
-                return config; // Запрос не выполнится из-за аборта
+                return config;
             }
         }
     
-        // Добавляем токен авторизации
         if (user) config.headers.Authorization = `Bearer ${localStorage.getItem("token")}`;
     
         return config;
@@ -61,7 +58,7 @@ const AxiosInterceptor = () => {
         async (error) => {
             if (axios.isCancel(error)) {
                 console.log("Request was canceled:", error.message);
-                return; // Ничего не делаем, запрос уже отменен
+                return;
             }
             if (error.response.status === 401) {
                 logout();
@@ -75,7 +72,7 @@ const AxiosInterceptor = () => {
         }
     );
 
-    return null; // Этот компонент ничего не рендерит, его задача — настроить интерцепторы
+    return null;
 };
 
 export { api, AxiosInterceptor };

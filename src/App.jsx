@@ -44,7 +44,7 @@ function AppContent() {
     return (
         isLoading ? <LoadingSpinner /> : (
             <div className="app-content bg-gray-100">
-                <ScrollToTop /> {/* Этот компонент прокручивает наверх при каждом изменении маршрута */}
+                <ScrollToTop />
                 <div className="flex flex-col min-h-screen ">
                     <Header />
                     <div className="flex flex-grow">
@@ -90,7 +90,7 @@ function App() {
     
         console.error = (...args) => {
             if (typeof args[0] === 'string' && args[0].includes('cannot appear as a descendant of')) {
-                return; // Игнорируем конкретное предупреждение
+                return;
             }
             originalWarn(...args);
         };

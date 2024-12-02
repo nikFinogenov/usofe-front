@@ -29,7 +29,7 @@ const UserDropdown = () => {
   }, [isOpen]);
 
   useEffect(() => {
-    setIsOpen(false);  // Optionally close the dropdown when user changes
+    setIsOpen(false);  
   }, [user]);
 
   return (
@@ -65,7 +65,6 @@ const UserDropdown = () => {
         </svg>
       </button>
 
-      {/* Dropdown menu */}
       {isOpen && (
         <div
           id="dropdownAvatarName"

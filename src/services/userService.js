@@ -1,9 +1,7 @@
-// import axios from 'axios';
 import { api } from './index'
 
 const API_URL = process.env.REACT_APP_API;
 
-// Existing functions
 
 export const fetchUser = async (email, password) => {
     try {
@@ -72,9 +70,6 @@ export const createUser = async (login, email, fullName, password) => {
     }
 };
 
-// New functions
-
-// Update user details
 export const updateUser = async (userId, { login, email, fullName, password, role }) => {
     try {
         const response = await api.patch(`${API_URL}/users/${userId}`, {
@@ -87,7 +82,6 @@ export const updateUser = async (userId, { login, email, fullName, password, rol
     }
 };
 
-// Upload avatar
 export const uploadAvatar = async (formData) => {
     try {
         const response = await api.patch(`${API_URL}/users/avatar`, formData);
@@ -98,7 +92,7 @@ export const uploadAvatar = async (formData) => {
     }
 };
 
-// Delete user account
+
 export const deleteAccount = async (userId) => {
     try {
         const response = await api.delete(`${API_URL}/users/${userId}`);
@@ -109,7 +103,6 @@ export const deleteAccount = async (userId) => {
     }
 };
 
-// Delete all posts by user
 export const deleteAllPosts = async (userId) => {
     try {
         const response = await api.delete(`${API_URL}/users/${userId}/posts`);

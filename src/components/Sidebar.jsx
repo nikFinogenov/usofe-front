@@ -8,9 +8,9 @@ function Sidebar() {
     const handleRandomClick = async () => {
         try {
             const { id } = await fetchRandomPost();
-            // console.log(id);
-            // if(id === null) setRandomId(1);// обновляем состояние, чтобы ссылка изменилась
-            navigate(`/post/${id}`); // перенаправляем на новую страницу случайного поста
+            
+            
+            navigate(`/post/${id}`); 
         } catch (error) {
             console.error('Failed to load random post:', error);
         }

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaChevronDown, FaChevronUp } from 'react-icons/fa'; // Importing chevron icons
+import { FaChevronDown, FaChevronUp } from 'react-icons/fa'; 
 import CategoryTags from './CategoryTags';
 
 const SearchResult = ({ title, data, linkPrefix }) => {
@@ -20,7 +20,7 @@ const SearchResult = ({ title, data, linkPrefix }) => {
         }
     };
 
-    if (!data || data.length === 0) return null; // If no data, don't render the block
+    if (!data || data.length === 0) return null; 
 
     return (
         <div className="search-result mb-6">
@@ -63,7 +63,6 @@ const SearchResult = ({ title, data, linkPrefix }) => {
                                 <>
                                     <div className='flex justify-between'>
                                         <div>
-                                            {/* Show inactive badge if the post is inactive */}
                                             {item.status === 'inactive' && (
                                                 <span className="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full mr-2">
                                                     Inactive

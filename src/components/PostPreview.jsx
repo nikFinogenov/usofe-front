@@ -17,20 +17,20 @@ function PostPreview({ post }) {
         (post.content.length > 50 ? '...' : '');
 
     const handleMouseEnter = () => {
-        clearTimeout(hoverTimer); // Очистить таймер, если он был запущен
+        clearTimeout(hoverTimer); 
         setHoverTimer(
             setTimeout(() => {
                 setShowProfilePreview(true);
-            }, 300) // Задержка перед показом превью
+            }, 300) 
         );
     };
 
     const handleMouseLeave = () => {
-        clearTimeout(hoverTimer); // Очистить таймер, если он был запущен
+        clearTimeout(hoverTimer); 
         setHoverTimer(
             setTimeout(() => {
                 setShowProfilePreview(false);
-            }, 300) // Задержка перед скрытием превью
+            }, 300) 
         );
     };
 
@@ -100,8 +100,8 @@ function PostPreview({ post }) {
                     {showProfilePreview && (
                         <div
                             className="absolute top-full left-0 mt-2 z-10 bg-white rounded-lg shadow-lg border border-gray-200 p-2 transition-opacity duration-300 ease-in-out"
-                            onMouseEnter={handleMouseEnter} // Удерживаем превью, если на него наведён курсор
-                            onMouseLeave={handleMouseLeave} // Скрываем превью с задержкой
+                            onMouseEnter={handleMouseEnter} 
+                            onMouseLeave={handleMouseLeave} 
                         >
                             <ProfilePreview userId={post.user.id} />
                         </div>

@@ -1,4 +1,4 @@
-// components/Error.jsx
+
 import React from 'react';
 
 function Error() {

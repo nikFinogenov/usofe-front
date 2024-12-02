@@ -10,15 +10,15 @@ import remarkBreaks from 'remark-breaks';
 import rehypePrism from 'rehype-prism-plus';
 import 'react-markdown-editor-lite/lib/index.css';
 import 'prismjs/themes/prism-tomorrow.css';
-import { fetchCategoriesTags } from '../services/categoryService'; // Service for fetching categories
-// import MarkdownIt from 'markdown-it'; // Markdown parser
+import { fetchCategoriesTags } from '../services/categoryService'; 
+
 import died from '../assets/died.png';
 import 'prismjs/themes/prism-tomorrow.css';
-// Initialize the Markdown parser
-// const mdParser = new MarkdownIt({
-//     breaks: true, // Включает поддержку переносов строк\
-//     gfm: true
-// });
+
+
+
+
+
 
 function EditPost() {
     const { id } = useParams();
@@ -28,19 +28,19 @@ function EditPost() {
     const [post, setPost] = useState(null);
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
-    const [tags, setTags] = useState([]); // Tags for the post
-    const [availableTags, setAvailableTags] = useState([]); // Available tags to choose from
-    const [search, setSearch] = useState(''); // Search term for tags
+    const [tags, setTags] = useState([]); 
+    const [availableTags, setAvailableTags] = useState([]); 
+    const [search, setSearch] = useState(''); 
     const [loading, setLoading] = useState(true);
 
-    // Fetch post and tags data
+    
     useEffect(() => {
         const loadPostAndTags = async () => {
             try {
                 const postData = await fetchPostById(id);
                 setPost(postData);
                 setTitle(postData.title);
-                setContent(postData.content); // Initially set content as markdown
+                setContent(postData.content); 
                 setTags(postData.categories || []);
                 
                 const response = await fetchCategoriesTags();
@@ -66,7 +66,7 @@ function EditPost() {
             return;
         }
         setTags([...tags, tag]);
-        setSearch(''); // Clear search when tag is added
+        setSearch(''); 
     };
 
     const handleRemoveTag = (id) => {
@@ -92,8 +92,8 @@ function EditPost() {
                         [
                             rehypePrism,
                             {
-                                ignoreMissing: true, // Игнорируем неизвестные языки
-                                defaultLanguage: 'plaintext', // Язык по умолчанию
+                                ignoreMissing: true, 
+                                defaultLanguage: 'plaintext', 
                             },
                         ],
                     ]}
@@ -102,13 +102,13 @@ function EditPost() {
         );
     };
 
-    // useEffect для поиска элементов <pre> и добавления класса, если его нет
+    
     useEffect(() => {
-        // Находим все элементы <pre> на странице
+        
         const preElements = document.querySelectorAll('pre');
         
         preElements.forEach((pre) => {
-            // Если у элемента нет классов, добавляем language-plaintext
+            
             if (!pre.classList.length) {
                 pre.classList.add('language-plaintext');
             }
@@ -159,7 +159,6 @@ function EditPost() {
                 />
             </div>
 
-            {/* Tags input */}
             <div className="mb-4">
                 <label className="block text-lg font-semibold mb-2">Tags</label>
                 <input

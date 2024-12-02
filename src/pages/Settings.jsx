@@ -8,7 +8,6 @@ import { FaCircleDot } from "react-icons/fa6";
 
 function Settings() {
     const { user, logout, setNewUser } = useContext(AuthContext);
-    // console.log(user);
     const showNotification = useContext(NotifyContext);
     const [activeSection, setActiveSection] = useState("edit");
     const [formData, setFormData] = useState({
@@ -22,7 +21,7 @@ function Settings() {
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
     const location = useLocation();
-    const fileInputRef = useRef(null);  // Ref for file input
+    const fileInputRef = useRef(null);
     const [isAccountChecked, setIsAccountChecked] = useState(false);
     const [isPostsChecked, setIsPostsChecked] = useState(false);
     const [isCommentsChecked, setIsCommentsChecked] = useState(false);
@@ -71,7 +70,6 @@ function Settings() {
     };
 
     const handleAvatarClick = () => {
-        // Trigger click on the hidden file input
         fileInputRef.current.click();
     };
 
@@ -100,7 +98,7 @@ function Settings() {
             }
 
             if (fieldsChanged) {
-                await updateUser(user.id, formData); // Update the context with new user data
+                await updateUser(user.id, formData);
             }
 
             const updatedUser = {
@@ -110,15 +108,9 @@ function Settings() {
                 login: formData.login,
                 profilePicture: selectedAvatarFile ? avatar : user.profilePicture
             };
-            // console.log("-->",selectedAvatarFile);
-            // console.log("-->",updatedUser);
-            // console.log("-->",avatar);
-            // console.log("-->",user.profilePicture);
             setNewUser(updatedUser);
             showNotification('Account updated successfully', 'success');
         } catch (error) {
-            // console.log(error);
-            // showNotification('Error updating account', 'error');
         } finally {
             setLoading(false);
         }
@@ -126,9 +118,9 @@ function Settings() {
     const handleDeleteAccount = async () => {
         setLoading(true);
         try {
-            if (isPostsChecked) await deleteAllPosts(user.id);  // Delete posts if selected
-            if (isCommentsChecked) await deleteAllComments(user.id);  // Delete comments if selected
-            await deleteAccount(user.id);  // Delete the account itself
+            if (isPostsChecked) await deleteAllPosts(user.id);
+            if (isCommentsChecked) await deleteAllComments(user.id);
+            await deleteAccount(user.id);
             showNotification('Account deleted successfully', 'success');
             logout();
             navigate('/');
@@ -154,7 +146,7 @@ function Settings() {
     const handleDeleteAllComments = async () => {
         setLoading(true);
         try {
-            await deleteAllComments(user.id); // Call the service to delete all comments
+            await deleteAllComments(user.id);
             showNotification('All comments deleted successfully', 'success');
         } catch (error) {
             showNotification('Failed to delete comments', 'error');
@@ -185,8 +177,8 @@ function Settings() {
                         <li
                             onClick={() => handleChangeSection("edit")}
                             className={`cursor-pointer py-2 px-4 rounded shadow ${activeSection === "edit" ? 'bg-gray-300 font-semibold' : ''} sm:transition-all sm:duration-300`}>
-                            <span className="block sm:hidden"><FaCircleDot /></span> {/* Текст "1" только на мобильных */}
-                            <span className="hidden sm:block">Edit Account</span> {/* Полный текст на больших экранах */}
+                            <span className="block sm:hidden"><FaCircleDot /></span>
+                            <span className="hidden sm:block">Edit Account</span>
                         </li>
                         <li
                             onClick={() => handleChangeSection("deleteAccount")}
@@ -221,7 +213,7 @@ function Settings() {
                                     type="file"
                                     onChange={handleAvatarChange}
                                     className="hidden"
-                                    ref={fileInputRef} // Attach ref to input
+                                    ref={fileInputRef}
                                 />
                             </div>
                             <form onSubmit={(e) => { e.preventDefault(); handleSaveChanges(); }} className="space-y-4">
@@ -250,7 +242,6 @@ function Settings() {
                             <h2 className="text-2xl font-bold mb-4">Delete Account</h2>
                             <p className="text-gray-600 mb-4">Are you sure you want to delete your account? This action cannot be undone.</p>
 
-                            {/* Checkbox to enable post and comment deletion */}
                             <div className="mb-4">
                                 <label className="flex items-center">
                                     <input
@@ -263,7 +254,6 @@ function Settings() {
                                 </label>
                             </div>
 
-                            {/* Text input for username confirmation */}
                             {isAccountChecked && (
                                 <div className="mb-4">
                                     <label className="block text-gray-600 mb-2">Enter your username to confirm:</label>
@@ -276,9 +266,7 @@ function Settings() {
                                 </div>
                             )}
 
-                            {/* Disable button until confirmed */}
                             <button
-                                // onClick={handleDeleteAccount}
                                 onClick={() => setShowDeleteDialog(true)}
                                 className={`bg-red-500 text-white p-3 rounded-md hover:bg-red-600 ${!isAccountChecked || usernameConfirm !== user?.login ? 'opacity-50 cursor-not-allowed' : ''}`}
                                 disabled={!isAccountChecked || usernameConfirm !== user?.login}
@@ -294,7 +282,6 @@ function Settings() {
                             <h2 className="text-2xl font-bold mb-4">Delete All Posts</h2>
                             <p className="text-gray-600 mb-4">Are you sure you want to delete all your posts? This action cannot be undone.</p>
 
-                            {/* Checkbox to enable the button */}
                             <div className="mb-4">
                                 <label className="flex items-center">
                                     <input
@@ -307,7 +294,6 @@ function Settings() {
                                 </label>
                             </div>
 
-                            {/* Text input for username confirmation */}
                             {isPostsChecked && (
                                 <div className="mb-4">
                                     <label className="block text-gray-600 mb-2">Enter your username to confirm:</label>
@@ -320,7 +306,6 @@ function Settings() {
                                 </div>
                             )}
 
-                            {/* Disable button until confirmed */}
                             <button
                                 onClick={handleDeleteAllPosts}
                                 className={`bg-red-500 text-white p-3 rounded-md hover:bg-red-600 ${!isPostsChecked || usernameConfirmPosts !== user?.login ? 'opacity-50 cursor-not-allowed' : ''}`}
@@ -335,7 +320,6 @@ function Settings() {
                             <h2 className="text-2xl font-bold mb-4">Delete All Comments</h2>
                             <p className="text-gray-600 mb-4">Are you sure you want to delete all your comments? This action cannot be undone.</p>
 
-                            {/* Checkbox to enable the button */}
                             <div className="mb-4">
                                 <label className="flex items-center">
                                     <input
@@ -348,7 +332,6 @@ function Settings() {
                                 </label>
                             </div>
 
-                            {/* Text input for username confirmation */}
                             {isCommentsChecked && (
                                 <div className="mb-4">
                                     <label className="block text-gray-600 mb-2">Enter your username to confirm:</label>
@@ -361,7 +344,6 @@ function Settings() {
                                 </div>
                             )}
 
-                            {/* Disable button until confirmed */}
                             <button
                                 onClick={handleDeleteAllComments}
                                 className={`bg-red-500 text-white p-3 rounded-md hover:bg-red-600 ${!isCommentsChecked || usernameConfirmComments !== user?.login ? 'opacity-50 cursor-not-allowed' : ''}`}

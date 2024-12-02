@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import LoadingSpinner from '../components/LoadingSpinner';
 
 function Register() {
-    const { register, user } = useContext(AuthContext); // Получаем user из AuthContext
+    const { register, user } = useContext(AuthContext);
     const showNotification = useContext(NotifyContext);
     const [email, setEmail] = useState('');
     const [username, setUsername] = useState('');
@@ -17,7 +17,6 @@ function Register() {
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
-    // Проверяем, если пользователь уже авторизован, перенаправляем на главную
     useEffect(() => {
         if (user) {
             showNotification("Already logged in!", 'info');

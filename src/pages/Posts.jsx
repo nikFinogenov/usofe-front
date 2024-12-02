@@ -4,8 +4,8 @@ import PostPreview from '../components/PostPreview';
 import Pagination from '../components/Pagination';
 import { Link, useLocation } from 'react-router-dom';
 import LoadingSpinner from '../components/LoadingSpinner';
-import SortDropdown from '../components/SortDropdown';  // Import the SortDropdown component
-import FilterDropdown from '../components/FilterDropdown';  // Import the FilterDropdown component
+import SortDropdown from '../components/SortDropdown';  
+import FilterDropdown from '../components/FilterDropdown';  
 import { AuthContext } from '../context/AuthContext';
 
 function Posts() {
@@ -14,8 +14,8 @@ function Posts() {
     const [loading, setLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPosts, setTotalPosts] = useState(0);
-    const [sortOption, setSortOption] = useState(sessionStorage.getItem('sortOptionPost') || 'newest'); // Default sort option
-    const [filterOption, setFilterOption] = useState(sessionStorage.getItem('filterOptionPost') || 'all'); // Default sort option
+    const [sortOption, setSortOption] = useState(sessionStorage.getItem('sortOptionPost') || 'newest'); 
+    const [filterOption, setFilterOption] = useState(sessionStorage.getItem('filterOptionPost') || 'all'); 
     const { user } = useContext(AuthContext);
     const location = useLocation();
 
@@ -29,9 +29,9 @@ function Posts() {
         const loadPosts = async () => {
             try {
                 const way = (sortOption === 'newest' || sortOption === 'most' || sortOption === 'popular') ? 'desc' : 'asc';
-                const { posts, totalPosts } = await fetchPosts(currentPage, postsPerPage, sortOption, way, filterOption); // Include sortOption
+                const { posts, totalPosts } = await fetchPosts(currentPage, postsPerPage, sortOption, way, filterOption); 
                 setPosts(posts);
-                // console.log(posts);
+                
                 setTotalPosts(totalPosts);
             } catch (error) {
                 console.error('Failed to load posts:', error);
@@ -41,13 +41,13 @@ function Posts() {
         };
 
         loadPosts();
-    }, [currentPage, sortOption, filterOption]); // Re-fetch posts when sortOption changes
+    }, [currentPage, sortOption, filterOption]); 
 
     const totalPages = Math.ceil(totalPosts / postsPerPage);
 
     const handleSortChange = (event) => {
         setSortOption(event.target.value);
-        sessionStorage.setItem('sortOptionPost', event.target.value); // Save to localStorage
+        sessionStorage.setItem('sortOptionPost', event.target.value); 
     };
 
     const handleFilterChange = (event) => {

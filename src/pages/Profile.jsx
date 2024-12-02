@@ -47,22 +47,22 @@ function Profile() {
 
     const handleDeletePost = async () => {
         try {
-            await deletePostById(postIdToDelete);  // Delete the selected post
-            setPosts((prevPosts) => prevPosts.filter((post) => post.id !== postIdToDelete));  // Remove the deleted post from state
-            setTotalPosts((prevTotal) => prevTotal - 1);  // Decrease total post count
-            setShowDeleteConfirm(false);  // Close the confirmation modal
-            showNotification('Post deleted successfully!', 'success');  // Display success notification
+            await deletePostById(postIdToDelete);
+            setPosts((prevPosts) => prevPosts.filter((post) => post.id !== postIdToDelete));
+            setTotalPosts((prevTotal) => prevTotal - 1);
+            setShowDeleteConfirm(false);
+            showNotification('Post deleted successfully!', 'success');
         } catch (error) {
-            showNotification('Failed to delete post.', 'error');  // Error notification
+            showNotification('Failed to delete post.', 'error');
         }
     };
 
     const handleDeleteConfirmation = (postId) => {
-        setPostIdToDelete(postId);  // Set the post ID to be deleted
-        setShowDeleteConfirm(true);  // Show the confirmation modal
+        setPostIdToDelete(postId);  
+        setShowDeleteConfirm(true);  
     };
     const handleBorderClick = () => {
-        // console.log('Border clicked!');
+        
         window.open('https://github.com/DMYTRO-DOLHII', '_blank');
     };
 
@@ -72,7 +72,6 @@ function Profile() {
 
     return (
         <div className="flex flex-col items-center pt-16 mt-5 bg-gray-100 min-h-screen px-4">
-            {/* User Info Section */}
             <div className="w-full max-w-3xl mb-6 p-4 bg-white rounded-lg shadow-lg sm:p-6">
                 <div className="flex flex-col sm:flex-row items-center sm:space-x-4">
                     <div
@@ -83,7 +82,7 @@ function Profile() {
                             src={user?.profilePicture}
                             alt={`${user?.fullName}'s profile`}
                             className="w-full h-full rounded-full object-cover"
-                            onClick={(e) => e.stopPropagation()}  // Prevent event propagation on the image
+                            onClick={(e) => e.stopPropagation()}  
                         />
                     </div>
 
@@ -104,7 +103,6 @@ function Profile() {
                 </div>
             </div>
 
-            {/* User's Posts Section */}
             <div className="w-full max-w-5xl">
                 <h2 className="text-lg sm:text-2xl font-semibold text-gray-900 mb-4">Your Posts</h2>
                 <div className="flex flex-col gap-4 px-2 sm:px-4 mb-10">

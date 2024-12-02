@@ -31,12 +31,12 @@ const ProfilePreview = ({ userId }) => {
 
   const { user, stats } = userData;
 
-  // Ограничение длины комментария
+  
   const truncateComment = (comment, maxLength = 20) => {
-    // Удаляем маркдаун
+    
     const plainText = comment.replace(/[#_*~`>|-]/g, '').replace(/\[.*?\]\(.*?\)/g, '').trim();
   
-    // Обрезаем текст, если он длиннее указанной длины
+    
     if (plainText.length > maxLength) {
       return plainText.slice(0, maxLength) + '...';
     }

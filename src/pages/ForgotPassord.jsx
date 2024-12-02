@@ -16,14 +16,14 @@ function ForgotPassword() {
         setServerError('');
         setLoading(true);
         try {
-            // Mock API call to request password reset
-            // await fakeApiRequestPasswordReset(email);
+            
+            
             await passwordReset(email)
             showNotification('Password reset instructions have been sent to your email.', 'success');
             navigate('/login');
         } catch (error) {
             setServerError(error.response.data.error);
-            // showNotification(error.response.data.error, 'info'); 
+            
         } finally {
             setLoading(false);
         }

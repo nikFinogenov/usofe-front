@@ -1,6 +1,4 @@
-// services/categoryService.js
 
-// import axios from 'axios';
 import { api } from './index'
 
 export const fetchCategories = async (page = 1, pageSize = 10) => {

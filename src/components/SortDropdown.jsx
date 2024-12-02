@@ -13,7 +13,6 @@ const SortDropdown = ({ sortOption, onSortChange, type }) => {
                 <option value="most">Top Rating</option>
                 <option value="less">Low Rating</option>
                 
-                {/* Conditional options for posts */}
                 {type === 'post' && (
                     <>
                     <option value="popular">Most Views</option>
