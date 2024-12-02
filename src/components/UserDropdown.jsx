@@ -46,7 +46,8 @@ const UserDropdown = () => {
           src={user ? user.profilePicture : noname}
           alt="user"
         />
-        {user ? user.fullName : "Anonym"}
+        <span className="hidden sm:inline">{user ? user.fullName : "Anonym"}</span>
+
         <svg
           className={`w-2.5 h-2.5 ms-3 transform transition-transform ${isOpen ? 'rotate-180' : ''}`}
           aria-hidden="true"
@@ -96,13 +97,13 @@ const UserDropdown = () => {
             {
               user && (
                 <li>
-                <a
-                  href="/favourites"
-                  className="block px-4 py-2 hover:bg-gray-100"
-                >
-                  Favourites
-                </a>
-              </li>
+                  <a
+                    href="/favourites"
+                    className="block px-4 py-2 hover:bg-gray-100"
+                  >
+                    Favourites
+                  </a>
+                </li>
               )
             }
           </ul>

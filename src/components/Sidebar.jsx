@@ -17,7 +17,7 @@ function Sidebar() {
     };
 
     return (
-        <aside className="fixed top-1/3 left-0 w-12 bg-blue-600 text-white shadow-2xl flex flex-col items-center py-6 space-y-6 rounded-lg">
+        <aside className="hidden lg:flex fixed top-1/3 left-0 w-12 bg-blue-600 text-white shadow-2xl flex-col items-center py-6 space-y-6 rounded-lg">
             <nav>
                 <ul className="space-y-4 text-2xl relative">
                     <li className="group relative" title="Home">

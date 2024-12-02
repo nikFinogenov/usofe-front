@@ -8,8 +8,8 @@
 [x] date view
 [x] date search
 [x] lazy loading fix
-[ ] role based things
-[ ] create category
+[x] role based things
+[x] create category
 [ ] adapivtnost
 [ ] rewrite header + footer text
 [x] user preview every where
