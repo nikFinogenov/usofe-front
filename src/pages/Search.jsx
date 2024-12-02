@@ -49,6 +49,7 @@ const Search = () => {
         if (query) {
             fetchSearchResults();
         }
+    // eslint-disable-next-line
     }, [query, currentPage, showNotification]); 
 
     useEffect(() => {
@@ -72,7 +73,6 @@ const Search = () => {
     }, [hasMoreResults, loading]);
 
     const isEmptyResults = !loading && (!results.users.length && !results.categories.length && !results.posts.length);
-
 
     const scrollToTop = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
