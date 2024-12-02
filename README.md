@@ -79,6 +79,7 @@ npm -v
    REACT_APP_API="http://localhost:3306/api"
    REACT_APP_BASE="http://localhost:3306"
    ```
+   If you are on Windows, add `GENERATE_SOURCEMAP=false` to `.env` and remove it from from `package.json`
 
 5. Start the application:
 
