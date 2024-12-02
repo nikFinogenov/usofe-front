@@ -33,7 +33,7 @@ function Main() {
         <div className="flex flex-col items-center pt-16 min-h-screen">
             {/* Banner Section */}
             <div className="w-full bg-blue-600 text-white p-8 text-center mb-6 hidden sm:block">
-                <h1 className="text-4xl font-bold sm:text-3xl text-center">Welcome to Our Forum</h1>
+                <h1 className="text-4xl font-bold sm:text-3xl text-center">Welcome to the Muffin Forum!</h1>
                 <p className="text-lg mt-2 sm:text-base">Explore the latest discussions and trending topics</p>
             </div>
 

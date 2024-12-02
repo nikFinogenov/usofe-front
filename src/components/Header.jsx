@@ -79,8 +79,8 @@ function Header() {
                 </button>
 
                 {/* Заголовок */}
-                <h1 className="text-2xl font-bold ml-4 flex-1 sm:block hidden">
-                    <Link to="/" onClick={handleLabelClick}>My Forum</Link>
+                <h1 className="text-2xl font-bold ml-4 sm:block hidden">
+                    <Link to="/" onClick={handleLabelClick}>Muffin</Link>
                 </h1>
 
                 {/* Поисковая строка */}

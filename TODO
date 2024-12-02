@@ -10,8 +10,8 @@
 [x] lazy loading fix
 [x] role based things
 [x] create category
-[ ] adapivtnost
-[ ] rewrite header + footer text
+[x] adapivtnost
+[x] rewrite header + footer text
 [x] user preview every where
 [x] user tag ++ comment ++ post
 [x] comment date -> show
