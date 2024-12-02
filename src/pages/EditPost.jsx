@@ -84,7 +84,7 @@ function EditPost() {
     };
     const renderMarkdownPreview = (text) => {
         return (
-            <div className="prose break-words">
+            <div className="prose break-words mbl:break-all">
                 <ReactMarkdown
                     children={text}
                     remarkPlugins={[remarkGfm, remarkBreaks]}
@@ -119,7 +119,7 @@ function EditPost() {
     if (!post) return <div>Post not found.</div>;
 
     return (
-        <div className="max-w-2xl mx-auto pt-16 flex flex-col flex-grow">
+        <div className="max-w-2xl mx-auto pt-16 flex flex-col flex-grow mbl:px-4 tbl:px-4 2tbl:px-4">
             <div className="flex items-center justify-between mb-4 mt-5">
                 <div className="flex items-center">
                     {post.user ? (

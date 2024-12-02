@@ -47,7 +47,7 @@ function Category() {
     if (loading) return <LoadingSpinner />;
 
     return (
-        <div className="flex flex-col items-center pt-16 bg-gray-100 min-h-screen mt-5">
+        <div className="flex flex-col items-center pt-16 bg-gray-100 min-h-screen mt-5 mbl:px-4 tbl:px-4 2tbl:px-4">
             <h1 className="text-2xl font-bold mb-2">Posts about <i>{title}</i> </h1>
             <h3 className="text-m mb-4">{description ? description : "No description available."}</h3>
 

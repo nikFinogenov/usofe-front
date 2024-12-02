@@ -116,7 +116,7 @@ const NewPost = () => {
     };
 
     return (
-        <div className="max-w-3xl mx-auto pt-16 pb-4">
+        <div className="max-w-3xl mx-auto pt-16 pb-4 mbl:px-4 tbl:px-4 2tbl:px-4">
             <h1 className="text-3xl font-bold mb-6 mt-5">Create a New Post</h1>
 
             {/* Поле для названия */}

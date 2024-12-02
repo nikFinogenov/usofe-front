@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import UserDropdown from './UserDropdown';
+import { fetchRandomPost } from '../services/postService';
 import { AuthContext } from '../context/AuthContext';
 import { RxHamburgerMenu } from "react-icons/rx";
 import { IoIosClose } from "react-icons/io";
@@ -37,6 +38,16 @@ function Header() {
             setShowSuggestions(false);
         }, 100);
     };
+    const handleRandomClick = async () => {
+        try {
+            const { id } = await fetchRandomPost();
+            // console.log(id);
+            // if(id === null) setRandomId(1);// обновляем состояние, чтобы ссылка изменилась
+            navigate(`/post/${id}`); // перенаправляем на новую страницу случайного поста
+        } catch (error) {
+            console.error('Failed to load random post:', error);
+        }
+    };
 
     const handleFocus = () => {
         setShowSuggestions(searchText.trim().length > 0);
@@ -61,7 +72,7 @@ function Header() {
             <nav className="flex items-center">
                 {/* Бургер-меню на мобильных */}
                 <button
-                    className="block lg:hidden text-2xl"
+                    className="block xl:hidden text-2xl"
                     onClick={() => setIsMenuOpen(!isMenuOpen)}
                 >
                     {isMenuOpen ? <IoIosClose /> : <RxHamburgerMenu />}
@@ -123,7 +134,7 @@ function Header() {
 
             {/* Меню для мобильных */}
             {isMenuOpen && (
-                <div className="lg:hidden bg-blue-500 text-white py-4">
+                <div className="xl:hidden bg-blue-500 text-white py-4">
                     <ul className="space-y-4 text-left">
                         <li>
                             <Link to="/" onClick={() => setIsMenuOpen(false)} className="block py-2">🏠 Home</Link>
@@ -135,7 +146,7 @@ function Header() {
                             <Link to="/categories" onClick={() => setIsMenuOpen(false)} className="block py-2">📂 Categories</Link>
                         </li>
                         <li>
-                            <button onClick={() => setIsMenuOpen(false)} className="block py-2">🎲 Random</button>
+                            <button onClick={() => { handleRandomClick(); setIsMenuOpen(false); }} className="block py-2">🎲 Random</button>
                         </li>
                     </ul>
                 </div>

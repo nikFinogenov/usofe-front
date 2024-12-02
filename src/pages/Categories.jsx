@@ -98,7 +98,7 @@ function Categories() {
     if (loading) return <LoadingSpinner />;
 
     return (
-        <div className="max-w-2xl mx-auto pt-16 mt-5">
+        <div className="max-w-2xl mx-auto pt-16 mt-5 mbl:px-4 tbl:px-4 2tbl:px-4">
             <h1 className="text-2xl font-bold mb-4 flex justify-between items-center">
                 Categories
                 {user?.role === 'admin' && (

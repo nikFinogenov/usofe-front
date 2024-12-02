@@ -23,7 +23,7 @@ const CommentEditor = ({ onSubmit, height, inputValue = '' }) => {
 
     const renderMarkdownPreview = (text) => {
         return (
-            <div className="prose break-words">
+            <div className="prose break-words mbl:break-all">
                 <ReactMarkdown
                     children={text}
                     remarkPlugins={[remarkGfm, remarkBreaks]}

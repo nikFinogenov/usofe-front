@@ -267,7 +267,7 @@ function Comment({ comment, replies, onReplyAdded, onDelete }) {
                 </div>
             ) : (
                 <div className='flex'>
-                    <ReactMarkdown className="prose break-words" 
+                    <ReactMarkdown className="prose break-words mbl:break-all" 
                     remarkPlugins={[remarkGfm, remarkBreaks]} 
                     rehypePlugins={[
                         [

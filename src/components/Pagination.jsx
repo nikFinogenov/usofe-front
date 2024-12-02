@@ -1,5 +1,3 @@
-// src/components/Pagination.jsx
-
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -13,8 +11,10 @@ function Pagination({ currentPage, totalPages, onPageChange }) {
 
     const renderButtons = () => {
         const buttons = [];
-        const maxVisibleButtons = 10;
-        let startPage = Math.max(1, currentPage - 4);
+        const isMobile = window.innerWidth < 640; // Проверка: мобильное устройство или нет
+        const maxVisibleButtons = isMobile ? 4 : 10; // 5 кнопок на мобильных, 10 на десктопе
+
+        let startPage = Math.max(1, currentPage - Math.floor(maxVisibleButtons / 2));
         let endPage = Math.min(totalPages, startPage + maxVisibleButtons - 1);
 
         if (endPage - startPage < maxVisibleButtons - 1) {
@@ -50,7 +50,11 @@ function Pagination({ currentPage, totalPages, onPageChange }) {
         return buttons;
     };
 
-    return <div className="mt-4 flex justify-center mb-5">{renderButtons()}</div>;
+    return (
+        <div className="mt-4 flex justify-center mb-5 flex-wrap gap-2 sm:gap-4">
+            {renderButtons()}
+        </div>
+    );
 }
 
 export default Pagination;

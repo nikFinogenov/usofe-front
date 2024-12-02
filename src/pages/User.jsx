@@ -55,7 +55,7 @@ function User() {
     };
 
     return (
-        <div className="flex flex-col items-center pt-16 mt-5 bg-gray-100 min-h-screen">
+        <div className="flex flex-col items-center pt-16 mt-5 bg-gray-100 min-h-screen mbl:px-4 tbl:px-4 2tbl:px-4">
             {/* User Info Section */}
             <div className="w-full max-w-3xl mb-6 p-6 bg-white rounded-lg shadow-lg">
                 <div className="flex items-center space-x-4">
@@ -65,9 +65,9 @@ function User() {
                         className="w-24 h-24 rounded-full object-cover"
                     />
                     <div>
-                        <h1 className="text-3xl font-bold text-gray-900">{user?.fullName}</h1>
-                        <p className="text-lg text-gray-600">@{user?.login}</p>
-                        <p className="text-gray-600">{user?.email}</p>
+                        <h1 className="text-3xl mbl:text-xl font-bold text-gray-900">{user?.fullName}</h1>
+                        <p className="text-lg text-gray-600 mbl:text-sm">@{user?.login}</p>
+                        <p className="text-gray-600 mbl:text-sm">{user?.email}</p>
                         <p className="text-gray-500">{user?.role}</p>
 
                         {/* Рейтинг отображаем как число с окраской */}

@@ -247,7 +247,7 @@ function FullPost() {
         postComments.filter((reply) => reply.replyId === commentId);
 
     return (
-        <div className="max-w-2xl mx-auto pt-16 flex flex-col flex-grow">
+        <div className="max-w-2xl mx-auto pt-16 flex flex-col flex-grow mbl:px-4 tbl:px-4 2tbl:px-4">
             <div className="flex items-center justify-between mb-4 mt-5">
                 {author ? (
                     <div className="relative group"
@@ -338,7 +338,7 @@ function FullPost() {
             <p className="text-gray-500 text-sm mb-2">
                 Published on {new Date(publishDate).toLocaleDateString()} | Views: {views}
             </p>
-            <div className="prose break-words mb-4">
+            <div className="prose break-words mb-4 mbl:break-all">
                 <ReactMarkdown remarkPlugins={[remarkGfm, remarkBreaks]}
                     rehypePlugins={[
                         [

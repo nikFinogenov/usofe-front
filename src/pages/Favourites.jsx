@@ -33,7 +33,7 @@ function Favourites() {
     if (loading) return <LoadingSpinner />;
 
     return (
-        <div className="flex flex-col items-center pt-16 bg-gray-100 min-h-screen">
+        <div className="flex flex-col items-center pt-16 bg-gray-100 min-h-screen mbl:px-4 tbl:px-4 2tbl:px-4">
             <h2 className="text-3xl font-semibold text-gray-800 mt-4 text-left w-full max-w-5xl px-4">Favourites</h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-4 max-w-5xl w-full mb-5">

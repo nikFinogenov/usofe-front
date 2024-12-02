@@ -4,10 +4,11 @@ import { updateUser, deleteAccount, deleteAllPosts, deleteAllComments, uploadAva
 import { NotifyContext } from '../context/NotifyContext';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { FaCircleDot } from "react-icons/fa6";
 
 function Settings() {
     const { user, logout, setNewUser } = useContext(AuthContext);
-    console.log(user);
+    // console.log(user);
     const showNotification = useContext(NotifyContext);
     const [activeSection, setActiveSection] = useState("edit");
     const [formData, setFormData] = useState({
@@ -169,30 +170,43 @@ function Settings() {
         setUsernameConfirmPosts("");
         setUsernameConfirmComments("");
         setUsernameConfirm("");
-        
+
     };
 
 
     if (loading) return <LoadingSpinner />;
 
     return (
-        <div className="flex flex-col items-center pt-16 min-h-screen">
+        <div className="flex flex-col items-center pt-16 min-h-screen mbl:px-2 tbl:px-4 2tbl:px-4">
             <h1 className="text-2xl font-bold mt-5 ml-8">Settings</h1>
             <div className="flex w-full max-w-4xl mx-auto shadow-md rounded-lg overflow-hidden">
                 <div className="w-1/4 bg-gray-200 p-4">
                     <ul>
-                        <li onClick={() => handleChangeSection("edit")} className={`cursor-pointer py-2 ${activeSection === "edit" ? 'bg-gray-300 font-semibold shadow rounded px-4 transition-all duration-300' : ''}`}>
-                            Edit Account
+                        <li
+                            onClick={() => handleChangeSection("edit")}
+                            className={`cursor-pointer py-2 px-4 rounded shadow ${activeSection === "edit" ? 'bg-gray-300 font-semibold' : ''} sm:transition-all sm:duration-300`}>
+                            <span className="block sm:hidden"><FaCircleDot /></span> {/* Текст "1" только на мобильных */}
+                            <span className="hidden sm:block">Edit Account</span> {/* Полный текст на больших экранах */}
                         </li>
-                        <li onClick={() => handleChangeSection("deleteAccount")} className={`cursor-pointer py-2 ${activeSection === "deleteAccount" ? 'bg-gray-300 font-semibold shadow rounded px-4 transition-all duration-300' : ''}`}>
-                            Delete Account
+                        <li
+                            onClick={() => handleChangeSection("deleteAccount")}
+                            className={`cursor-pointer py-2 px-4 rounded shadow ${activeSection === "deleteAccount" ? 'bg-gray-300 font-semibold' : ''} sm:transition-all sm:duration-300`}>
+                            <span className="block sm:hidden"><FaCircleDot /></span>
+                            <span className="hidden sm:block">Delete Account</span>
                         </li>
-                        <li onClick={() => handleChangeSection("deletePosts")} className={`cursor-pointer py-2 ${activeSection === "deletePosts" ? 'bg-gray-300 font-semibold shadow rounded px-4 transition-all duration-300' : ''}`}>
-                            Delete All Posts
+                        <li
+                            onClick={() => handleChangeSection("deletePosts")}
+                            className={`cursor-pointer py-2 px-4 rounded shadow ${activeSection === "deletePosts" ? 'bg-gray-300 font-semibold' : ''} sm:transition-all sm:duration-300`}>
+                            <span className="block sm:hidden"><FaCircleDot /></span>
+                            <span className="hidden sm:block">Delete All Posts</span>
                         </li>
-                        <li onClick={() => handleChangeSection("deleteComments")} className={`cursor-pointer py-2 ${activeSection === "deleteComments" ? 'bg-gray-300 font-semibold shadow rounded px-4 transition-all duration-300' : ''}`}>
-                            Delete All Comments
+                        <li
+                            onClick={() => handleChangeSection("deleteComments")}
+                            className={`cursor-pointer py-2 px-4 rounded shadow ${activeSection === "deleteComments" ? 'bg-gray-300 font-semibold' : ''} sm:transition-all sm:duration-300`}>
+                            <span className="block sm:hidden"><FaCircleDot /></span>
+                            <span className="hidden sm:block">Delete All Comments</span>
                         </li>
+
                     </ul>
                 </div>
 
