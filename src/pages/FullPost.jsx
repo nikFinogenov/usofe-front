@@ -129,7 +129,7 @@ function FullPost() {
                 }
             }
         } catch (error) {
-            showNotification('Failed to like the post.', 'error');
+            // showNotification('Failed to like the post.', 'error');
         } finally {
             setIsFetchingLike(false);
         }
@@ -154,7 +154,7 @@ function FullPost() {
                 }
             }
         } catch (error) {
-            showNotification('Failed to dislike the post.', 'error');
+            // showNotification('Failed to dislike the post.', 'error');
         } finally {
             setIsFetchingLike(false);
         }
@@ -183,7 +183,7 @@ function FullPost() {
             }
             setFavourited(!favourited);
         } catch (error) {
-            showNotification('Failed to fav the post.', 'error');
+            // showNotification('Failed to fav the post.', 'error');
         } finally {
             setIsFetchingLike(false);
         }
@@ -296,17 +296,19 @@ function FullPost() {
                     </div>
                 )}
 
-                {user?.id === author?.id && (
+                {(user?.id === author?.id || user?.role === 'admin') && (
                     <div className="flex space-x-2">
-                        <button
-                            className="bg-gray-500 text-white px-4 py-1 rounded hover:bg-gray-400 transition"
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                handleHide();
-                            }}
-                        >
-                            {isHidden ? 'Show' : 'Hide'}
-                        </button>
+                        {
+                            user?.role === 'admin' && <button
+                                className="bg-gray-500 text-white px-4 py-1 rounded hover:bg-gray-400 transition"
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleHide();
+                                }}
+                            >
+                                {isHidden ? 'Show' : 'Hide'}
+                            </button>
+                        }
                         <Link
                             to={`/edit-post/${post.id}`}
                             className="bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-400 transition"

@@ -31,7 +31,7 @@ function Comment({ comment, replies, onReplyAdded, onDelete }) {
     const [isFetchingLike, setIsFetchingLike] = useState(false);
     const [showReplyDialog, setShowReplyDialog] = useState(false);
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-    const [isHidden, setIsHidden] = useState(false);
+    const [isHidden, setIsHidden] = useState(comment.status === 'inactive');
     const [isEditing, setIsEditing] = useState(false);
     const [content, setContent] = useState(initialContent);
     const [showProfilePreview, setShowProfilePreview] = useState(false);
@@ -129,7 +129,7 @@ function Comment({ comment, replies, onReplyAdded, onDelete }) {
                 }
             }
         } catch (error) {
-            showNotification('Failed to like the comment.', 'error');
+            // showNotification('Failed to like the comment.', 'error');
         } finally {
             setIsFetchingLike(false);
         }
@@ -153,7 +153,7 @@ function Comment({ comment, replies, onReplyAdded, onDelete }) {
                 }
             }
         } catch (error) {
-            showNotification('Failed to dislike the comment.', 'error');
+            // showNotification('Failed to dislike the comment.', 'error');
         } finally {
             setIsFetchingLike(false);
         }
@@ -281,7 +281,7 @@ function Comment({ comment, replies, onReplyAdded, onDelete }) {
                     >
                         {content}
                     </ReactMarkdown>
-                    {user?.id === commentAuthor?.id && (
+                    {(user?.id === commentAuthor?.id || user?.role === 'admin')&& (
                         <Menu
                             menuButton={<MenuButton className='ml-auto self-start'><IoSettingsOutline /></MenuButton>}
                             key={'right'}
@@ -293,11 +293,17 @@ function Comment({ comment, replies, onReplyAdded, onDelete }) {
                             gap={12}
                             shift={12}
                         >
-                            {['Edit', 'Hide', 'Delete'].map((action) => (
+                            {user?.role === 'admin' ? ['Edit', 'Hide', 'Delete'].map((action) => (
                                 <MenuItem key={action} onClick={() => handleMenuAction(action)}>
                                     {(action === 'Hide' && isHidden) ? `Show` : action}
                                 </MenuItem>
-                            ))}
+                            )) :['Edit', 'Delete'].map((action) => (
+                                <MenuItem key={action} onClick={() => handleMenuAction(action)}>
+                                    {action}
+                                </MenuItem>
+                            ))
+                            }
+
                         </Menu>
                     )}
                 </div>

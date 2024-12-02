@@ -66,7 +66,7 @@ const AxiosInterceptor = () => {
             if (error.response.status === 401) {
                 logout();
                 navigate("/login");
-                showNotification("Session expired. Please log in again.", "error");
+                showNotification("Please log in again.", "error");
             }
             if (error.response.status === 403) {
                 showNotification("Access denied. You do not have permission to perform this action.", "error");

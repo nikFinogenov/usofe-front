@@ -26,7 +26,7 @@ function Favourites() {
         };
 
         loadFavourites();
-    }, [currentPage, favourites]);
+    }, [currentPage]);
 
     const totalPages = Math.ceil(totalFavourites / postsPerPage);
 
