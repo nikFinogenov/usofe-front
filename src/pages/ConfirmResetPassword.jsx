@@ -38,7 +38,7 @@ function ConfirmResetPassword() {
             showNotification('Your password has been reset successfully.', 'success');
             navigate('/login');
         } catch (error) {
-            setServerError(error.response?.data?.error || 'An error occurred while resetting your password.');
+            // setServerError(error.response?.data?.error || 'An error occurred while resetting your password.');
         } finally {
             setLoading(false);
         }
