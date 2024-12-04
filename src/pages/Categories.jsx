@@ -54,7 +54,7 @@ function Categories() {
         if (!newCategoryTitle.trim()) return;
 
         try {
-            await createCategory({ title: newCategoryTitle, description: newCategoryDescription });
+            await createCategory(newCategoryTitle, newCategoryDescription);
             setNewCategoryTitle('');
             setNewCategoryDescription('');
             setShowModal(false);
@@ -101,7 +101,7 @@ function Categories() {
         <div className="max-w-2xl mx-auto pt-16 mt-5 mbl:px-4 tbl:px-4 2tbl:px-4">
             <h1 className="text-2xl font-bold mb-4 flex justify-between items-center">
                 Categories
-                {user?.role === 'admin' && (
+                {(user?.role === 'admin' || user?.rating > 100) && (
                     <button
                         onClick={() => setShowModal(true)}
                         className="bg-blue-500 text-white rounded-full w-7 h-7 flex items-center justify-center hover:bg-blue-600"
