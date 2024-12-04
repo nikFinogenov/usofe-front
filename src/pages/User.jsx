@@ -1,10 +1,11 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { fetchUserPosts, fetchUserProfile, deleteAccount, updateUser } from '../services/userService';
 import { NotifyContext } from '../context/NotifyContext';
-import { Link, useParams, useNavigate } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import PostPreview from '../components/PostPreview';
 import LoadingSpinner from '../components/LoadingSpinner';
 import Pagination from '../components/Pagination';
+import UpdateUserModal from '../components/UpdateUserModal';
 
 function User() {
     const { id } = useParams();
@@ -13,12 +14,11 @@ function User() {
     const [totalPosts, setTotalPosts] = useState(0);
     const [loading, setLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const postsPerPage = 12;
     const showNotification = useContext(NotifyContext);
-    const navigate = useNavigate();
 
-    // Replace this with your method of checking the current user's role
-    const currentUserRole = 'admin'; // Example: Replace with logic to fetch the logged-in user's role
+    const currentUserRole = 'admin'; // Replace with actual logic for checking user role
 
     useEffect(() => {
         const loadUserProfile = async () => {
@@ -49,7 +49,6 @@ function User() {
         if (window.confirm(`Are you sure you want to ban ${user?.fullName}?`)) {
             try {
                 await deleteAccount(user.id);
-                navigate('/');
                 showNotification(`${user.fullName} has been banned.`, 'success');
             } catch (error) {
                 showNotification('Failed to ban user.', 'error');
@@ -57,22 +56,25 @@ function User() {
         }
     };
 
-    const handleUpdateUser = async () => {
-        // This is a basic form, you can extend it to include fields for updating the user
-        const updatedUser = {
-            ...user,
-            fullName: prompt('Enter new full name:', user?.fullName),
-            email: prompt('Enter new email:', user?.email),
-        };
-
+    const handleUpdateUser = async (updatedUser) => {
         try {
-            const updated = await updateUser(updatedUser);
-            setUser(updated);
-            showNotification('User details have been updated.', 'success');
+            const fieldsChanged = Object.keys(updatedUser).some(
+                (key) => updatedUser[key] !== user[key]
+            );
+    
+            if (fieldsChanged) {
+                await updateUser(user.id, updatedUser);
+                setUser(updatedUser);
+                showNotification('User details have been updated.', 'success');
+                setIsModalOpen(false);
+            } else {
+                showNotification('No changes were made.', 'info');
+            }
         } catch (error) {
             showNotification('Failed to update user details.', 'error');
         }
     };
+    
 
     if (loading) return <LoadingSpinner />;
 
@@ -118,7 +120,7 @@ function User() {
                                 Ban User
                             </button>
                             <button
-                                onClick={handleUpdateUser}
+                                onClick={() => setIsModalOpen(true)}
                                 className="px-4 py-2 text-white bg-blue-500 hover:bg-blue-600 rounded-lg"
                             >
                                 Update User
@@ -146,6 +148,14 @@ function User() {
                     <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
                 )}
             </div>
+
+            {isModalOpen && (
+                <UpdateUserModal
+                    user={user}
+                    onClose={() => setIsModalOpen(false)}
+                    onSave={handleUpdateUser}
+                />
+            )}
         </div>
     );
 }

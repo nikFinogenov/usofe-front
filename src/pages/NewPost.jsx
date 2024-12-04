@@ -108,7 +108,7 @@ const NewPost = () => {
                 setTags([]);
                 navigate('/');
             } catch (error) {
-                showNotification('Failed to publish post.', 'error');
+                // showNotification('Failed to publish post.', 'error');
             }
         } else {
             showNotification('Please fill out all fields.', 'warning');

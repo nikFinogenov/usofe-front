@@ -39,8 +39,8 @@ const Search = () => {
                     setTotalResults(response.totalResults);
                 }
             } catch (err) {
-                showNotification("Failed to search", "error");
-                console.error(err);
+                // showNotification("Failed to search", "error");
+                // console.error(err);
             } finally {
                 setLoading(false);
             }
